@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Header from "../Common/header";
-import Cart from "../Common/cart";
+import Cart from "./cart"
 import { checkOut } from "../../services/productService";
+import { getAccountByID } from "../../services/userService";
 
+import { decodeToken } from "../../services/jwtHelper";
+import {
+  getURLMomo,
+  getURLPayPal,
+  getURLVNPAY,
+} from "../../services/paymentService";
+import Header from "../Common/Header/header";
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     const savedCartItems = localStorage.getItem("cartItems");
@@ -14,6 +22,20 @@ const CartPage = () => {
     }
   }, []);
 
+  const fetchUser = async () => {
+    const userToken = await decodeToken();
+
+    if (userToken !== null) {
+      let res = await getAccountByID(userToken.accountID);
+      if (res) {
+        console.log(res);
+        setUser(res);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
   const paymentMethods = [
     {
       id: "paypal",
@@ -33,6 +55,7 @@ const CartPage = () => {
   ];
 
   const handleSelectMethod = (methodId) => {
+    console.log("check method", methodId);
     setSelectedMethod(methodId);
   };
 
@@ -81,7 +104,7 @@ const CartPage = () => {
     const orderData = {
       items: orderItems,
       order: {
-        buyerAccountId: 1, 
+        buyerAccountId: user.accountId,
       },
     };
 
@@ -89,6 +112,24 @@ const CartPage = () => {
       let res = await checkOut(orderData);
       if (res) {
         console.log("Order submitted successfully", res);
+        console.log(selectedMethod);
+        if (selectedMethod == "paypal") {
+          let respone = await getURLPayPal(res);
+          console.log(respone);
+          if (respone) {
+            window.location.href = respone;
+          }
+        } else if (selectedMethod == "momo") {
+          let respone = await getURLMomo(res);
+          if (respone) {
+            window.location.href = respone;
+          }
+        } else if (selectedMethod == "vnpay") {
+          let respone = await getURLVNPAY(res);
+          if (respone) {
+            window.location.href = respone;
+          }
+        }
       }
     } catch (e) {
       console.error("Error submitting order", e);
@@ -109,31 +150,60 @@ const CartPage = () => {
             />
           </div>
           <div className="col-md-3 container-fluid">
-            <div className="information-cart mt-5 mb-3">
+            <div className="information-cart mt-5 mb-3" style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
               <h5>Information</h5>
               <div className="mb-3">
-                <label htmlFor="name" className="w-25">Name</label>
-                <input type="text" value={"Hong Quan"} className="m-lg-3 p-1" style={{border:"1px solid #ccc", borderRadius:"5px"}}/>
+                <label htmlFor="name" className="w-100">
+                  Name
+                </label>
+                <input
+                  readOnly
+                  type="text"
+                  value={`${user.firstName} ${user.lastName} `}
+                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                />
               </div>
               <div className="mb-3">
-                <label htmlFor="name"  className="w-25">Phone Number</label>
-                <input type="text" value={"09090009"} className="m-lg-3 p-1"  style={{border:"1px solid #ccc", borderRadius:"5px"}}/>
+                <label htmlFor="name" className="w-100">
+                  Phone Number
+                </label>
+                <input
+                  readOnly
+                  type="text"
+                  defaultValue={user.phoneNumber}
+                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                />
               </div>
               <div className="mb-3">
-                <label htmlFor="name"  className="w-25">Email</label>
-                <input type="text" value={"Hihi@gmail.com"} className="m-lg-3 p-1"  style={{border:"1px solid #ccc", borderRadius:"5px"}}/>
+                <label htmlFor="name" className="w-100">
+                  Email
+                </label>
+                <input
+                  readOnly
+                  type="text"
+                  defaultValue={user.email}
+                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                />
               </div>
               <div className="mb-3">
-                <label htmlFor="name"  className="w-25">Address</label>
-                <input type="text" value={"HCM City"} className="m-lg-3 p-1"  style={{border:"1px solid #ccc", borderRadius:"5px"}}/>
+                <label htmlFor="name" className="w-100">
+                  Address
+                </label>
+                <input
+                  readOnly
+                  type="text"
+                  value={"HCM City"}
+                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                />
               </div>
             </div>
-            <div className="payment-methods">
+            <div className="payment-methods" style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
               <h5 style={{ fontSize: "1.2rem" }}>Select Payment Method</h5>
               <div className="method-list d-flex flex-md-column ">
                 {paymentMethods.map((method) => (
                   <div key={method.id} className="d-flex m-2">
                     <input
+                    readOnly
                       type="radio"
                       name="paymentMethod" // Add this attribute
                       onClick={() => handleSelectMethod(method.id)}
@@ -149,7 +219,9 @@ const CartPage = () => {
                   </div>
                 ))}
               </div>
-              <h5 className="mb-3">Total: {calculateTotalPrice().toLocaleString("en-US")}đ</h5>
+              <h5 className="mb-3">
+                Total: {calculateTotalPrice().toLocaleString("en-US")}đ
+              </h5>
 
               <button
                 className="btn bg-black text-white "

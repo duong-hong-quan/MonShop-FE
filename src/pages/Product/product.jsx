@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import Header from "../Common/header";
 import {
   fetchAllProduct,
   fetchAllCategories,
 } from "../../services/productService";
-import Chat from "../Common/chat";
 import { NavLink } from "react-router-dom";
 import LoadingOverlay from "../../components/Loading/LoadingOverlay";
-
+import "./product.css";
+import { decodeToken } from "../../services/jwtHelper";
+import Header from "../Common/Header/header";
 const ProductPage = () => {
   const [productList, setProductList] = useState([]);
   const [productListFilter, setProductListFilter] = useState([]);
@@ -18,6 +18,7 @@ const ProductPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [minMaxPriceRange, setMinMaxPriceRange] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const getAllCategory = async () => {
     let res = await fetchAllCategories();
     if (res) {
@@ -35,10 +36,14 @@ const ProductPage = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     let filterProduct = productListFilter;
-
-    if (selectedCategory != 0) {
+    if (selectedCategory == 0) {
+      getAllProduct();
+      // setProductList();
+    }
+    if (selectedCategory !== 0) {
       filterProduct = productListFilter.filter(
         (product) => product.categoryId == selectedCategory
       );
@@ -57,13 +62,6 @@ const ProductPage = () => {
     setProductList(filterProduct);
   }, [selectedCategory, minMaxPriceRange]);
 
-  const resetFilter = () => {
-    getAllProduct();
-  };
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
-
   useEffect(() => {
     getAllCategory();
     getAllProduct();
@@ -72,6 +70,21 @@ const ProductPage = () => {
       setCartItems(JSON.parse(savedCartItems));
     }
   }, []);
+
+  useEffect(() => {
+    let filterProduct = productListFilter;
+    filterProduct = filterProduct.filter((product) =>
+      product.productName.toLowerCase().includes(searchKeyword)
+    );
+    setProductList(filterProduct);
+  }, [searchKeyword]);
+  
+  const resetFilter = () => {
+    getAllProduct();
+  };
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
 
   const addToCart = (product) => {
     const existingItem = cartItems.find(
@@ -107,25 +120,25 @@ const ProductPage = () => {
     const maxPrice = 1000000;
     return (maxPrice * stepValue) / 100;
   };
+
+
   return (
     <>
       <LoadingOverlay loading={loading}></LoadingOverlay>
 
-      <Chat></Chat>
       <Header></Header>
 
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-3">
-            <div
-              className="d-flex align-items-center mb-3">
+            <div className="d-flex align-items-center mb-3">
               <h6 className="m-0">Filter Options</h6>
               <span
                 onClick={() => resetFilter()}
                 className="text-black d-block"
-                style={{marginLeft:'10px', cursor:'pointer'}}
+                style={{ marginLeft: "10px", cursor: "pointer" }}
               >
-                <i class="fa-solid fa-rotate-left"></i>
+                <i className="fa-solid fa-rotate-left"></i>
               </span>
             </div>
             <select
@@ -176,6 +189,8 @@ const ProductPage = () => {
                 placeholder="Search Product"
                 className="mb-2 p-2"
                 style={{ borderRadius: "5px", border: "1px solid #ccc" }}
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
               ></input>
             </div>
             <div className="row">
@@ -189,14 +204,20 @@ const ProductPage = () => {
                   }}
                 >
                   <div className="card p-3" style={{ border: "none" }}>
-                    <img
-                      src={product.imageUrl}
-                      alt={product.productName}
-                      className="card-img-top"
-                      style={{
-                        maxHeight: "250px",
-                      }}
-                    />
+                    <NavLink
+                      style={{ textDecoration: "none", color: "white" }}
+                      to={`/product/${product.productId}`}
+                    >
+                      <img
+                        src={product.imageUrl}
+                        alt={product.productName}
+                        className="card-img-top"
+                        style={{
+                          maxHeight: "250px",
+                        }}
+                      />
+                    </NavLink>
+
                     <div className="card-body">
                       <h5 className="card-title">{product.productName}</h5>
                       <div className="d-flex justify-content-evenly">
@@ -223,7 +244,7 @@ const ProductPage = () => {
                       >
                         Add to Cart
                       </button>
-                      <button className="btn bg-black text-white m-1">
+                      {/* <button className="btn bg-black text-white m-1">
                         <NavLink
                           style={{ textDecoration: "none", color: "white" }}
                           to={`/product/${product.productId}`}
@@ -231,7 +252,7 @@ const ProductPage = () => {
                           {" "}
                           View Detail
                         </NavLink>
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
