@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Cart from "./cart"
+import Cart from "./cart";
 import { checkOut } from "../../services/productService";
 import { getAccountByID } from "../../services/userService";
 
@@ -150,13 +150,22 @@ const CartPage = () => {
             />
           </div>
           <div className="col-md-3 container-fluid">
-            <div className="information-cart mt-5 mb-3" style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
-              <h5>Information</h5>
+            <div
+              className="information-cart mt-5 mb-3"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                padding: "5px 15px",
+              }}
+            >
+              <h5 className="mb-1">Information</h5>
               <div className="mb-3">
-                <label htmlFor="name" className="w-100">
+                <label htmlFor="name" className="w-100 mb-2">
                   Name
                 </label>
                 <input
+                  className="w-100"
                   readOnly
                   type="text"
                   value={`${user.firstName} ${user.lastName} `}
@@ -164,10 +173,11 @@ const CartPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="name" className="w-100">
+                <label htmlFor="name" className="w-100  mb-2">
                   Phone Number
                 </label>
                 <input
+                  className="w-100"
                   readOnly
                   type="text"
                   defaultValue={user.phoneNumber}
@@ -175,10 +185,11 @@ const CartPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="name" className="w-100">
+                <label htmlFor="name" className="w-100  mb-2">
                   Email
                 </label>
                 <input
+                  className="w-100"
                   readOnly
                   type="text"
                   defaultValue={user.email}
@@ -186,10 +197,11 @@ const CartPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="name" className="w-100">
+                <label htmlFor="name" className="w-100  mb-2">
                   Address
                 </label>
                 <input
+                  className="w-100"
                   readOnly
                   type="text"
                   value={"HCM City"}
@@ -197,13 +209,21 @@ const CartPage = () => {
                 />
               </div>
             </div>
-            <div className="payment-methods" style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
+            <div
+              className="payment-methods"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                padding: "5px 15px",
+              }}
+            >
               <h5 style={{ fontSize: "1.2rem" }}>Select Payment Method</h5>
               <div className="method-list d-flex flex-md-column ">
                 {paymentMethods.map((method) => (
                   <div key={method.id} className="d-flex m-2">
                     <input
-                    readOnly
+                      readOnly
                       type="radio"
                       name="paymentMethod" // Add this attribute
                       onClick={() => handleSelectMethod(method.id)}

@@ -8,6 +8,7 @@ import LoadingOverlay from "../../components/Loading/LoadingOverlay";
 import "./product.css";
 import { decodeToken } from "../../services/jwtHelper";
 import Header from "../Common/Header/header";
+import Chat from "../Common/Chat/chat";
 const ProductPage = () => {
   const [productList, setProductList] = useState([]);
   const [productListFilter, setProductListFilter] = useState([]);
@@ -78,7 +79,7 @@ const ProductPage = () => {
     );
     setProductList(filterProduct);
   }, [searchKeyword]);
-  
+
   const resetFilter = () => {
     getAllProduct();
   };
@@ -121,13 +122,11 @@ const ProductPage = () => {
     return (maxPrice * stepValue) / 100;
   };
 
-
   return (
     <>
       <LoadingOverlay loading={loading}></LoadingOverlay>
 
       <Header></Header>
-
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-3">

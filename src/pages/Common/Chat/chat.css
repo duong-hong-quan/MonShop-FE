@@ -310,3 +310,16 @@ button, input, optgroup, select, textarea {
   overflow-y: scroll !important;
   height: 400px;
 }
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.modal-bottom-right {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}

@@ -1,9 +1,56 @@
 import Header from "../../Common/Header/header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import  "./transaction.css";
+import "./transaction.css";
+import { getOrderByAccountID } from "../../../services/paymentService";
+import { decodeToken } from "../../../services/jwtHelper";
+import { Button, Table } from "react-bootstrap";
+import { getAccountByID } from "../../../services/userService";
+import { NavLink } from "react-router-dom";
 const Transaction = () => {
+  const [orderList, setOrderList] = useState([]);
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [user, setUser] = useState({});
+
+  const fetchUser = async () => {
+    const userToken = await decodeToken();
+
+    if (userToken !== null) {
+      let res = await getAccountByID(userToken.accountID);
+      if (res) {
+        setUser(res);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
+  const fetchOrder = async () => {
+    const userToken = await decodeToken();
+    var status = 1;
+    if (activeTab.toLowerCase() == "pending") {
+      status = 1;
+    } else if (activeTab.toLowerCase() == "success pay") {
+      status = 2;
+    } else if (activeTab.toLowerCase() == "fail pay") {
+      status = 3;
+    } else if (activeTab.toLowerCase() == "shipped") {
+      status = 4;
+    } else if (activeTab.toLowerCase() == "delivered") {
+      status = 5;
+    } else if (activeTab.toLowerCase() == "cancelled") {
+      status = 6;
+    }
+    let res = await getOrderByAccountID(userToken.accountID, status);
+    if (res) {
+      setOrderList(res);
+    }
+  };
+  useEffect(() => {
+    fetchOrder();
+  }, [activeTab]);
+
   const transactionData = [
     {
       id: 1,
@@ -37,14 +84,26 @@ const Transaction = () => {
     },
   ];
 
-  const [activeTab, setActiveTab] = useState("Pending");
-
   const handleTabSelect = (status) => {
     setActiveTab(status);
   };
+
+  function formatDate(inputDateString) {
+    var dateObj = new Date(inputDateString);
+  
+    var day = dateObj.getDate();
+    var month = dateObj.getMonth() + 1;
+    var year = dateObj.getFullYear();
+    var hours = dateObj.getHours();
+    var minutes = dateObj.getMinutes();
+  
+    var formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+  
+    return formattedDate;
+  }
   return (
     <>
-      <Header></Header>
+      <Header />
       <div className="container mt-5">
         <h2>Transaction Order</h2>
         <Tabs
@@ -58,9 +117,37 @@ const Transaction = () => {
               eventKey={transaction.status}
               title={transaction.status}
             >
-              <div className="mt-3">
-                <h4>{transaction.status}</h4>
-                <p>{transaction.data}</p>
+              <div className="mt-3"  style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
+                {activeTab === transaction.status && (
+                  <table className="table"  bordered>
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Total</th>
+                        <th>Customer</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orderList.map((order, index) => (
+                        <tr key={index}>
+                          <td>{order.orderId}</td>
+                          <td>{formatDate(order.orderDate)}</td>
+                          <td>{order.total}</td>
+                          <td>{user.firstName}</td>
+                          <td>
+                            <Button style={{backgroundColor:'black', border:'none'}}>
+
+                            <NavLink to={`/transaction/${order.orderId}`} style={{textDecoration:'none', color:'white', border:'none'}}>View Detail</NavLink>
+
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </Tab>
           ))}

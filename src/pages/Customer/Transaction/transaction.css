@@ -1,8 +1,6 @@
 /* TransactionOrder.css */
 .tab-content {
-    border: 1px solid #dee2e6;
     padding: 20px;
-    border-radius: 4px;
   }
   
   .tab-content h4 {
@@ -25,5 +23,6 @@
   .nav-tabs .nav-link.active {
     color: #000;
     background-color: #f8f9fa;
+    font-weight: bold;
   }
   
