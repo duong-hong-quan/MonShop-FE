@@ -35,12 +35,14 @@ function PaymentBadge({ paymentMethod }) {
     color: iconColor || 'white',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    width:'80px'
+    
   };
 
   return (
     <Badge style={badgeStyle}>
-      {icon}
+      {icon} 
       {paymentMethod}
     </Badge>
   );

@@ -7,6 +7,7 @@ import { Badge, Button } from "react-bootstrap";
 import { decodeToken } from "../../../services/jwtHelper";
 import { getAccountByID } from "../../../services/userService";
 import PaymentBadge from "../../Common/PaymentBadge/paymentBadge";
+import PaymentMethod from "../../Cart/paymentMethod";
 
 const TransactionDetail = () => {
   const { id } = useParams();
@@ -43,9 +44,7 @@ const TransactionDetail = () => {
 
     fetchOrderDetail();
   }, [id]);
-const handlePayment= ()=>{
-  
-}
+  const handlePayment = () => {};
   return (
     <>
       <Header />
@@ -156,17 +155,7 @@ const handlePayment= ()=>{
                 >
                   {paymentMethod == "Pending pay" ? (
                     <>
-                      <Button
-                        style={{
-                          backgroundColor: "black",
-                          color: "white",
-                          border: "none",
-                          width: "200px",
-                        }}
-                        onClick={handlePayment(order.orderId)}
-                      >
-                        Pay now
-                      </Button>
+                      <PaymentMethod OrderID={order.orderId}></PaymentMethod>
                     </>
                   ) : (
                     <></>
