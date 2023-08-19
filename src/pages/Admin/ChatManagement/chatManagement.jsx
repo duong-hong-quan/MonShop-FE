@@ -31,6 +31,8 @@ const ChatManagement = () => {
     const [message, setMessage] = useState("");
     const userToken = decodeToken();
     const [room, setRoom] = useState({});
+    const [contentChange, setContentChange] = useState(0);
+
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -60,6 +62,11 @@ const ChatManagement = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (contentChange > 0) {
+            chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+        }
+    }, [contentChange]);
     useEffect(() => {
         if (user && isTokenExpired()) {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -113,8 +120,8 @@ const ChatManagement = () => {
                     // Update the messages state with the new list of messages
                     console.log(message);
                     setMessages(message);
-                    chatContentRef.current.scrollTop =
-                        chatContentRef.current.scrollHeight;
+                    setContentChange(prevChange => prevChange + 1); // Tăng giá trị để kích hoạt cuộn xuống
+
                 });
                 newConnection.on("ReceiveAllRoom", (room) => {
                     // Update the messages state with the new list of messages
@@ -151,9 +158,12 @@ const ChatManagement = () => {
         if (res && room) {
             setMessages(res);
             setRoom(room);
-        }
-        chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
 
+
+        }
+        setTimeout(() => {
+            chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+        }, 100);
     }
     const sendMessage = async (roomIdToSend) => {
 
@@ -177,7 +187,7 @@ const ChatManagement = () => {
 
                 console.log("Message sent successfully.");
                 setMessage("");
-                chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+                setContentChange(prevChange => prevChange + 1);
 
             } catch (error) {
                 console.error("Error sending message:", error);
@@ -241,6 +251,7 @@ const ChatManagement = () => {
         }
     }
 
+
     const toggleOptions = (id) => {
         setSelectedRoomId(id);
         setShowOptions(!showOptions);
@@ -302,7 +313,7 @@ const ChatManagement = () => {
                                                         {showOptions && room.roomId === selectedRoomId && (
                                                             <ul className="list-group position-absolute " style={{ bottom: '-45px', right: '25px', zIndex: '1' }}>
                                                                 <li className='list-group-item' onClick={() => handleEditClick(room)}>Edit Room</li>
-                                                                <li className='list-group-item' onClick={()=>deleteRoom(room.roomId)}>Delete Room</li>
+                                                                <li className='list-group-item' onClick={() => deleteRoom(room.roomId)}>Delete Room</li>
                                                             </ul>
                                                         )}
                                                     </div>
