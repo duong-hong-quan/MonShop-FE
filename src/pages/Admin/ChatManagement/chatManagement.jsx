@@ -18,6 +18,7 @@ import { getAccountByID, logout, refreshAccessToken } from "../../../services/us
 import HeaderAdmin from "../../../components/HeaderAdmin/headerAdmin";
 import SideMenu from '../../../components/SideMenu/sideMenu';
 import { useNavigate } from 'react-router-dom';
+import hosting from '../../../Utils/config';
 
 const ChatManagement = () => {
     const chatContentRef = useRef(null);
@@ -81,7 +82,7 @@ const ChatManagement = () => {
     useEffect(() => {
         const startConnection = async () => {
             const newConnection = new signalR.HubConnectionBuilder()
-                .withUrl("https://localhost:7022/chat")
+                .withUrl(`${hosting}/chat`)
                 .build();
 
             newConnection.onclose((error) => {
