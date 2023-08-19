@@ -14,6 +14,8 @@ import _ from 'lodash';
 import HeaderAdmin from '../../../components/HeaderAdmin/headerAdmin';
 import SideMenu from '../../../components/SideMenu/sideMenu';
 import { useNavigate } from 'react-router-dom';
+import LoadingCenter from '../../../components/Loading/loading';
+import LoadingOverlay from '../../../components/Loading/LoadingOverlay';
 
 const ProductManagement = () => {
 
@@ -26,6 +28,7 @@ const ProductManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentProduct, setCurrentProduct] = useState({});
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -35,7 +38,7 @@ const ProductManagement = () => {
             let userToken = decodeToken();
             if (userToken.userRole == "admin" || userToken.userRole == "staff") {
                 navigate("/management/product");
-            }else{
+            } else {
                 navigate("/products");
 
             }
@@ -59,6 +62,7 @@ const ProductManagement = () => {
         let res = await fetchAllProductByManager();
         if (res) {
             setProducts(res);
+            setLoading(false);
         }
     }
     useEffect(() => {
@@ -155,7 +159,7 @@ const ProductManagement = () => {
                         style={{
                             margin: '24px 16px',
                             padding: 24,
-                            minHeight: 280,
+                            minHeight: '900px',
                             background: '#fff',
                         }}
                     >
@@ -176,55 +180,58 @@ const ProductManagement = () => {
                                     Add Product
                                 </Button>
                             </div>
+                            <LoadingOverlay loading={loading}></LoadingOverlay>
+                            {loading == false &&
 
-                            <div className='table-responsive' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
-                                <Table className="mt-3" >
-                                    <thead className="thead-dark">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Price (đ)</th>
-                                            <th>Discount (%)</th>
-                                            <th>Quantity</th>
-                                            <th>Category</th>
-                                            <th>Status</th>
-                                            <th>Deleted</th>
+                                <div className='table-responsive' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
+                                    <Table className="mt-3" >
+                                        <thead className="thead-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Price (đ)</th>
+                                                <th>Discount (%)</th>
+                                                <th>Quantity</th>
+                                                <th>Category</th>
+                                                <th>Status</th>
+                                                <th>Deleted</th>
 
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {products && products.map((product, index) => {
-                                            return (
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {products && products.map((product, index) => {
+                                                return (
 
-                                                <tr key={index}>
-                                                    <td>{product.productId}</td>
-                                                    <td>{product.productName}</td>
+                                                    <tr key={index}>
+                                                        <td>{product.productId}</td>
+                                                        <td>{product.productName}</td>
 
-                                                    <td>{product.price.toLocaleString("en-US")} đ</td>
-                                                    <td>{product.discount}</td>
-                                                    <td>{product.quantity}</td>
-                                                    <td>{product.category?.categoryName}</td>
+                                                        <td>{product.price.toLocaleString("en-US")} đ</td>
+                                                        <td>{product.discount}</td>
+                                                        <td>{product.quantity}</td>
+                                                        <td>{product.category?.categoryName}</td>
 
-                                                    <td><Badge bg={product.productStatus?.status.toLowerCase() == "active" ? "primary" : "danger"}>{product.productStatus?.status}</Badge></td>
-                                                    <td>{product.isDeleted ? "True" : "False"}</td>
+                                                        <td><Badge bg={product.productStatus?.status.toLowerCase() == "active" ? "primary" : "danger"}>{product.productStatus?.status}</Badge></td>
+                                                        <td>{product.isDeleted ? "True" : "False"}</td>
 
-                                                    <td>
-                                                        <Button style={{ marginRight: '5px', border: 'none', color: 'blue' }} onClick={() => handleEditClick(product)}><i className="fa-solid fa-pen-to-square"></i></Button>
-                                                        <Button style={{ color: 'red', border: 'none' }} onClick={() => handleDeleteClick(product)}><i className="fa-solid fa-trash"></i></Button>
-                                                    </td>
-                                                </tr>
+                                                        <td>
+                                                            <Button style={{ marginRight: '5px', border: 'none', color: 'blue' }} onClick={() => handleEditClick(product)}><i className="fa-solid fa-pen-to-square"></i></Button>
+                                                            <Button style={{ color: 'red', border: 'none' }} onClick={() => handleDeleteClick(product)}><i className="fa-solid fa-trash"></i></Button>
+                                                        </td>
+                                                    </tr>
 
-                                            )
-
-
-                                        }
+                                                )
 
 
-                                        )}
-                                    </tbody>
-                                </Table>
-                            </div>
+                                            }
+
+
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                </div>}
+
 
                         </div>
                     </Content>

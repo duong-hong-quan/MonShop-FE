@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Badge, Button, Form, Modal, Table } from "react-bootstrap";
 import { getAllOrderStatus, getListItemByOrderID } from "../../../services/paymentService";
-import "./orderDetailManagement.css"
 import { formatPrice } from "../../../Utils/util";
 const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus }) => {
     const [orderItems, setOrderItems] = useState([]);
@@ -36,7 +35,7 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
         await handleUpdateStatus(order?.orderId, OrderStatusId);
     }
     return (<>
-        <Modal show={show} onHide={onHide} className="custom-modal-width" >
+        <Modal show={show} onHide={onHide} >
 
             <Modal.Header closeButton >
                 <Modal.Title>Order Detail</Modal.Title>

@@ -48,6 +48,8 @@ function App() {
             { path: "/cart", element: <CartPage /> },
             { path: "/transaction", element: <Transaction /> },
             { path: "/transaction/:id", element: <TransactionDetail /> },
+            { path: "/management", element: <ProductManagement /> },
+
             { path: "/management/product", element: <ProductManagement /> },
             { path: "/management/user", element: <AccountManagement /> },
             { path: "/management/chat", element: <ChatManagement /> },

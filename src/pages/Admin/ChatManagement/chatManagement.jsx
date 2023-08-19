@@ -19,6 +19,8 @@ import HeaderAdmin from "../../../components/HeaderAdmin/headerAdmin";
 import SideMenu from '../../../components/SideMenu/sideMenu';
 import { useNavigate } from 'react-router-dom';
 import hosting from '../../../Utils/config';
+import CreateRoomModal from './CreateRoomModal/createRoomModal';
+import EditRoomModal from './EditRoomModal/editRoomModal';
 
 const ChatManagement = () => {
     const chatContentRef = useRef(null);
@@ -35,6 +37,11 @@ const ChatManagement = () => {
     const [rooms, setRooms] = useState([]);
     const [account, setAccount] = useState({});
     const [user, setUser] = useState(null);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showOptions, setShowOptions] = useState(false);
+    const [selectedRoomId, setSelectedRoomId] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [currentRoom, setCurrentRoom] = useState({});
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -44,7 +51,7 @@ const ChatManagement = () => {
             let userToken = decodeToken();
             if (userToken.userRole == "admin" || userToken.userRole == "staff") {
                 navigate("/management/chat");
-            }else{
+            } else {
                 navigate("/products");
 
             }
@@ -177,6 +184,67 @@ const ChatManagement = () => {
             }
         }
     };
+    const handleAddClick = () => {
+        setShowAddModal(true);
+    }
+    const handleEditClick = (room) => {
+        setCurrentRoom(room);
+        setShowEditModal(true);
+    }
+    const createRoom = async (room) => {
+        console.log("Creating room...");
+        if (connection) {
+
+            try {
+                console.log("About to invoke SendMessage...");
+
+                console.log(room)
+                await connection.invoke("CreateRoom", room);
+                setShowAddModal(false);
+
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+    }
+
+    const editRoom = async (room) => {
+        if (connection) {
+
+            try {
+                console.log("About to invoke SendMessage...");
+
+                console.log(room)
+                await connection.invoke("UpdateRoom", room);
+                setShowEditModal(false);
+                await handleGetMessByRoom(room.roomId);
+
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+    }
+
+    const deleteRoom = async (id) => {
+        if (connection) {
+
+            try {
+                console.log("About to invoke SendMessage...");
+
+                console.log(room)
+                await connection.invoke("DeleteRoom", id);
+                await handleGetMessByRoom(id);
+
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+    }
+
+    const toggleOptions = (id) => {
+        setSelectedRoomId(id);
+        setShowOptions(!showOptions);
+    };
     return (<>
 
         <Layout>
@@ -188,7 +256,7 @@ const ChatManagement = () => {
                     style={{
 
                         padding: 24,
-                        minHeight: 280,
+                        minHeight: '900px',
                         background: '#fff',
                     }}
                 >
@@ -199,7 +267,7 @@ const ChatManagement = () => {
                                 <div className="side-one">
                                     <div className=" heading">
                                         <h5>Messenger</h5>
-                                        <Button style={{ backgroundColor: 'rgb(22, 119, 255)', color: 'white' }}>Create Room</Button>
+                                        <Button style={{ backgroundColor: 'rgb(22, 119, 255)', color: 'white' }} onClick={() => handleAddClick()}>Create Room</Button>
 
                                     </div>
 
@@ -215,20 +283,30 @@ const ChatManagement = () => {
                                         {rooms && rooms.map((room, index) => {
                                             return (
                                                 <div key={index} className="row sideBar-body" onClick={() => handleGetMessByRoom(room.roomId)}>
-                                                    <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                                                        <div className="avatar-icon">
-                                                            <img src={room.roomImg} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-sm-9 col-xs-9 sideBar-main">
-                                                        <div className="row">
-                                                            <div className="col-sm-8 col-xs-8 sideBar-name">
+                                                    <div className="d-flex" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <div className='d-flex' style={{ alignItems: 'center' }}>
+                                                            <div className="avatar-icon">
+                                                                <img src={room.roomImg} />
+                                                            </div>
+                                                            <div className="">
                                                                 <span className="name-meta">{room.roomName}
                                                                 </span>
                                                             </div>
+                                                        </div>
+                                                        <div className="d-inline-block">
+                                                            <Button onClick={() => toggleOptions(room.roomId)}>
+                                                                <i className="fa fa-ellipsis-vertical"></i>
+                                                            </Button>
 
                                                         </div>
+                                                        {showOptions && room.roomId === selectedRoomId && (
+                                                            <ul className="list-group position-absolute " style={{ bottom: '-45px', right: '25px', zIndex: '1' }}>
+                                                                <li className='list-group-item' onClick={() => handleEditClick(room)}>Edit Room</li>
+                                                                <li className='list-group-item' onClick={()=>deleteRoom(room.roomId)}>Delete Room</li>
+                                                            </ul>
+                                                        )}
                                                     </div>
+
                                                 </div>
 
                                             )
@@ -298,6 +376,9 @@ const ChatManagement = () => {
                 </Content>
             </Layout>
         </Layout>
+        <CreateRoomModal show={showAddModal} onHide={() => setShowAddModal(false)} createRoom={createRoom}></CreateRoomModal>
+        <EditRoomModal show={showEditModal} onHide={() => setShowEditModal(false)} currentRoom={currentRoom} editRoom={editRoom}></EditRoomModal>
+
     </>)
 }
 

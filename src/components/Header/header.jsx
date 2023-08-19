@@ -10,7 +10,7 @@ const Header = () => {
 
   const navigate = useNavigate();
   const fetchUser = async () => {
-    const userToken = await decodeToken();
+    const userToken = decodeToken();
 
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
@@ -72,7 +72,7 @@ const Header = () => {
                 Cart
               </NavLink>
             </li>
-            {user.firstName ? (
+            {user ? (
               <>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/transaction">
@@ -82,6 +82,12 @@ const Header = () => {
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/login">
                     Profile
+                  </NavLink>
+                </li>
+
+                <li className="nav-item" style={{display: user.roleId == 1 ? "block" :"none"}}>
+                  <NavLink className="nav-link" to="/management">
+                    Management
                   </NavLink>
                 </li>
                 <li className="nav-item" onClick={handleLogout}>

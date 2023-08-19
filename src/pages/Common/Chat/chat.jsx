@@ -8,6 +8,7 @@ import { refreshAccessToken, logout } from "../../../services/userService"
 import jwtDecode from "jwt-decode";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import hosting from "../../../Utils/config";
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -60,7 +61,7 @@ const Chat = () => {
       const userToken = await decodeToken();
       setSenderId(userToken?.accountID);
       const newConnection = new signalR.HubConnectionBuilder()
-        .withUrl("https://localhost:7022/chat")
+        .withUrl(`${hosting}/chat`)
         .build();
 
       newConnection.onclose((error) => {

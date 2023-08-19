@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { decodeToken, isTokenExpired } from '../../../services/jwtHelper';
 import { logout, refreshAccessToken } from '../../../services/userService';
+import LoadingCenter from '../../../components/Loading/loading';
 
 const SettingManagement = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -24,7 +25,7 @@ const SettingManagement = () => {
             if (userToken.userRole == "admin" || userToken.userRole == "staff") {
                 navigate("/management/settings");
 
-            }else{
+            } else {
                 navigate("/products");
 
             }
@@ -53,12 +54,13 @@ const SettingManagement = () => {
                     style={{
                         margin: '24px 16px',
                         padding: 24,
-                        height: 'auto',
+                        minHeight: '900px',
                         background: '#fff',
                     }}
                 >
                     <div >
                         <h2 style={{ color: 'red', textAlign: 'center' }}>This screen is developing ! Please return when it completed!</h2>
+                        <LoadingCenter loading={true}></LoadingCenter>
 
                     </div>
                 </Content>

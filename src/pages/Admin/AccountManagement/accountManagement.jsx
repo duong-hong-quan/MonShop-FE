@@ -21,6 +21,8 @@ import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { decodeToken, isTokenExpired } from '../../../services/jwtHelper';
+import LoadingCenter from '../../../components/Loading/loading';
+import LoadingOverlay from '../../../components/Loading/LoadingOverlay';
 
 const AccountManagement = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -36,6 +38,7 @@ const AccountManagement = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [currentAccount, setCurrentAccount] = useState({});
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -45,11 +48,11 @@ const AccountManagement = () => {
             let userToken = decodeToken();
             if (userToken.userRole == "admin" || userToken.userRole == "staff") {
                 navigate("/management/user");
-            }else{
+            } else {
                 navigate("/products");
 
             }
-        }else{
+        } else {
             navigate("/login");
         }
     }, []);
@@ -69,6 +72,7 @@ const AccountManagement = () => {
         if (res) {
             setUserList(res);
             setDataFilter(res);
+            setLoading(false);
         }
     }
     useEffect(() => {
@@ -137,8 +141,9 @@ const AccountManagement = () => {
                     style={{
                         margin: '24px 16px',
                         padding: 24,
-                        height: 'auto',
+                        minHeight: '900px',
                         background: '#fff',
+
                     }}
                 >
                     <div >
@@ -158,43 +163,48 @@ const AccountManagement = () => {
                                 Add Account
                             </Button>
                         </div>
-                        <div className='table-responsive' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
-                            <Table className="mt-3" >
-                                <thead className="thead-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Email</th>
-                                        <th>Full Name </th>
-                                        <th>Phone Number</th>
-                                        <th>Role</th>
-                                        <th>Deleted</th>
+                        <LoadingOverlay loading={loading}></LoadingOverlay>
+                        {loading == false &&
 
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {userList && userList.map((account, index) => {
+                            <div className='table-responsive' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
+                                <Table className="mt-3" >
+                                    <thead className="thead-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Email</th>
+                                            <th>Full Name </th>
+                                            <th>Phone Number</th>
+                                            <th>Role</th>
+                                            <th>Deleted</th>
 
-                                        return (
-                                            <tr key={index}>
-                                                <td>{account.accountId}</td>
-                                                <td>{account.email}</td>
-                                                <td>{account.firstName} {account.lastName}</td>
-                                                <td>{account.phoneNumber}</td>
-                                                <td><Badge bg={account.role?.roleName.toLowerCase() == "admin" ? "danger" : account.role?.roleName.toLowerCase() == "staff" ? "warning" : "primary"}>{account.role?.roleName}</Badge></td>
-                                                <td>{account.isDeleted ? "True" : "False"}</td>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {userList && userList.map((account, index) => {
 
-                                                <td>
-                                                    <Button style={{ marginRight: '5px', border: 'none', color: 'blue' }} onClick={() => handleEditClick(account)} ><i className="fa-solid fa-pen-to-square"></i></Button>
-                                                    <Button style={{ color: 'red', border: 'none' }} onClick={() => handleDeleteClick(account)} ><i className="fa-solid fa-trash"></i></Button>
-                                                </td>
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{account.accountId}</td>
+                                                    <td>{account.email}</td>
+                                                    <td>{account.firstName} {account.lastName}</td>
+                                                    <td>{account.phoneNumber}</td>
+                                                    <td><Badge bg={account.role?.roleName.toLowerCase() == "admin" ? "danger" : account.role?.roleName.toLowerCase() == "staff" ? "warning" : "primary"}>{account.role?.roleName}</Badge></td>
+                                                    <td>{account.isDeleted ? "True" : "False"}</td>
 
-                                            </tr>
-                                        )
-                                    })}
-                                </tbody>
-                            </Table>
-                        </div>
+                                                    <td>
+                                                        <Button style={{ marginRight: '5px', border: 'none', color: 'blue' }} onClick={() => handleEditClick(account)} ><i className="fa-solid fa-pen-to-square"></i></Button>
+                                                        <Button style={{ color: 'red', border: 'none' }} onClick={() => handleDeleteClick(account)} ><i className="fa-solid fa-trash"></i></Button>
+                                                    </td>
+
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                            </div>
+                        }
+
 
                     </div>
                 </Content>

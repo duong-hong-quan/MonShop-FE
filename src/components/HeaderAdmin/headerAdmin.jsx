@@ -62,19 +62,14 @@ const HeaderAdmin = ({ collapsed, setCollapsed }) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                flexWrap:'nowrap'
 
             }}
         >
-            <Button
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                    fontSize: '16px',
-                    width: 64,
-                    height: 64,
-                }}
-            />
+            <div className="d-flex h-100" style={{alignItems:'center'}}>
+               
+                <Button style={{ backgroundColor: '#1677ff', color:'white' }} onClick={()=> navigate("/home")}><i className="fa-solid fa-house" style={{ marginRight: '5px' }}></i> Home</Button>
+            </div>
             <div>
                 <img src={AccountInfo?.imageUrl} alt="" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
                 <span style={{ margin: '0 10px' }} >{AccountInfo?.firstName}</span>
