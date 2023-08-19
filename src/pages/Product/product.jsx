@@ -6,9 +6,10 @@ import {
 import { NavLink } from "react-router-dom";
 import LoadingOverlay from "../../components/Loading/LoadingOverlay";
 import "./product.css";
-import { decodeToken } from "../../services/jwtHelper";
-import Header from "../Common/Header/header";
 import Chat from "../Common/Chat/chat";
+import Header from "../../components/Header/header";
+import { toast } from "react-toastify";
+import "../../Utils/util"
 const ProductPage = () => {
   const [productList, setProductList] = useState([]);
   const [productListFilter, setProductListFilter] = useState([]);
@@ -33,7 +34,6 @@ const ProductPage = () => {
       setSelectedCategory(0);
       setProductList(res);
       setProductListFilter(res);
-      setMinMaxPriceRange(100);
       setLoading(false);
     }
   };
@@ -41,8 +41,10 @@ const ProductPage = () => {
   useEffect(() => {
     let filterProduct = productListFilter;
     if (selectedCategory == 0) {
-      getAllProduct();
-      // setProductList();
+      filterProduct = filterProduct.filter(
+        (product) => product.price <= calculatePriceForStep(minMaxPriceRange)
+      );
+
     }
     if (selectedCategory !== 0) {
       filterProduct = productListFilter.filter(
@@ -59,7 +61,7 @@ const ProductPage = () => {
         (product) => product.price <= calculatePriceForStep(minMaxPriceRange)
       );
     }
-    setTimeout(() => {}, 500);
+    setTimeout(() => { }, 500);
     setProductList(filterProduct);
   }, [selectedCategory, minMaxPriceRange]);
 
@@ -100,6 +102,7 @@ const ProductPage = () => {
       );
       setCartItems(updatedCartItems);
       localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      toast.success("Add to cart successfully !");
     } else {
       const newCartItem = { ...product, quantity: 1 };
       setCartItems((prevCartItems) => [...prevCartItems, newCartItem]);
@@ -107,6 +110,8 @@ const ProductPage = () => {
         "cartItems",
         JSON.stringify([...cartItems, newCartItem])
       );
+    toast.success("Add to cart successfully !");
+
     }
   };
 
@@ -260,6 +265,8 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
+      <Chat></Chat>
+
     </>
   );
 };

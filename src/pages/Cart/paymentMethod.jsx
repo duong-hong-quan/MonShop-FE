@@ -38,19 +38,19 @@ const PaymentMethod = ({ OrderID }) => {
   const handleSelectMethod = async (method) => {
     
     setSelectedMethod(method);
-    console.log(selectedMethod)
-    if (selectedMethod.id == "paypal") {
+    console.log(selectedMethod);
+    if (selectedMethod?.id == "paypal") {
       let respone = await getURLPayPal(OrderID);
       console.log(respone);
       if (respone) {
         window.location.href = respone;
       }
-    } else if (selectedMethod.id == "momo") {
+    } else if (selectedMethod?.id == "momo") {
       let respone = await getURLMomo(OrderID);
       if (respone) {
         window.location.href = respone;
       }
-    } else if (selectedMethod.id == "vnpay") {
+    } else if (selectedMethod?.id == "vnpay") {
       let respone = await getURLVNPAY(OrderID);
       if (respone) {
         window.location.href = respone;

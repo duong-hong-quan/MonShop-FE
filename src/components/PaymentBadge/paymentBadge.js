@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { FaCheckCircle, FaExclamationCircle, FaCreditCard, FaPaypal } from 'react-icons/fa';
-
+import './paymentBadge.css';
 function PaymentBadge({ paymentMethod }) {
   let badgeVariant, icon, iconColor;
 
@@ -16,13 +16,9 @@ function PaymentBadge({ paymentMethod }) {
       iconColor = 'white';
       break;
     case 'vnpay':
-      badgeVariant = 'info';
-      icon = <FaCreditCard />;
-      iconColor = 'white';
-      break;
     case 'paypal':
       badgeVariant = 'info';
-      icon = <FaPaypal />;
+      icon = paymentMethod === 'vnpay' ? <FaCreditCard /> : <FaPaypal />;
       iconColor = 'white';
       break;
     default:
@@ -30,20 +26,12 @@ function PaymentBadge({ paymentMethod }) {
       icon = null;
   }
 
-  const badgeStyle = {
-    backgroundColor: badgeVariant === 'primary' ? '#0d6efd' : badgeVariant === 'danger' ? '#dc3545' : '#0dcaf0',
-    color: iconColor || 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width:'80px'
-    
-  };
+  const badgeClassName = `custom-badge ${badgeVariant} ${iconColor === 'white' ? 'white-text' : ''}`;
 
   return (
-    <Badge style={badgeStyle}>
-      {icon} 
-      {paymentMethod}
+    <Badge className={badgeClassName} style={{ margin: '0 5px', padding:'10px' }}>
+      <span > {icon}</span>
+      <span>{paymentMethod}</span>
     </Badge>
   );
 }

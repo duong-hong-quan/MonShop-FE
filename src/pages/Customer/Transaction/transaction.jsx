@@ -1,19 +1,21 @@
-import Header from "../../Common/Header/header";
 import React, { useEffect, useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import "./transaction.css";
-import { getOrderByAccountID } from "../../../services/paymentService";
+import { getOrderByAccountID, getOrderStatistic } from "../../../services/paymentService";
 import { decodeToken } from "../../../services/jwtHelper";
-import { Button, Table } from "react-bootstrap";
+import { Badge, Button, Table } from "react-bootstrap";
 import { getAccountByID } from "../../../services/userService";
 import { NavLink } from "react-router-dom";
+import Chat from "../../Common/Chat/chat";
+import { formatDate } from "../../../Utils/util";
+import Header from "../../../components/Header/header";
 const Transaction = () => {
   const [orderList, setOrderList] = useState([]);
   const [activeTab, setActiveTab] = useState("Pending");
   const [user, setUser] = useState({});
-
-  const fetchUser = async () => {
+  const [tabCounts, setTabCounts] = useState({});
+  const fetchData = async () => {
     const userToken = await decodeToken();
 
     if (userToken !== null) {
@@ -21,10 +23,16 @@ const Transaction = () => {
       if (res) {
         setUser(res);
       }
+      let res2 = await getOrderStatistic(userToken.accountID);
+      if (res2) {
+        setTabCounts(res2);
+      }
     }
   };
+
+
   useEffect(() => {
-    fetchUser();
+    fetchData();
   }, []);
   const fetchOrder = async () => {
     const userToken = await decodeToken();
@@ -88,19 +96,7 @@ const Transaction = () => {
     setActiveTab(status);
   };
 
-  function formatDate(inputDateString) {
-    var dateObj = new Date(inputDateString);
-  
-    var day = dateObj.getDate();
-    var month = dateObj.getMonth() + 1;
-    var year = dateObj.getFullYear();
-    var hours = dateObj.getHours();
-    var minutes = dateObj.getMinutes();
-  
-    var formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-  
-    return formattedDate;
-  }
+
   return (
     <>
       <Header />
@@ -110,49 +106,55 @@ const Transaction = () => {
           id="transaction-tabs"
           activeKey={activeTab}
           onSelect={handleTabSelect}
+
         >
           {transactionData.map((transaction) => (
             <Tab
               key={transaction.id}
               eventKey={transaction.status}
               title={transaction.status}
+
             >
-              <div className="mt-3"  style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
+              <div className="mt-3" style={{ backgroundColor: '#fff', borderRadius: '10px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding: '5px 15px' }}>
                 {activeTab === transaction.status && (
-                  <table className="table"  bordered>
-                    <thead>
-                      <tr>
-                        <th>Order ID</th>
-                        <th>Order Date</th>
-                        <th>Total</th>
-                        <th>Customer</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {orderList.map((order, index) => (
-                        <tr key={index}>
-                          <td>{order.orderId}</td>
-                          <td>{formatDate(order.orderDate)}</td>
-                          <td>{order.total}</td>
-                          <td>{user.firstName}</td>
-                          <td>
-                            <Button style={{backgroundColor:'black', border:'none'}}>
-
-                            <NavLink to={`/transaction/${order.orderId}`} style={{textDecoration:'none', color:'white', border:'none'}}>View Detail</NavLink>
-
-                            </Button>
-                          </td>
+                  <div className="table-responsive">
+                    <table className="table" bordered>
+                      <thead>
+                        <tr>
+                          <th>Order ID</th>
+                          <th>Order Date</th>
+                          <th>Total</th>
+                          <th>Customer</th>
+                          <th></th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {orderList.map((order, index) => (
+                          <tr key={index}>
+                            <td>{order.orderId}</td>
+                            <td>{formatDate(order.orderDate)}</td>
+                            <td>{order.total}</td>
+                            <td>{user.firstName}</td>
+                            <td>
+                              <Button style={{ backgroundColor: 'black', border: 'none' }}>
+
+                                <NavLink to={`/transaction/${order.orderId}`} style={{ textDecoration: 'none', color: 'white', border: 'none' }}>View Detail</NavLink>
+
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
                 )}
               </div>
             </Tab>
           ))}
         </Tabs>
       </div>
+      <Chat></Chat>
     </>
   );
 };

@@ -1,10 +1,13 @@
 import jwt_decode from "jwt-decode";
 
-const decodeToken = async () => {
-  const token = await localStorage.getItem("token");
+
+
+
+const decodeToken =  () => {
+  const token =  localStorage.getItem("token");
 
   if (token !== null) {
-    const decoded = await jwt_decode(token);
+    const decoded =  jwt_decode(token);
 
     const userRole =
       decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
@@ -14,5 +17,13 @@ const decodeToken = async () => {
     return null;
   }
 };
+const isTokenExpired = () => {
+  const token =  localStorage.getItem("token");
+  const decoded =  jwt_decode(token);
 
-export { decodeToken };
+  const currentTime = Date.now() / 1000;
+  return decoded.exp < currentTime;
+};
+
+
+export { decodeToken, isTokenExpired };

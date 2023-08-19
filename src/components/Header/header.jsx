@@ -1,8 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "./header.css";
 import { useEffect, useState } from "react";
-import { getAccountByID, logout } from "../../../services/userService";
-import { decodeToken } from "../../../services/jwtHelper";
+import { getAccountByID, logout } from "../../services/userService";
+import { decodeToken } from "../../services/jwtHelper";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [user, setUser] = useState({});
@@ -25,6 +26,7 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     navigate("/login");
+    toast.success("Log out successfully")
   };
   return (
     <header className="bg-dark text-white">
@@ -56,7 +58,7 @@ const Header = () => {
         >
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/">
+              <NavLink className="nav-link" to="/home">
                 Home
               </NavLink>
             </li>

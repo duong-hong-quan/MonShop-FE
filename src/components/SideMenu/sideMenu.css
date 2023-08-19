@@ -1,0 +1,58 @@
+.side-menu {
+  width: 250px;
+  height: 100%;
+  background-color: #4e69ee;
+  color: #fff;
+  transition: width 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Đảm bảo menu luôn nằm trên cùng */
+}
+
+.content-container {
+  margin-left: 250px; /* Đặt kích thước margin theo chiều ngang của menu */
+}
+.side-menu.collapsed {
+  width: 60px;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  width: 60px;
+  text-align: center;
+
+  /* Đặt align thành center */
+}
+
+.menu-items {
+  list-style: none;
+  padding: 10px;
+}
+
+.menu-items li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.menu-items li .menu-label {
+  display: inline-block;
+  margin-left: 10px;
+  opacity: 1;
+  /* Đặt opacity thành 1 */
+  transition: opacity 0.3s;
+}
+
+.side-menu.collapsed .menu-items li .menu-label {
+  opacity: 0;
+  /* Đặt opacity thành 0 khi menu ẩn */
+}
+
+.menu-items li svg {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}

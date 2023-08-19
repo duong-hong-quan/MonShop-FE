@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
-import Header from "../../Common/Header/header";
 import React, { useState, useEffect } from "react";
 import { getListItemByOrderID } from "../../../services/paymentService"; // Import your API function
 import "./transactionDetail.css"; // Import your CSS file
 import { Badge, Button } from "react-bootstrap";
 import { decodeToken } from "../../../services/jwtHelper";
 import { getAccountByID } from "../../../services/userService";
-import PaymentBadge from "../../Common/PaymentBadge/paymentBadge";
 import PaymentMethod from "../../Cart/paymentMethod";
+import Chat from "../../Common/Chat/chat";
+import Header from "../../../components/Header/header";
+import PaymentBadge from "../../../components/PaymentBadge/paymentBadge";
 
 const TransactionDetail = () => {
   const { id } = useParams();
@@ -44,7 +45,7 @@ const TransactionDetail = () => {
 
     fetchOrderDetail();
   }, [id]);
-  const handlePayment = () => {};
+  const handlePayment = () => { };
   return (
     <>
       <Header />
@@ -65,6 +66,7 @@ const TransactionDetail = () => {
             >
               Order ID: {orderItemList[0].orderId}
             </h5>
+            <div className="table-responsive">
             <table className="table">
               <thead className="thead-dark">
                 <tr>
@@ -93,18 +95,20 @@ const TransactionDetail = () => {
                 ))}
               </tbody>
             </table>
+            </div>
+
+           
             {order && (
-              <div className="m-3">
+              <div className="m-3 d-flex" style={{ flexDirection: 'column', textAlign: 'center' }}>
                 <div
-                  className="d-flex"
-                  style={{ alignItems: "baseline", justifyContent: "end" }}
+                  className="m-3 d-flex" style={{ flexDirection: 'row', justifyContent: 'center' }}
                 >
-                  <h5 style={{ margin: "0", fontSize: "18px" }}>Total: </h5>
+                  <h5 style={{ margin: "0 5px", fontSize: "18px" }}>Total: </h5>
                   <h5
                     style={{
                       fontSize: "18px",
                       fontWeight: "400",
-                      marginLeft: "3px",
+                      margin: '0'
                     }}
                   >
                     {" "}
@@ -112,48 +116,35 @@ const TransactionDetail = () => {
                   </h5>
                 </div>
                 <div
-                  className="d-flex mb-2 mt-2"
-                  style={{ alignItems: "baseline", justifyContent: "end" }}
+                  className="m-3 d-flex" style={{ flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}
+
                 >
-                  <h5 style={{ margin: "0", fontSize: "18px" }}>
+                  <h6 style={{ margin: "0 5px", fontSize: "18px" }}>
                     {" "}
-                    Payment Method:{" "}
-                  </h5>
-                  <h5
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "400",
-                      marginLeft: "3px",
-                    }}
-                  >
-                    {" "}
-                    <PaymentBadge paymentMethod={paymentMethod} />
-                    {/* <Badge bg="primary">{paymentMethod}</Badge> */}
-                  </h5>
+                    Payment Method
+                  </h6>
+                  <PaymentBadge paymentMethod={paymentMethod} />
+
                 </div>
                 <div
-                  className="d-flex"
-                  style={{ alignItems: "baseline", justifyContent: "end" }}
+                  className="m-3 d-flex" style={{ flexDirection: 'row', justifyContent: 'center' }}
+
                 >
-                  <h5 style={{ margin: "0", fontSize: "18px" }}> Customer: </h5>
+                  <h5 style={{ margin: "0 5px", fontSize: "18px", margin: '0' }}> Customer: </h5>
                   <h5
                     style={{
                       fontSize: "18px",
                       fontWeight: "400",
-                      marginLeft: "3px",
+                      margin: "0 3px",
                     }}
                   >
                     {user.firstName}
                   </h5>
                 </div>
                 <div
-                  className="d-flex"
-                  style={{
-                    alignItems: "baseline",
-                    justifyContent: "end",
-                  }}
+
                 >
-                  {paymentMethod == "Pending pay" ? (
+                  {paymentMethod == "Pending Pay" ? (
                     <>
                       <PaymentMethod OrderID={order.orderId}></PaymentMethod>
                     </>
@@ -168,6 +159,7 @@ const TransactionDetail = () => {
           <p>Loading...</p>
         )}
       </div>
+      <Chat></Chat>
     </>
   );
 };

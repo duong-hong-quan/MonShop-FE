@@ -9,7 +9,7 @@ import {
   getURLPayPal,
   getURLVNPAY,
 } from "../../services/paymentService";
-import Header from "../Common/Header/header";
+import Header from "../../components/Header/header";
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -168,7 +168,7 @@ const CartPage = () => {
                   className="w-100"
                   readOnly
                   type="text"
-                  value={`${user.firstName} ${user.lastName} `}
+                  value={`${user?.firstName} ${user?.lastName} `}
                   style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                 />
               </div>
@@ -204,7 +204,7 @@ const CartPage = () => {
                   className="w-100"
                   readOnly
                   type="text"
-                  value={"HCM City"}
+                  value={user?.address}
                   style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                 />
               </div>

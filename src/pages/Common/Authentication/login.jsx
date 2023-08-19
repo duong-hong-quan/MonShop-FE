@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, redirect, useNavigate } from "react-router-dom";
 import { login } from "../../../services/userService";
 import { decodeToken } from "../../../services/jwtHelper";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,21 +10,37 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    console.log({ email: email, password: password });
-    console.log("password", password);
     const res = await login({ email: email, password: password });
-    if (res && res.token && res.refreshToken) {
+    if (res.status == 404) {
+      toast.error("User name or password incorrect");
+    }
+    if (res.token && res.refreshToken) {
+      toast.success("Login sucess");
       localStorage.setItem("token", res.token);
       localStorage.setItem("refreshToken", res.refreshToken);
     }
-    let user = await decodeToken();
+    let user = decodeToken();
+    console.log(user)
     if (user.userRole == "admin") {
+      navigate("/management/product");
+    } else if (user.userRole == "staff") {
+      navigate("/management/product");
+    } else if (user.userRole == "user") {
       navigate("/products");
+
     } else {
-      navigate("/products");
+      navigate("/login")
+
     }
   };
 
+  useEffect(() => {
+
+    let user = localStorage.getItem("token");
+    if (user) {
+      navigate("/products");
+    }
+  }, [])
   return (
     <div
       className="container-fluid"
@@ -53,7 +70,7 @@ const Login = () => {
                     type="text"
                     className="form-control mt-3"
                     id="email"
-                    // placeholder="...@gmail.com"
+                    placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>

@@ -6,41 +6,67 @@ import ProductDetail from "./pages/Product/productDetail";
 import CartPage from "./pages/Cart/cartPage";
 import Login from "./pages/Common/Authentication/login";
 import SignUp from "./pages/Common/Authentication/signup";
-
-import Header from "./pages/Common/Header/header";
-import Chat from "./pages/Common/Chat/chat";
 import Transaction from "./pages/Customer/Transaction/transaction";
 import TransactionDetail from "./pages/Customer/TransactionDetail/transactionDetail";
+import ProductManagement from "./pages/Admin/ProductManagement/productManagement";
+import AccountManagement from "./pages/Admin/AccountManagement/accountManagement";
+import ChatManagement from "./pages/Admin/ChatManagement/chatManagement";
+import Chat from "./pages/Common/Chat/chat";
+import OrderManagement from "./pages/Admin/OrderManagement/orderManagement";
+import HomePage from "./pages/HomePage/homePage";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SettingManagement from "./pages/Admin/SettingManagement/settingManagement";
+
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Chat></Chat>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        {/* Same as */}
+        <ToastContainer />
         <Routes>
-          <Route path="/login" element={<Login />} exact />
-        </Routes>
-        <Routes>
-          <Route path="/header" element={<Header />} exact />
-        </Routes>
-        <Routes>
-          <Route path="/signup" element={<SignUp />} exact />
-        </Routes>
-        <Routes>
-          <Route path="/products" element={<ProductPage />} exact />
-        </Routes>
-        <Routes>
-          <Route path="/product/:id" element={<ProductDetail />} exact />
-        </Routes>
-        <Routes>
-          <Route path="/cart" element={<CartPage />} exact />
-        </Routes>
-    
-        <Routes>
-          <Route path="/transaction" element={<Transaction></Transaction>}></Route>
-        </Routes>
+          {[
+            { path: "/home", element: <HomePage /> },
+            { path: "/", element: <HomePage /> },
 
-        <Routes>
-          <Route path="/transaction/:id" element={<TransactionDetail></TransactionDetail>} exact></Route>
+            { path: "/login", element: <Login /> },
+            { path: "/signup", element: <SignUp /> },
+            { path: "/products", element: <ProductPage /> },
+            { path: "/product/:id", element: <ProductDetail /> },
+            { path: "/cart", element: <CartPage /> },
+            { path: "/transaction", element: <Transaction /> },
+            { path: "/transaction/:id", element: <TransactionDetail /> },
+            { path: "/management/product", element: <ProductManagement /> },
+            { path: "/management/user", element: <AccountManagement /> },
+            { path: "/management/chat", element: <ChatManagement /> },
+            { path: "/management/orders", element: <OrderManagement /> },
+            { path: "/management/settings", element: <SettingManagement /> },
+
+
+            { path: "/chat", element: <Chat /> },
+
+
+          ].map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={route.element}
+              exact
+            />
+          ))}
+
         </Routes>
       </div>
     </BrowserRouter>

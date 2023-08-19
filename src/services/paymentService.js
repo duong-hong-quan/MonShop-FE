@@ -16,8 +16,24 @@ const getOrderByAccountID = (AccountID, StatusID) => {
     `/Order/GetAllOrderByAccountID?AccountID=${AccountID}&OrderStatusID=${StatusID}`
   );
 };
-const getListItemByOrderID = (OrderId)=>{
-return axios.get(`/Order/GetListItemByOrderID?orderID=${OrderId}
+const getListItemByOrderID = (OrderId) => {
+  return axios.get(`/Order/GetListItemByOrderID?orderID=${OrderId}
 `)
 }
-export { getURLMomo, getURLVNPAY, getURLPayPal, getOrderByAccountID, getListItemByOrderID };
+
+const getAllOrder = () => {
+  return axios.get("/Order/GetAllOrder");
+}
+
+const getAllOrderStatus = () => {
+  return axios.get("/Order/GetAllOrderStatus");
+}
+
+const updateStatusForOrder = (OrderID, status) => {
+  return axios.put(`/Order/UpdateStatusForOrder?OrderID=${OrderID}&status=${status}`);
+}
+
+const getOrderStatistic = (accountID) =>{
+  return axios.get( `/Order/GetOrderStatistic?AccountID=${accountID}`);
+}
+export {getOrderStatistic, updateStatusForOrder, getAllOrderStatus, getAllOrder, getURLMomo, getURLVNPAY, getURLPayPal, getOrderByAccountID, getListItemByOrderID };

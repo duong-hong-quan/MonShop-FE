@@ -1,0 +1,88 @@
+import { Button } from "antd";
+import { Header } from "antd/es/layout/layout";
+import {
+    MenuFoldOutlined,
+    MenuUnfoldOutlined
+
+} from '@ant-design/icons';
+import { useEffect, useState } from "react";
+import jwtDecode from "jwt-decode";
+import { getAccountByID, logout, refreshAccessToken } from "../../services/userService";
+import { isTokenExpired } from "../../services/jwtHelper";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+const HeaderAdmin = ({ collapsed, setCollapsed }) => {
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+
+    const [AccountInfo, setAccountInfo] = useState({});
+    useEffect(() => {
+
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setUser(decodedToken);
+            const fetchInfo = async () => {
+                let res = await getAccountByID(decodedToken?.AccountID);
+                if (res) {
+                    setAccountInfo(res);
+                }
+            }
+            fetchInfo();
+        }
+
+    }, []);
+
+
+    useEffect(() => {
+
+        if (user && isTokenExpired()) {
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (refreshToken) {
+                refreshAccessToken();
+            } else {
+                logout();
+            }
+        }
+
+    }, [user]);
+
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+        toast.success("Log out successfully")
+    }
+    return (<>
+
+        <Header
+            style={{
+                padding: 0,
+                background: '#fff',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+
+            }}
+        >
+            <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                    fontSize: '16px',
+                    width: 64,
+                    height: 64,
+                }}
+            />
+            <div>
+                <img src={AccountInfo?.imageUrl} alt="" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                <span style={{ margin: '0 10px' }} >{AccountInfo?.firstName}</span>
+                <Button style={{ backgroundColor: '#1677ff', color: '#fff' }} onClick={handleLogout}> <i className="fa-solid fa-arrow-right-from-bracket" style={{ marginRight: '5px' }}></i>Log out</Button>
+            </div>
+        </Header>
+
+    </>)
+}
+
+export default HeaderAdmin;

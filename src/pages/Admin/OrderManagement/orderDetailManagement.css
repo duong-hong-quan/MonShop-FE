@@ -1,0 +1,6 @@
+.custom-modal-width .modal-content {
+    width: 120%; /* Adjust the percentage value as needed */
+  }
+  .modal.fade .modal-dialog{
+width: 100%;
+  }

@@ -1,0 +1,17 @@
+/* PaymentBadge.css */
+.custom-badge.primary {
+    background-color: #0d6efd !important;
+  }
+  
+  .custom-badge.danger {
+    background-color: #d82f8b !important; /* Change this to your desired pink color */
+  }
+  
+  .custom-badge.info {
+    background-color: #0dcaf0 !important;
+  }
+  
+  .custom-badge.white-text {
+    color: white !important;
+  }
+  
