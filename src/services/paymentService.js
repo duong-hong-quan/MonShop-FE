@@ -33,7 +33,11 @@ const updateStatusForOrder = (OrderID, status) => {
   return axios.put(`/Order/UpdateStatusForOrder?OrderID=${OrderID}&status=${status}`);
 }
 
-const getOrderStatistic = (accountID) =>{
-  return axios.get( `/Order/GetOrderStatistic?AccountID=${accountID}`);
+const getOrderStatistic = (accountID) => {
+  return axios.get(`/Order/GetOrderStatistic?AccountID=${accountID}`);
 }
-export {getOrderStatistic, updateStatusForOrder, getAllOrderStatus, getAllOrder, getURLMomo, getURLVNPAY, getURLPayPal, getOrderByAccountID, getListItemByOrderID };
+
+const verifyOrder = (OrderID) => {
+  return axios.get(`/Order/VerifyOrder?OrderID=${OrderID}`)
+}
+export { verifyOrder,getOrderStatistic, updateStatusForOrder, getAllOrderStatus, getAllOrder, getURLMomo, getURLVNPAY, getURLPayPal, getOrderByAccountID, getListItemByOrderID };

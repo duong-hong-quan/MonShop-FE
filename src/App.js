@@ -41,7 +41,7 @@ function App() {
           {[
             { path: "/home", element: <HomePage /> },
             { path: "/", element: <HomePage /> },
-            { path: "/verify", element: <VerifyPayment /> },
+            { path: "/verify/:id", element: <VerifyPayment /> },
 
             { path: "/login", element: <Login /> },
             { path: "/signup", element: <SignUp /> },
