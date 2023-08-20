@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Button } from "antd";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 import "./transaction.css";
 import { getOrderByAccountID, getOrderStatistic } from "../../../services/paymentService";
 import { decodeToken } from "../../../services/jwtHelper";
+import { Badge, Button, Table } from "react-bootstrap";
 import { getAccountByID } from "../../../services/userService";
 import { NavLink } from "react-router-dom";
 import Chat from "../../Common/Chat/chat";
 import { formatDate } from "../../../Utils/util";
 import Header from "../../../components/Header/header";
-
-const { TabPane } = Tabs;
-
 const Transaction = () => {
   const [orderList, setOrderList] = useState([]);
   const [activeTab, setActiveTab] = useState("Pending");
   const [user, setUser] = useState({});
   const [tabCounts, setTabCounts] = useState({});
-
   const fetchData = async () => {
     const userToken = await decodeToken();
 
@@ -32,34 +30,31 @@ const Transaction = () => {
     }
   };
 
+
   useEffect(() => {
     fetchData();
   }, []);
-
   const fetchOrder = async () => {
     const userToken = await decodeToken();
-    let status = 1;
-
-    if (activeTab.toLowerCase() === "pending") {
+    var status = 1;
+    if (activeTab.toLowerCase() == "pending") {
       status = 1;
-    } else if (activeTab.toLowerCase() === "success pay") {
+    } else if (activeTab.toLowerCase() == "success pay") {
       status = 2;
-    } else if (activeTab.toLowerCase() === "fail pay") {
+    } else if (activeTab.toLowerCase() == "fail pay") {
       status = 3;
-    } else if (activeTab.toLowerCase() === "shipped") {
+    } else if (activeTab.toLowerCase() == "shipped") {
       status = 4;
-    } else if (activeTab.toLowerCase() === "delivered") {
+    } else if (activeTab.toLowerCase() == "delivered") {
       status = 5;
-    } else if (activeTab.toLowerCase() === "cancelled") {
+    } else if (activeTab.toLowerCase() == "cancelled") {
       status = 6;
     }
-
     let res = await getOrderByAccountID(userToken.accountID, status);
     if (res) {
       setOrderList(res);
     }
   };
-
   useEffect(() => {
     fetchOrder();
   }, [activeTab]);
@@ -101,23 +96,26 @@ const Transaction = () => {
     setActiveTab(status);
   };
 
+
   return (
     <>
       <Header />
       <div className="container mt-5">
         <h2>Transaction Order</h2>
-        <Tabs activeKey={activeTab} onChange={handleTabSelect}>
+        <Tabs
+          id="transaction-tabs"
+          activeKey={activeTab}
+          onSelect={handleTabSelect}
+
+        >
           {transactionData.map((transaction) => (
-            <TabPane key={transaction.status} tab={transaction.status}>
-              <div
-                className="mt-3"
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                  padding: "5px 15px",
-                }}
-              >
+            <Tab
+              key={transaction.id}
+              eventKey={transaction.status}
+              title={transaction.status}
+
+            >
+              <div className="mt-3" style={{ backgroundColor: '#fff', borderRadius: '10px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding: '5px 15px' }}>
                 {activeTab === transaction.status && (
                   <div className="table-responsive">
                     <table className="table" bordered>
@@ -138,22 +136,10 @@ const Transaction = () => {
                             <td>{order.total}</td>
                             <td>{user.firstName}</td>
                             <td>
-                              <Button
-                                style={{
-                                  backgroundColor: "black",
-                                  border: "none",
-                                }}
-                              >
-                                <NavLink
-                                  to={`/transaction/${order.orderId}`}
-                                  style={{
-                                    textDecoration: "none",
-                                    color: "white",
-                                    border: "none",
-                                  }}
-                                >
-                                  View Detail
-                                </NavLink>
+                              <Button style={{ backgroundColor: 'black', border: 'none' }}>
+
+                                <NavLink to={`/transaction/${order.orderId}`} style={{ textDecoration: 'none', color: 'white', border: 'none' }}>View Detail</NavLink>
+
                               </Button>
                             </td>
                           </tr>
@@ -161,13 +147,14 @@ const Transaction = () => {
                       </tbody>
                     </table>
                   </div>
+
                 )}
               </div>
-            </TabPane>
+            </Tab>
           ))}
         </Tabs>
       </div>
-      <Chat />
+      <Chat></Chat>
     </>
   );
 };

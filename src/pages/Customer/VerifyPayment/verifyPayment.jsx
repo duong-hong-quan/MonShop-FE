@@ -9,24 +9,31 @@ const VerifyPayment = () => {
     const { id } = useParams();
     const [OrderID, setOrderID] = useState("");
     const [loading, setLoading] = useState(true);
-    const [status, setStatus] = useState(false);
+    const [status, setStatus] = useState(null);
     const navigate = useNavigate();
     useEffect(() => {
         setOrderID(id);
         setTimeout(() => {
             setLoading(false);
+
             verify();
-        }, 15000);
+            setTimeout(() => {
+                navigate("/transaction");
+            }, 5000);
+        }, 1500);
     }, []);
 
     const verify = async () => {
         let res = await verifyOrder(id);
-        if (res) {
-            setStatus(res);
+
+
+        if (res.status == 400) {
+            setStatus(false)
+        } else {
+            setStatus(true)
         }
-        setTimeout(() => {
-            navigate("/transaction");
-        }, 5000);
+
+
     }
 
     return (
@@ -45,22 +52,27 @@ const VerifyPayment = () => {
                     backgroundColor: '#fff'
                 }}>
                     <span style={{ fontSize: '16px', fontWeight: '600' }}>Order ID: {OrderID}</span>
+                    <span style={{ fontSize: '16px', fontWeight: '600' }}>Thank you for choose us!</span>
 
-                    {status ? (
-                        <div style={{
-                            marginTop: '20px',
-                            backgroundColor: 'green',
-                            color: 'white',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: '50%',
-                            width: '100px',
-                            height: '100px'
-                        }}>
-                            <i className="fa-solid fa-check" style={{ fontSize: '36px' }}></i>
-                        </div>
-                    ) : (
+                    {status == true &&
+
+                        (
+                            <div style={{
+                                marginTop: '20px',
+                                backgroundColor: 'green',
+                                color: 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: '50%',
+                                width: '100px',
+                                height: '100px'
+                            }}>
+                                <i className="fa-solid fa-check" style={{ fontSize: '36px' }}></i>
+                            </div>
+                        )}
+
+                    {status == false && (
                         <div style={{
                             marginTop: '20px',
                             color: 'white',
@@ -77,7 +89,11 @@ const VerifyPayment = () => {
                     )}
 
                     <span className="mt-3">
-                        <b>{status ? "Payment success !" : "Payment failed !"}</b>
+                        <b>{status == true && "Payment success !"}</b>
+                        <b>{status == false && "Payment failed !"}</b>
+
+                        <br />
+                        <b>We will redirect to transaction page ...</b>
                     </span>
                 </div>
             )}
