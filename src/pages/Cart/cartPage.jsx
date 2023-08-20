@@ -219,7 +219,7 @@ const CartPage = () => {
               }}
             >
               <h5 style={{ fontSize: "1.2rem" }}>Select Payment Method</h5>
-              <div className="method-list d-flex flex-md-column ">
+              <div className="method-list d-flex flex-md-column " style={{flexWrap:'wrap'}}>
                 {paymentMethods.map((method) => (
                   <div key={method.id} className="d-flex m-2">
                     <input

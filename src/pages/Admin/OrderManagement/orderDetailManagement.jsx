@@ -41,7 +41,7 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
                 <Modal.Title>Order Detail</Modal.Title>
             </Modal.Header>
             <Modal.Body >
-                <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
+                <div className="table-responsive" style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
                     <Table>
                         <thead>
                             <tr>

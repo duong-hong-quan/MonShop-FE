@@ -44,6 +44,7 @@ const ChatManagement = () => {
     const [selectedRoomId, setSelectedRoomId] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [currentRoom, setCurrentRoom] = useState({});
+    const [isDisplay, setIsDisplay] = useState(true);
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -152,6 +153,7 @@ const ChatManagement = () => {
     const handleGetMessByRoom = async (id) => {
 
         setRoomId(id);
+        setIsDisplay(false);
         console.log(roomId)
         let res = await getMessageByRoomID(id);
         let room = await getRoomByID(id);
@@ -274,7 +276,7 @@ const ChatManagement = () => {
 
                     <div className="container app">
                         <div className="row app-one">
-                            <div className="col-sm-4 side">
+                            <div className={`col-sm-4 side ${isDisplay ? 'show-on-mobile' : 'hide-on-mobile'}`}>
                                 <div className="side-one">
                                     <div className=" heading">
                                         <h5>Messenger</h5>
@@ -330,8 +332,11 @@ const ChatManagement = () => {
 
                             </div>
 
-                            <div className="col-sm-8 conversation">
+                            <div className={`col-sm-8 conversation ${isDisplay ? "hide-on-mobile" : "show-on-mobile"}`}>
                                 <div className="heading-room" style={{ display: 'flex', alignItems: 'center', backgroundColor: '#eee', padding: "10px 16px 10px 15px" }}>
+                                    <div style={{ margin: '0 5px' }} className={ `show-on-mobile-button`}>
+                                        <Button onClick={() => setIsDisplay(true)} > <i className="fa-solid fa-backward-step"></i></Button>
+                                    </div>
                                     <div className="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                                         <div className="heading-avatar-icon">
                                             <img src={room.roomImg} alt="" />

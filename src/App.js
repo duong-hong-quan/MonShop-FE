@@ -17,6 +17,7 @@ import HomePage from "./pages/HomePage/homePage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SettingManagement from "./pages/Admin/SettingManagement/settingManagement";
+import VerifyPayment from "./pages/Customer/VerifyPayment/verifyPayment";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           {[
             { path: "/home", element: <HomePage /> },
             { path: "/", element: <HomePage /> },
+            { path: "/verify", element: <VerifyPayment /> },
 
             { path: "/login", element: <Login /> },
             { path: "/signup", element: <SignUp /> },

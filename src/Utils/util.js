@@ -17,6 +17,15 @@ function formatPrice(input) {
 }
 
 
+function parseStringToBoolean(str) {
+    if (str == 'true') {
+        return true;
+    } else if (str == 'false') {
+        return false;
+    } else {
+        // Handle other cases if needed
+        return undefined; // Or throw an error
+    }
+}
 
-
-export { formatDate, formatPrice }
+export { formatDate, formatPrice,parseStringToBoolean }

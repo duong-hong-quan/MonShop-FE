@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { getListItemByOrderID } from "../../../services/paymentService"; // Import your API function
 import "./transactionDetail.css"; // Import your CSS file
@@ -60,6 +60,7 @@ const TransactionDetail = () => {
       >
         {orderItemList.length > 0 ? (
           <>
+          <NavLink to={"/transaction"}>Back</NavLink>
             <h5
               className="mt-3 mb-3"
               style={{ fontSize: "16px", fontWeight: "600" }}

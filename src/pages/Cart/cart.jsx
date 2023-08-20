@@ -14,6 +14,7 @@ const Cart = ({
     <div className="container">
       <div className="cart-container mt-5" style={{  backgroundColor:'#fff',borderRadius:'10px',boxShadow:'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding:'5px 15px'}}>
         <h2>Your Cart</h2>
+        <div className="table-responsive">
         <table className="table">
           <thead>
             <tr>
@@ -68,6 +69,8 @@ const Cart = ({
             ))}
           </tbody>
         </table>
+        </div>
+       
       </div>
     </div>
   );

@@ -186,7 +186,7 @@
   font-size: 100%;
   color: #000;
   display: block;
-  margin:  0 10px;
+  margin: 0 10px;
 }
 
 .sideBar-time {
@@ -385,7 +385,8 @@
   margin: 0 !important;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;}
+  justify-content: space-between;
+}
 
 
 .reply-send {
@@ -402,7 +403,7 @@
 .reply-main {
   padding: 2px 5px !important;
   flex: 1;
-  
+
 }
 
 .reply-main input {
@@ -419,4 +420,25 @@
   border: none;
   text-indent: 5px;
   box-shadow: none;
+}
+
+.show-on-mobile-button {
+  display: none;
+}
+
+/* Add this CSS to your existing stylesheet */
+@media (max-width: 740px) {
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .show-on-mobile {
+    display: block;
+  }
+  .show-on-mobile-button{
+    display: block;
+  }
+  .show-on-desktop {
+    display: none;
+  }
 }

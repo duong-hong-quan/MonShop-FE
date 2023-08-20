@@ -62,17 +62,20 @@ const HeaderAdmin = ({ collapsed, setCollapsed }) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                flexWrap:'nowrap'
+                flexWrap: 'nowrap'
 
             }}
         >
-            <div className="d-flex h-100" style={{alignItems:'center'}}>
-               
-                <Button style={{ backgroundColor: '#1677ff', color:'white' }} onClick={()=> navigate("/home")}><i className="fa-solid fa-house" style={{ marginRight: '5px' }}></i> Home</Button>
+            <div className="d-flex h-100" style={{ alignItems: 'center', flexWrap: 'nowrap' }}>
+
+                <Button style={{ backgroundColor: '#1677ff', color: 'white' }} onClick={() => navigate("/home")}><i className="fa-solid fa-house" style={{ marginRight: '5px' }}></i> Home</Button>
             </div>
-            <div>
-                <img src={AccountInfo?.imageUrl} alt="" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
-                <span style={{ margin: '0 10px' }} >{AccountInfo?.firstName}</span>
+            <div className="d-flex h-100" style={{ flexWrap: 'nowrap', alignItems: 'center' }}>
+                <div className="d-flex h-100" style={{ flexWrap: 'nowrap', alignItems: 'center' }}>
+                    <img src={AccountInfo?.imageUrl} alt="" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                    <span style={{ margin: '0 10px' }} >{AccountInfo?.firstName}</span>
+                </div>
+
                 <Button style={{ backgroundColor: '#1677ff', color: '#fff' }} onClick={handleLogout}> <i className="fa-solid fa-arrow-right-from-bracket" style={{ marginRight: '5px' }}></i>Log out</Button>
             </div>
         </Header>
