@@ -18,6 +18,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SettingManagement from "./pages/Admin/SettingManagement/settingManagement";
 import VerifyPayment from "./pages/Customer/VerifyPayment/verifyPayment";
+import Profile from "./pages/Customer/Profile/profile";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
             { path: "/home", element: <HomePage /> },
             { path: "/", element: <HomePage /> },
             { path: "/verify/:id", element: <VerifyPayment /> },
+            { path: "/profile", element: <Profile /> },
 
             { path: "/login", element: <Login /> },
             { path: "/signup", element: <SignUp /> },

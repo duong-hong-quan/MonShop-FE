@@ -3,12 +3,11 @@ import jwt_decode from "jwt-decode";
 
 
 
-const decodeToken =  () => {
-  const token =  localStorage.getItem("token");
-
+const decodeToken = () => {
+  const token = localStorage.getItem("token");
   if (token !== null) {
-    const decoded =  jwt_decode(token);
-
+    const decoded = jwt_decode(token);
+    console.log(decoded)
     const userRole =
       decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
     const accountID = decoded["AccountID"];
@@ -18,8 +17,8 @@ const decodeToken =  () => {
   }
 };
 const isTokenExpired = () => {
-  const token =  localStorage.getItem("token");
-  const decoded =  jwt_decode(token);
+  const token = localStorage.getItem("token");
+  const decoded = jwt_decode(token);
 
   const currentTime = Date.now() / 1000;
   return decoded.exp < currentTime;
