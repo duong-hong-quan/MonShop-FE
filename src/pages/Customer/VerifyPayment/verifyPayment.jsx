@@ -20,7 +20,7 @@ const VerifyPayment = () => {
             setTimeout(() => {
                 navigate("/transaction");
             }, 5000);
-        }, 30000);
+        }, 35000);
     }, []);
 
     const verify = async () => {
