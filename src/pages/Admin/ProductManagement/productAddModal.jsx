@@ -13,6 +13,7 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
     const [categoryID, setCategoryID] = useState(1);
     const [statusID, setStatusID] = useState(1);
     const [discount, setDiscount] = useState(0);
+    const [disableButton, setDisableButton] = useState(false);
 
     const fetchCategory = async () => {
         let res = await fetchAllCategories();
@@ -33,6 +34,7 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
     }, [])
 
     const handleAddProduct = async () => {
+        setDisableButton(true);
         await handleSaveAdd(
             {
                 "productName": productName,
@@ -45,7 +47,7 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
                 "discount": parseFloat(discount),
                 "isDeleted": false
             });
-
+        setDisableButton(false)
     }
     return (<>
 
@@ -147,7 +149,7 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
                 <Button variant="secondary" onClick={onHide}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={handleAddProduct} >
+                <Button variant="primary" onClick={handleAddProduct} disabled={disableButton} >
                     Add Product
                 </Button>
             </Modal.Footer>

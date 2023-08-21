@@ -15,6 +15,8 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
     const [statusID, setStatusID] = useState(1);
     const [discount, setDiscount] = useState(0);
     const [isDeleted, setIsDeleted] = useState(false);
+    const [disableButton, setDisableButton] = useState(false);
+
     const fetchCategory = async () => {
         let res = await fetchAllCategories();
 
@@ -51,6 +53,7 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
     }, [])
 
     const handleEdit = async () => {
+        setDisableButton(true);
         await handleEditProduct
             ({
                 "productId": productId,
@@ -64,7 +67,7 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
                 "discount": parseFloat(discount),
                 "isDeleted": parseStringToBoolean(isDeleted)
             });
-
+        setDisableButton(false);
 
     }
 
@@ -193,7 +196,7 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
                 <Button variant="secondary" onClick={onHide}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={handleEdit} >
+                <Button variant="primary" onClick={handleEdit} disabled={disableButton} >
                     Edit Product
                 </Button>
             </Modal.Footer>

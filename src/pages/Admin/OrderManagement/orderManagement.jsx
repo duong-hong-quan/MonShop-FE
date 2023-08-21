@@ -27,6 +27,7 @@ const OrderManagement = () => {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [currentOrder, setCurrentOrder] = useState({});
     const [loading, setLoading] = useState(true);
+
     const fetchOrder = async () => {
         let res = await getAllOrder();
         if (res) {

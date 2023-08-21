@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { fetchAllRole } from "../../../services/userService";
 
 const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) => {
-    const [accountID, setAccountID]= useState(0);
+    const [accountID, setAccountID] = useState(0);
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -12,6 +12,8 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
     const [roles, setRoles] = useState([]);
     const [roleId, setRoleId] = useState(1);
     const [isDeleted, setIsDeleted] = useState(false);
+    const [disableButton, setDisableButton] = useState(false);
+
     const fetchRole = async () => {
         let res = await fetchAllRole();
         if (res) {
@@ -49,6 +51,7 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
             "isDeleted": parseStringToBoolean(isDeleted),
             "roleId": roleId
         })
+        setDisableButton(true);
         await handleEditAccount(
             {
                 "accountId": accountID,
@@ -59,10 +62,11 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                 "lastName": lastName,
                 "address": address,
                 "phoneNumber": phoneNumber,
-                "isDeleted":  parseStringToBoolean(isDeleted),
+                "isDeleted": parseStringToBoolean(isDeleted),
                 "roleId": roleId
             }
         )
+        setDisableButton(false);
 
     }
     function parseStringToBoolean(str) {
@@ -92,7 +96,7 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </Form.Group>
-                   
+
                     <Form.Group>
                         <Form.Label>First Name</Form.Label>
                         <Form.Control
@@ -164,7 +168,7 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                 <Button variant="secondary" onClick={onHide}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={handleEdit} >
+                <Button variant="primary" onClick={handleEdit} disabled={disableButton} >
                     Update Account
                 </Button>
             </Modal.Footer>

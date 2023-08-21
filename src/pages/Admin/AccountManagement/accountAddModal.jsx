@@ -12,6 +12,7 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
     const [roles, setRoles] = useState([]);
     const [roleId, setRoleId] = useState(1);
     const [gender, setGender] = useState(true);
+    const [disableButton, setDisableButton] = useState(false);
     const fetchRole = async () => {
         let res = await fetchAllRole();
         if (res) {
@@ -25,7 +26,7 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
     }, [])
 
     const handleAddAccount = async () => {
-
+        setDisableButton(true);
         let img = "";
         if (gender == true) {
             img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOfiKG1ZEI-srUuW6d7peaILhzVM1tsk5hcL1UGBK1LQeanMqcrQmrXk6c0A18MzcDKA&usqp=CAU";
@@ -56,6 +57,7 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
             "isDeleted": false,
             "roleId": roleId
         })
+        setDisableButton(false);
 
     }
     return (
@@ -154,7 +156,7 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
                     <Button variant="secondary">
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={handleAddAccount} >
+                    <Button variant="primary" onClick={handleAddAccount} disabled={disableButton} >
                         Add Account
                     </Button>
                 </Modal.Footer>

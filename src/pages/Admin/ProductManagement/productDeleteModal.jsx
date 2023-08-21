@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 const ProductDeleteModal = ({ show, onClose, onDelete, currentProduct }) => {
+    const [disableButton, setDisableButton] = useState(false);
 
     const handleDelete = async () => {
+        setDisableButton(true);
         let res = await onDelete({
             "productId": currentProduct.productId,
             "productName": currentProduct.productName,
@@ -15,7 +17,7 @@ const ProductDeleteModal = ({ show, onClose, onDelete, currentProduct }) => {
             "productStatusId": currentProduct.productStatusId,
             "discount": currentProduct.discount
         });
-
+        setDisableButton(false)
         // if (res) {
         //     console.log(res)
         // }
@@ -42,7 +44,7 @@ const ProductDeleteModal = ({ show, onClose, onDelete, currentProduct }) => {
                 <Button variant="secondary" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button variant="danger" onClick={handleDelete}>
+                <Button variant="danger" onClick={handleDelete} disabled={disableButton}>
                     Delete
                 </Button>
             </Modal.Footer>

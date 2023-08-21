@@ -17,6 +17,8 @@ const Chat = () => {
   const chatContentRef = useRef(null);
   const [user, setUser] = useState(null);
   const [isManager, setIsManager] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
+
   const navigator = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -111,6 +113,7 @@ const Chat = () => {
   };
   const sendMessage = async () => {
     if (user != null) {
+      setDisableButton(true);
       console.log("Sending message...");
       const userToken = await decodeToken();
 
@@ -132,6 +135,7 @@ const Chat = () => {
 
           setMessage("");
           chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+          setDisableButton(false);
         } catch (error) {
           console.error("Error sending message:", error);
         }
@@ -230,12 +234,13 @@ const Chat = () => {
                   <a className="publisher-btn" href="#" data-abc="true">
                     <i className="fa fa-smile"></i>
                   </a>
-                  <a
+                  <Button
                     className="publisher-btn text-info"
                     onClick={sendMessage}
+                    disabled= {disableButton}
                   >
                     <i className="fa fa-paper-plane"></i>
-                  </a>
+                  </Button>
                 </div>
               </div>
             </div>

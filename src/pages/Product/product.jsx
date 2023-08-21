@@ -110,7 +110,7 @@ const ProductPage = () => {
         "cartItems",
         JSON.stringify([...cartItems, newCartItem])
       );
-    toast.success("Add to cart successfully !");
+      toast.success("Add to cart successfully !");
 
     }
   };
@@ -207,7 +207,7 @@ const ProductPage = () => {
                     textAlign: "center",
                   }}
                 >
-                  <div className="card p-3" style={{ border: "none" }}>
+                  <div className="card p-3" style={{ border: "none", borderRadius: '10px ', boxShadow: ' rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px' }}>
                     <NavLink
                       style={{ textDecoration: "none", color: "white" }}
                       to={`/product/${product.productId}`}

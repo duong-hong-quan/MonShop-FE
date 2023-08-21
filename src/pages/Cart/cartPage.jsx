@@ -14,6 +14,7 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [user, setUser] = useState({});
+  const [disableButton, setDisableButton] = useState(false);
 
   useEffect(() => {
     const savedCartItems = localStorage.getItem("cartItems");
@@ -96,6 +97,7 @@ const CartPage = () => {
   };
 
   const handleCheckout = async () => {
+    setDisableButton(true);
     const orderItems = cartItems.map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
@@ -131,6 +133,7 @@ const CartPage = () => {
           }
         }
       }
+      setDisableButton(false);
     } catch (e) {
       console.error("Error submitting order", e);
     }
@@ -219,7 +222,7 @@ const CartPage = () => {
               }}
             >
               <h5 style={{ fontSize: "1.2rem" }}>Select Payment Method</h5>
-              <div className="method-list d-flex flex-md-column " style={{flexWrap:'wrap'}}>
+              <div className="method-list d-flex flex-md-column " style={{ flexWrap: 'wrap' }}>
                 {paymentMethods.map((method) => (
                   <div key={method.id} className="d-flex m-2">
                     <input
@@ -246,7 +249,7 @@ const CartPage = () => {
               <button
                 className="btn bg-black text-white "
                 onClick={handleCheckout}
-                disabled={cartItems.length < 1 || !selectedMethod}
+                disabled={cartItems.length < 1 || !selectedMethod || disableButton}
               >
                 Checkout
               </button>

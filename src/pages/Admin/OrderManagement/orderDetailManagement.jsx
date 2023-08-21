@@ -9,6 +9,8 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
     const [order, setOrder] = useState({});
     const [orderStatusList, setOrderStatusList] = useState([]);
     const [OrderStatusId, setOrderStatusId] = useState(1);
+    const [disableButton, setDisableButton] = useState(false);
+
     const fetchData = async () => {
         let res = await getListItemByOrderID(currentOrder.orderId);
         console.log(res);
@@ -32,7 +34,9 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
     }, [currentOrder])
 
     const handleUpdate = async () => {
+        setDisableButton(true);
         await handleUpdateStatus(order?.orderId, OrderStatusId);
+        setDisableButton(false);
     }
     return (<>
         <Modal show={show} onHide={onHide} >
@@ -123,7 +127,7 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
                 <Button variant="secondary" onClick={onHide}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={handleUpdate} >
+                <Button variant="primary" onClick={handleUpdate} disabled={disableButton}>
                     Confirm
                 </Button>
             </Modal.Footer>

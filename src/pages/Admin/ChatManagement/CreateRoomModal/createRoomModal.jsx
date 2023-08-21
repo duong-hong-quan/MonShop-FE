@@ -3,11 +3,15 @@ import { Button, Form, Modal } from "react-bootstrap";
 const CreateRoomModal = ({ show, onHide, createRoom }) => {
     const [roomName, setRoomName] = useState("");
     const [roomImg, setRoomImg] = useState("");
+    const [disableButton, setDisableButton] = useState(false);
+
     const handleAddRoom = async () => {
+        setDisableButton(true);
         await createRoom({
             "roomName": roomName,
             "roomImg": roomImg
         });
+        setDisableButton(false);
 
     }
     return (<>
@@ -42,7 +46,7 @@ const CreateRoomModal = ({ show, onHide, createRoom }) => {
                 <Button variant="secondary">
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={handleAddRoom} >
+                <Button variant="primary" onClick={handleAddRoom}  disabled={disableButton}>
                     Create Room
                 </Button>
             </Modal.Footer>

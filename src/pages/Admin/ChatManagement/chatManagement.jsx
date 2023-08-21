@@ -47,6 +47,8 @@ const ChatManagement = () => {
     const [currentRoom, setCurrentRoom] = useState({});
     const [isDisplay, setIsDisplay] = useState(true);
     const [loading, setLoading]= useState(true);
+    const [disableButton, setDisableButton] = useState(false);
+
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -171,7 +173,7 @@ const ChatManagement = () => {
         }, 100);
     }
     const sendMessage = async (roomIdToSend) => {
-
+        setDisableButton(true);
         console.log("Sending message...");
 
         if (connection && message.trim() !== "") {
@@ -193,7 +195,7 @@ const ChatManagement = () => {
                 console.log("Message sent successfully.");
                 setMessage("");
                 setContentChange(prevChange => prevChange + 1);
-
+                setDisableButton(false);
             } catch (error) {
                 console.error("Error sending message:", error);
             }
@@ -384,9 +386,9 @@ const ChatManagement = () => {
                                         <input className="form-control" rows="1" id="comment" value={message} onChange={(e) => setMessage(e.target.value)}></input>
                                     </div>
 
-                                    <div className=" reply-send" onClick={() => sendMessage(roomId)}>
+                                    <Button className=" reply-send" onClick={() => sendMessage(roomId)} disabled={disableButton}>
                                         <i className="fa-solid fa-paper-plane"></i>
-                                    </div>
+                                    </Button>
                                 </div>
                             </div>
                         </div>
