@@ -20,7 +20,7 @@ const VerifyPayment = () => {
             setTimeout(() => {
                 navigate("/transaction");
             }, 5000);
-        }, 20000);
+        }, 30000);
     }, []);
 
     const verify = async () => {
@@ -39,7 +39,7 @@ const VerifyPayment = () => {
     return (
         <>
             <Header />
-            <LoadingOverlay loading={loading} />
+            <LoadingOverlay loading={loading} type={"Please wait, we are verifying the order..."}/>
 
             {!loading && (
                 <div style={{

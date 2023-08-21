@@ -129,7 +129,7 @@ const ProductPage = () => {
 
   return (
     <>
-      <LoadingOverlay loading={loading}></LoadingOverlay>
+      <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
 
       <Header></Header>
       <div className="container mt-5">

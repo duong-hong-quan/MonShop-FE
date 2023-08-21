@@ -1,14 +1,14 @@
 import React from "react";
 import "./LoadingOverlay.css";
 
-const LoadingOverlay = ({ loading }) => {
+const LoadingOverlay = ({ loading, type }) => {
   if (!loading) return null;
 
   return (
     <div className="loading-overlay">
       <div className="loading-content">
         <div className="loader" />
-        <span>Please wait...</span>
+        <span>{type}</span>
       </div>
     </div>
   );

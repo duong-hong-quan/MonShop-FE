@@ -10,11 +10,13 @@ import { NavLink } from "react-router-dom";
 import Chat from "../../Common/Chat/chat";
 import { formatDate } from "../../../Utils/util";
 import Header from "../../../components/Header/header";
+import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 const Transaction = () => {
   const [orderList, setOrderList] = useState([]);
   const [activeTab, setActiveTab] = useState("Pending");
   const [user, setUser] = useState({});
   const [tabCounts, setTabCounts] = useState({});
+  const [loading, setLoading]= useState(true);
   const fetchData = async () => {
     const userToken = await decodeToken();
 
@@ -53,6 +55,7 @@ const Transaction = () => {
     let res = await getOrderByAccountID(userToken.accountID, status);
     if (res) {
       setOrderList(res);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -99,6 +102,8 @@ const Transaction = () => {
 
   return (
     <>
+      <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
+
       <Header />
       <div className="container mt-5">
         <h2>Transaction Order</h2>

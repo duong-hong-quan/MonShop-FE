@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { decodeToken, isTokenExpired } from "../../../services/jwtHelper";
 import { getAccountByID, logout, refreshAccessToken } from "../../../services/userService";
 import jwt_decode from "jwt-decode";
+import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 
 const Profile = () => {
     const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ const Profile = () => {
     const [address, setAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [accountInfo, setAccountInfo] = useState({})
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
@@ -36,12 +38,13 @@ const Profile = () => {
         let res = await getAccountByID(parseInt(decoded?.AccountID));
         if (res) {
             setAccountInfo(res);
-
+            setLoading(false);
         }
 
     }
 
     return (<>
+    <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
         <Header></Header>
         <div className="container-fluid d-flex mt-2"
             style={{

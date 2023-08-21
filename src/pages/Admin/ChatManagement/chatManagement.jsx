@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import hosting from '../../../Utils/config';
 import CreateRoomModal from './CreateRoomModal/createRoomModal';
 import EditRoomModal from './EditRoomModal/editRoomModal';
+import LoadingOverlay from '../../../components/Loading/LoadingOverlay';
 
 const ChatManagement = () => {
     const chatContentRef = useRef(null);
@@ -45,6 +46,7 @@ const ChatManagement = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [currentRoom, setCurrentRoom] = useState({});
     const [isDisplay, setIsDisplay] = useState(true);
+    const [loading, setLoading]= useState(true);
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -142,6 +144,7 @@ const ChatManagement = () => {
         let res = await getAllRoom();
         if (res) {
             setRooms(res);
+            setLoading(false);
         }
     }
 
@@ -259,7 +262,7 @@ const ChatManagement = () => {
         setShowOptions(!showOptions);
     };
     return (<>
-
+    <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
         <Layout>
             <SideMenu collapsed={collapsed} />
 

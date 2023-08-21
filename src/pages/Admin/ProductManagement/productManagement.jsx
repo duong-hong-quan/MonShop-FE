@@ -180,7 +180,7 @@ const ProductManagement = () => {
                                     Add Product
                                 </Button>
                             </div>
-                            <LoadingOverlay loading={loading}></LoadingOverlay>
+                            <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
                             {loading == false &&
 
                                 <div className='table-responsive' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: ' 0 5px', borderRadius: '10px', margin: '15px 0' }}>
