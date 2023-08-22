@@ -114,7 +114,7 @@ const CartPage = () => {
       let res = await checkOut(orderData);
       if (res) {
         console.log("Order submitted successfully", res);
-        console.log(selectedMethod);
+        localStorage.removeItem("cartItems");
         if (selectedMethod == "paypal") {
           let respone = await getURLPayPal(res);
           console.log(respone);

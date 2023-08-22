@@ -16,7 +16,7 @@ const TransactionDetail = () => {
   const [order, setOrder] = useState({});
   const [paymentMethod, setPaymentMethod] = useState("");
   const [user, setUser] = useState({});
-
+  const [showModal, setShowModal] = useState(false);
   const fetchUser = async () => {
     const userToken = await decodeToken();
 
@@ -60,7 +60,7 @@ const TransactionDetail = () => {
       >
         {orderItemList.length > 0 ? (
           <>
-          <NavLink to={"/transaction"}>Back</NavLink>
+            <NavLink to={"/transaction"}>Back</NavLink>
             <h5
               className="mt-3 mb-3"
               style={{ fontSize: "16px", fontWeight: "600" }}
@@ -68,37 +68,37 @@ const TransactionDetail = () => {
               Order ID: {orderItemList[0].orderId}
             </h5>
             <div className="table-responsive">
-            <table className="table">
-              <thead className="thead-dark">
-                <tr>
-                  <th>Product</th>
-                  <th>Product Name</th>
+              <table className="table">
+                <thead className="thead-dark">
+                  <tr>
+                    <th>Product</th>
+                    <th>Product Name</th>
 
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orderItemList.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <img
-                        src={item.product.imageUrl}
-                        style={{ width: "100px", height: "100px" }}
-                      ></img>
-                    </td>
-                    <td>{item.product.productName}</td>
-                    <td>{item.pricePerUnit.toLocaleString("en-US")} đ</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.subtotal.toLocaleString("en-US")} đ</td>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {orderItemList.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <img
+                          src={item.product.imageUrl}
+                          style={{ width: "100px", height: "100px" }}
+                        ></img>
+                      </td>
+                      <td>{item.product.productName}</td>
+                      <td>{item.pricePerUnit.toLocaleString("en-US")} đ</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.subtotal.toLocaleString("en-US")} đ</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
-           
+
             {order && (
               <div className="m-3 d-flex" style={{ flexDirection: 'column', textAlign: 'center' }}>
                 <div
@@ -117,7 +117,7 @@ const TransactionDetail = () => {
                   </h5>
                 </div>
                 <div
-                  className="m-3 d-flex" style={{ flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}
+                  className="m-3 d-flex" style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
 
                 >
                   <h6 style={{ margin: "0 5px", fontSize: "18px" }}>
@@ -147,7 +147,8 @@ const TransactionDetail = () => {
                 >
                   {paymentMethod == "Pending Pay" ? (
                     <>
-                      <PaymentMethod OrderID={order.orderId}></PaymentMethod>
+                      <Button onClick={() => setShowModal(true)} style={{ backgroundColor: 'black', color: 'white', border: 'none' }}>Pay Now</Button>
+                      <PaymentMethod OrderID={order.orderId} show={showModal} onHide={() => setShowModal(false)}></PaymentMethod>
                     </>
                   ) : (
                     <></>
