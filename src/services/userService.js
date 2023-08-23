@@ -38,4 +38,12 @@ const deleteAccount = (data) => {
 const editAccount = (data) => {
   return axios.put("/Account/UpdateAccount", data);
 }
-export { addAccount, fetchAllAccount, fetchAllRole, login, getAccountByID, logout, refreshAccessToken, deleteAccount,editAccount };
+
+const signUp = (data) => {
+  return axios.post("/Account/SignUp", data);
+}
+
+const changePassword = (data) => {
+  return axios.post("/Account/ChangePassword", data);
+}
+export { changePassword, signUp, addAccount, fetchAllAccount, fetchAllRole, login, getAccountByID, logout, refreshAccessToken, deleteAccount, editAccount };

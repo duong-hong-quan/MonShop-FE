@@ -2,10 +2,11 @@ import { Button, Form } from "react-bootstrap";
 import Header from "../../../components/Header/header";
 import { useEffect, useState } from "react";
 import { decodeToken, isTokenExpired } from "../../../services/jwtHelper";
-import { editAccount, getAccountByID, logout, refreshAccessToken } from "../../../services/userService";
+import { changePassword, editAccount, getAccountByID, logout, refreshAccessToken } from "../../../services/userService";
 import jwt_decode from "jwt-decode";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 import { toast } from "react-toastify";
+import ChangePasswordModal from "./ChangePasswordModal/changePasswordModal";
 
 const Profile = () => {
     const [email, setEmail] = useState("");
@@ -19,6 +20,8 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [accountID, setAccountID] = useState(null);
     const [disableButton, setDisableButton] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+
     useEffect(() => {
 
 
@@ -66,7 +69,21 @@ const Profile = () => {
         toast.success("Update successfully");
         setDisableButton(false);
     }
+    const handleUpdatePassword = () => {
+        setShowEditModal(true);
+    }
 
+    const updatePassword = async (data) => {
+        let res = await changePassword(data);
+        if (res && res.status == 400) {
+            toast.error(res.data);
+        }
+        else {
+            toast.success("Success");
+            setShowEditModal(false);
+        }
+
+    }
     return (<>
         <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
         <Header></Header>
@@ -148,9 +165,13 @@ const Profile = () => {
 
                 </Form>
                 <Button className="mt-3" style={{ backgroundColor: 'black', color: 'white', border: 'none' }} onClick={handleUpdate} disabled={disableButton}>Update</Button>
+                <span className="text-center mt-3" style={{ color: 'blue', cursor: 'pointer' }} onClick={handleUpdatePassword}>
+                    Change Password ?
 
+                </span>
             </div>
         </div>
+        <ChangePasswordModal onHide={() => setShowEditModal(false)} show={showEditModal} updatePassword={updatePassword}></ChangePasswordModal>
     </>)
 }
 export default Profile;

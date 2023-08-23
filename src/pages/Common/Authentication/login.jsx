@@ -7,24 +7,30 @@ import { toast } from "react-toastify";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    setDisableButton(true);
     const res = await login({ email: email, password: password });
     if (res.status == 404) {
       toast.error("User name or password incorrect");
+      setDisableButton(false);
+
     }
     if (res.token && res.refreshToken) {
       toast.success("Login sucess");
       localStorage.setItem("token", res.token);
       localStorage.setItem("refreshToken", res.refreshToken);
+      setDisableButton(false);
+
     }
     let user = decodeToken();
-    if (user.userRole == "admin") {
+    if (user?.userRole == "admin") {
       navigate("/management/product");
-    } else if (user.userRole == "staff") {
+    } else if (user?.userRole == "staff") {
       navigate("/management/product");
-    } else if (user.userRole == "user") {
+    } else if (user?.userRole == "user") {
       navigate("/products");
 
     } else {
@@ -88,6 +94,7 @@ const Login = () => {
                   style={{ width: "120px" }}
                   onClick={() => handleSubmit()}
                   type="button"
+                  disabled={disableButton}
                 >
                   Login
                 </button>

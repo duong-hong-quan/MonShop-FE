@@ -24,12 +24,25 @@ const ProductDetail = () => {
       setCartItems(JSON.parse(savedCartItems));
     }
   }, []);
-  const addToCart = (product) => {
+  const addToCart = async (product) => {
+    const fetchProduct = await getProductByID(product.productId);
+    if (!fetchProduct || fetchProduct.quantity <= 0) {
+      toast.error("Product is out of stock.");
+      return;
+    }
+
     const existingItem = cartItems.find(
       (item) => item.productId === product.productId
     );
 
+
     if (existingItem) {
+      if (existingItem.quantity >= fetchProduct.quantity) {
+        // removeFromCart(existingItem.productId);
+        toast.error("Product is out of stock.");
+        return;
+      }
+
       const updatedCartItems = cartItems.map((item) =>
         item.productId === product.productId
           ? { ...item, quantity: item.quantity + 1 }
