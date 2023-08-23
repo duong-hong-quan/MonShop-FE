@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { Formik, Field, ErrorMessage } from 'formik';
 import { fetchAllRole } from "../../../services/userService";
+import * as Yup from 'yup';
 
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().required('Required').min(5, "Min character is 5").max(25, "Max character is 25"),
+    firstName: Yup.string().required('Required'),
+    lastName: Yup.string().required('Required'),
+    address: Yup.string().required('Required'),
+    phoneNumber: Yup.string().required('Required'),
+    roleId: Yup.number().required('Required'),
+    gender: Yup.boolean().required('Required'),
+});
 const AccountAddModal = ({ show, onHide, addAccount }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [address, setAddress] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
     const [roles, setRoles] = useState([]);
-    const [roleId, setRoleId] = useState(1);
-    const [gender, setGender] = useState(true);
-    const [disableButton, setDisableButton] = useState(false);
     const fetchRole = async () => {
         let res = await fetchAllRole();
         if (res) {
@@ -21,137 +24,118 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
     }
     useEffect(() => {
         fetchRole();
-
-
     }, [])
 
-    const handleAddAccount = async () => {
-        setDisableButton(true);
+    const handleAddAccount = async (values) => {
         let img = "";
-        if (gender == true) {
+        if (values.gender === true) {
             img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOfiKG1ZEI-srUuW6d7peaILhzVM1tsk5hcL1UGBK1LQeanMqcrQmrXk6c0A18MzcDKA&usqp=CAU";
         } else {
             img = "https://atomic.site/wp-content/uploads/2019/02/Avatar.png";
         }
-     
+
         await addAccount({
             "accountId": 0,
-            "email": email,
-            "password": password,
+            "email": values.email,
+            "password": values.password,
             "imageUrl": img,
-            "firstName": firstName,
-            "lastName": lastName,
-            "address": address,
-            "phoneNumber": phoneNumber,
+            "firstName": values.firstName,
+            "lastName": values.lastName,
+            "address": values.address,
+            "phoneNumber": values.phoneNumber,
             "isDeleted": false,
-            "roleId": roleId
-        })
-        setDisableButton(false);
-
+            "roleId": values.roleId
+        });
     }
+
     return (
-        <>
+        <Modal show={show} onHide={onHide}>
+            <Modal.Header closeButton>
+                <Modal.Title>Add Account</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Formik
+                    initialValues={{
+                        email: "",
+                        password: "",
+                        firstName: "",
+                        lastName: "",
+                        address: "",
+                        phoneNumber: "",
+                        gender: true,
+                        roleId: 1
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleAddAccount}
+                >
+                    {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label>Email</Form.Label>
+                                <Field type="text" name="email" as={Form.Control} />
+                                <ErrorMessage name="email" component="div" className="text-danger" />
 
-            <Modal show={show} onHide={onHide} >
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Account</Modal.Title>
-                </Modal.Header>
-                <Modal.Body >
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Password</Form.Label>
+                                <Field type="password" name="password" as={Form.Control} />
+                                <ErrorMessage name="password" component="div" className="text-danger" />
 
-                    <Form>
-                        <Form.Group>
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>First Name</Form.Label>
+                                <Field type="text" name="firstName" as={Form.Control} />
+                                <ErrorMessage name="firstName" component="div" className="text-danger" />
 
-                        </Form.Group>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Last Name</Form.Label>
+                                <Field type="text" name="lastName" as={Form.Control} />
+                                <ErrorMessage name="lastName" component="div" className="text-danger" />
 
-                        <Form.Group>
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Gender</Form.Label>
-                            <Form.Select
-                                onChange={(e) => setGender(e.target.value)}
-                            >
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Gender</Form.Label>
+                                <Field as="select" name="gender" className="form-select">
+                                    <option value={true}>Male</option>
+                                    <option value={false}>Female</option>
+                                </Field>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Address</Form.Label>
+                                <Field type="text" name="address" as={Form.Control} />
+                                <ErrorMessage name="address" component="div" className="text-danger" />
 
-                                <option key={1} value={true} >Male</option>
-                                <option key={2} value={true} >Female</option>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Phone Number</Form.Label>
+                                <Field type="text" name="phoneNumber" as={Form.Control} />
+                                <ErrorMessage name="phoneNumber" component="div" className="text-danger" />
 
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Role</Form.Label>
+                                <Field as="select" name="roleId" className="form-select">
+                                    {roles && roles.map((item, index) => (
+                                        <option key={index} value={item.roleId}>{item.roleName}</option>
+                                    ))}
+                                </Field>
+                            </Form.Group>
+                            <div className="d-flex" style={{ justifyContent: 'end', marginTop: '10px' }} >
+                                <Button variant="secondary" onClick={onHide}>
+                                    Cancel
+                                </Button>
+                                <Button variant="primary" type="submit">
+                                    Add Account
+                                </Button>
+                            </div>
 
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Address</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group>
-                            <Form.Label>Phone Number</Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group>
-                            <Form.Label>Role</Form.Label>
-                            <Form.Select
-                                onChange={(e) => setRoleId(e.target.value)}
-                            >
-                                {roles && roles.map((item, index) => {
-                                    return (
-                                        <option key={index} value={item.roleId} >{item.roleName}</option>
-
-                                    )
-                                })}
-
-
-                            </Form.Select>
-                        </Form.Group>
-
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary">
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={handleAddAccount} disabled={disableButton} >
-                        Add Account
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-        </>)
+                        </Form>
+                    )}
+                </Formik>
+            </Modal.Body>
+        </Modal>
+    );
 }
 
 export default AccountAddModal;

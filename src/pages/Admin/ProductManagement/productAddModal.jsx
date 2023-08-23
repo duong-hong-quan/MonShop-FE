@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup'; // Import Yup for validation
 import { addProduct, fetchAllCategories, fetchAllProduct, fetchAllStatus } from "../../../services/productService";
-const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
+const validationSchema = Yup.object().shape({
+    productName: Yup.string().required('Required'),
+    imgUrl: Yup.string().required('Required'),
+    price: Yup.number().required('Required').positive('Price must be a positive number'),
+    discount: Yup.number().min(0, 'Discount cannot be negative').max(100, 'Discount cannot exceed 100'),
+    quantity: Yup.number().required('Required').positive('Quantity must be a positive number'),
+    description: Yup.string().required('Required'),
+    categoryID: Yup.number().required('Required'),
+    statusID: Yup.number().required('Required'),
+});
 
+const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
     const [cactegory, setCategory] = useState([]);
     const [status, setStatus] = useState([]);
-    const [productName, setProductName] = useState("");
-    const [imgUrl, setImgUrl] = useState("");
-    const [price, setPrice] = useState(0);
-    const [quantity, setQuantity] = useState(0);
-    const [description, setDescription] = useState("");
-    const [categoryID, setCategoryID] = useState(1);
-    const [statusID, setStatusID] = useState(1);
-    const [discount, setDiscount] = useState(0);
     const [disableButton, setDisableButton] = useState(false);
 
     const fetchCategory = async () => {
@@ -30,130 +34,110 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
     useEffect(() => {
         fetchCategory();
         fetchStatus();
-
     }, [])
 
-    const handleAddProduct = async () => {
+    const handleAddProduct = async (values) => {
         setDisableButton(true);
-        await handleSaveAdd(
-            {
-                "productName": productName,
-                "ImageUrl": imgUrl,
-                "price": parseFloat(price),
-                "quantity": parseInt(quantity),
-                "description": description,
-                "categoryID": parseInt(categoryID),
-                "productStatusId": parseInt(statusID),
-                "discount": parseFloat(discount),
-                "isDeleted": false
-            });
+        await handleSaveAdd({
+            "productName": values.productName,
+            "ImageUrl": values.imgUrl,
+            "price": parseFloat(values.price),
+            "quantity": parseInt(values.quantity),
+            "description": values.description,
+            "categoryID": parseInt(values.categoryID),
+            "productStatusId": parseInt(values.statusID),
+            "discount": parseFloat(values.discount),
+            "isDeleted": false
+        });
         setDisableButton(false)
     }
-    return (<>
 
-        <Modal show={show} onHide={onHide} >
+    return (
+        <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Add Product</Modal.Title>
             </Modal.Header>
-            <Modal.Body >
+            <Modal.Body>
+                <Formik
+                    initialValues={{
+                        productName: "",
+                        imgUrl: "",
+                        price: "",
+                        discount: "",
+                        quantity: "",
+                        description: "",
+                        categoryID: 1,
+                        statusID: 1
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleAddProduct}
+                >
+                    {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label>Product Name</Form.Label>
+                                <Field type="text" name="productName" as={Form.Control} />
+                                <ErrorMessage name="productName" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Image URL</Form.Label>
+                                <Field type="text" name="imgUrl" as={Form.Control} />
+                                <ErrorMessage name="imgUrl" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Price</Form.Label>
+                                <Field type="number" name="price" as={Form.Control} />
+                                <ErrorMessage name="price" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Discount</Form.Label>
+                                <Field type="number" name="discount" as={Form.Control} />
+                                <ErrorMessage name="discount" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Quantity</Form.Label>
+                                <Field type="number" name="quantity" as={Form.Control} />
+                                <ErrorMessage name="quantity" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Description</Form.Label>
+                                <Field type="text" name="description" as={Form.Control} />
+                                <ErrorMessage name="description" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Category</Form.Label>
+                                <Field as="select" name="categoryID" className="form-select">
+                                    {cactegory && cactegory.map((item, index) => (
+                                        <option key={index} value={item.categoryId}>{item.categoryName}</option>
+                                    ))}
+                                </Field>
+                                <ErrorMessage name="categoryID" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Status</Form.Label>
+                                <Field as="select" name="statusID" className="form-select">
+                                    {status && status.map((item, index) => (
+                                        <option key={index} value={item.productStatusId}>{item.status}</option>
+                                    ))}
+                                </Field>
+                                <ErrorMessage name="statusID" component="div" className="text-danger" />
+                            </Form.Group>
+                            <div className="d-flex" style={{ justifyContent: 'end', marginTop: '10px' }} >
+                            <Button variant="secondary" onClick={onHide}>
+                                Cancel
+                            </Button>
+                            <Button variant="primary" type="submit" disabled={disableButton}>
+                                Add Product
+                            </Button>
+                            </div>
 
-                <Form>
-                    <Form.Group>
-                        <Form.Label>Product Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={productName}
-                            onChange={(e) => setProductName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Image URL</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={imgUrl}
-                            onChange={(e) => setImgUrl(e.target.value)}
-                        />
-                        <div className="d-flex m-3" style={{ flexDirection: 'column' }}>
-                            <span style={{ margin: '5px' }}>Preview</span>
-                            <img src={imgUrl} alt="" style={{ width: '100%' }} />
-                        </div>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control
-                            type="number"
-                            min="1"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Discount</Form.Label>
-                        <Form.Control
-                            type="number"
-                            min="1"
-                            value={discount}
-                            onChange={(e) => setDiscount(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Quantity</Form.Label>
-                        <Form.Control
-                            type="number" min="1"
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Category</Form.Label>
-                        <Form.Select
-                            onChange={(e) => setCategoryID(e.target.value)}
-                        >
-                            {cactegory && cactegory.map((item, index) => {
-                                return (
-                                    <option key={index} value={item.categoryId} >{item.categoryName}</option>
-
-                                )
-                            })}
-
-
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Status</Form.Label>
-                        <Form.Select
-                            onChange={(e) => setStatusID(e.target.value)}
-                        >
-                            {status && status.map((item, index) => {
-                                return (
-                                    <option key={index} value={item.productStatusId}>{item.status}</option>
-
-                                )
-                            })}
-
-
-                        </Form.Select>
-                    </Form.Group>
-
-                </Form>
+                        
+                        </Form>
+                    )}
+                </Formik>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onHide}>
-                    Cancel
-                </Button>
-                <Button variant="primary" onClick={handleAddProduct} disabled={disableButton} >
-                    Add Product
-                </Button>
-            </Modal.Footer>
         </Modal>
-    </>)
+    );
 }
+
 export default ProductAddModal;

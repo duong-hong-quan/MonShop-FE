@@ -3,16 +3,23 @@ import { NavLink, redirect, useNavigate } from "react-router-dom";
 import { login } from "../../../services/userService";
 import { decodeToken } from "../../../services/jwtHelper";
 import { toast } from "react-toastify";
+import * as Yup from 'yup'; // Import Yup for validation
+import { Formik, Field, ErrorMessage } from 'formik';
+import { Button, Form } from "react-bootstrap";
 
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required('Required').email('Invalid email'),
+  password: Yup.string().required('Required')
+
+});
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values) => {
     setDisableButton(true);
-    const res = await login({ email: email, password: password });
+    const res = await login({ email: values.email, password: values.password });
     if (res.status == 404) {
       toast.error("User name or password incorrect");
       setDisableButton(false);
@@ -68,37 +75,35 @@ const Login = () => {
           >
             <div className="card-body p-5">
               <h2 className="card-title text-center">Login</h2>
-              <form className="d-flex align-items-center flex-column p-3">
-                <div className="form-group w-100 mt-2">
-                  <label htmlFor="phoneNumber">Email</label>
-                  <input
-                    type="text"
-                    className="form-control mt-3"
-                    id="email"
-                    placeholder="Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="form-group w-100 mt-2">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    className="form-control mt-3"
-                    id="password"
-                    placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <button
-                  className="btn bg-black text-bg-primary btn-block mt-3"
-                  style={{ width: "120px" }}
-                  onClick={() => handleSubmit()}
-                  type="button"
-                  disabled={disableButton}
-                >
-                  Login
-                </button>
-              </form>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: ""
+
+                }}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+              >
+                {({ handleSubmit }) => (
+                  <Form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                    <Form.Group className="w-100">
+                      <Form.Label>Email</Form.Label>
+                      <Field type="text" name="email" as={Form.Control} />
+                      <ErrorMessage name="email" component="div" className="text-danger" />
+                    </Form.Group>
+                    <Form.Group className="w-100">
+                      <Form.Label>Password</Form.Label>
+                      <Field type="password" name="password" as={Form.Control} />
+                      <ErrorMessage name="password" component="div" className="text-danger" />
+                    </Form.Group>
+
+                    <Button className="mt-3" style={{ backgroundColor: 'black', border: 'none', color: 'white', width: '100px' }} type="submit" disabled={disableButton}>
+                      Login
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+
               <p className="text-center mt-3">
                 Don't have an account?{" "}
                 <NavLink className=" text-decoration-none" to="/signup">

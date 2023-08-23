@@ -1,68 +1,70 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup'; // Import Yup for validation
+
+const validationSchema = Yup.object().shape({
+    roomName: Yup.string().required('Required'),
+    roomImg: Yup.string().required('Required'),
+});
+
 const EditRoomModal = ({ show, onHide, currentRoom, editRoom }) => {
-    const [roomName, setRoomName] = useState("");
-    const [roomImg, setRoomImg] = useState("");
     const [roomId, setRoomId] = useState(0);
 
     useEffect(() => {
-        setRoomName(currentRoom.roomName);
-        setRoomImg(currentRoom.roomImg);
         setRoomId(currentRoom.roomId);
     }, [currentRoom]);
 
-    const handleEditRoom = async () => {
-        // console.log({
-
-        //     "roomId": roomId,
-        //     "roomImg": roomImg,
-        //     "roomName": roomName
-        //})
+    const handleEditRoom = async (values) => {
         await editRoom({
             "roomId": roomId,
-            "roomImg": roomImg,
-            "roomName": roomName
-
+            "roomImg": values.roomImg,
+            "roomName": values.roomName
         });
     }
-    return (<>
 
-        <Modal show={show} onHide={onHide} >
+    return (
+        <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Edit Room</Modal.Title>
             </Modal.Header>
-            <Modal.Body >
+            <Modal.Body>
+                <Formik
+                    initialValues={{
+                        roomName: currentRoom.roomName,
+                        roomImg: currentRoom.roomImg
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleEditRoom}
+                >
+                    {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label>Room Name</Form.Label>
+                                <Field type="text" name="roomName" as={Form.Control} />
+                                <ErrorMessage name="roomName" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Image Room</Form.Label>
+                                <Field type="text" name="roomImg" as={Form.Control} />
+                                <ErrorMessage name="roomImg" component="div" className="text-danger" />
+                            </Form.Group>
+                            <div className="d-flex" style={{ justifyContent: 'end', marginTop: '10px' }} >
+                                
+                            <Button variant="secondary" onClick={onHide}>
+                                Cancel
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Edit Room
+                            </Button>
+                            </div>
 
-                <Form>
-                    <Form.Group>
-                        <Form.Label>Room Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={roomName}
-                            onChange={(e) => setRoomName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Image Room</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={roomImg}
-                            onChange={(e) => setRoomImg(e.target.value)}
-                        />
-
-                    </Form.Group>
-
-                </Form>
+                        </Form>
+                    )}
+                </Formik>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onHide}>
-                    Cancel
-                </Button>
-                <Button variant="primary" onClick={handleEditRoom} >
-                    Edit Room
-                </Button>
-            </Modal.Footer>
         </Modal>
-    </>)
+    );
 }
+
 export default EditRoomModal;

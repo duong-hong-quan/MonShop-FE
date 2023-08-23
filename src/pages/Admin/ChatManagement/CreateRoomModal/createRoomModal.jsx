@@ -1,56 +1,66 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup'; // Import Yup for validation
+
+const validationSchema = Yup.object().shape({
+    roomName: Yup.string().required('Required'),
+    roomImg: Yup.string().required('Required'),
+});
+
 const CreateRoomModal = ({ show, onHide, createRoom }) => {
-    const [roomName, setRoomName] = useState("");
-    const [roomImg, setRoomImg] = useState("");
     const [disableButton, setDisableButton] = useState(false);
 
-    const handleAddRoom = async () => {
+    const handleAddRoom = async (values) => {
         setDisableButton(true);
         await createRoom({
-            "roomName": roomName,
-            "roomImg": roomImg
+            "roomName": values.roomName,
+            "roomImg": values.roomImg
         });
         setDisableButton(false);
-
     }
-    return (<>
-        <Modal show={show} onHide={onHide} >
+
+    return (
+        <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Add Room</Modal.Title>
             </Modal.Header>
-            <Modal.Body >
-
-                <Form>
-                    <Form.Group>
-                        <Form.Label>Room Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={roomName}
-                            onChange={(e) => setRoomName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Image Room</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={roomImg}
-                            onChange={(e) => setRoomImg(e.target.value)}
-                        />
-
-                    </Form.Group>
-
-                </Form>
+            <Modal.Body>
+                <Formik
+                    initialValues={{
+                        roomName: "",
+                        roomImg: ""
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleAddRoom}
+                >
+                    {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label>Room Name</Form.Label>
+                                <Field type="text" name="roomName" as={Form.Control} />
+                                <ErrorMessage name="roomName" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Image Room</Form.Label>
+                                <Field type="text" name="roomImg" as={Form.Control} />
+                                <ErrorMessage name="roomImg" component="div" className="text-danger" />
+                            </Form.Group>
+                            <div className="d-flex" style={{ justifyContent: 'end', marginTop: '10px' }} >
+                            <Button variant="secondary" onClick={onHide}>
+                                Cancel
+                            </Button>
+                            <Button variant="primary" type="submit" disabled={disableButton}>
+                                Create Room
+                            </Button>
+                            </div>
+                          
+                        </Form>
+                    )}
+                </Formik>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary">
-                    Cancel
-                </Button>
-                <Button variant="primary" onClick={handleAddRoom}  disabled={disableButton}>
-                    Create Room
-                </Button>
-            </Modal.Footer>
         </Modal>
-    </>)
+    );
 }
+
 export default CreateRoomModal;
