@@ -39,18 +39,7 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
 
 
     const handleEdit = async () => {
-        console.log({
-            "accountId": accountID,
-            "email": email,
-            "password": "",
-            "imageUrl": currentAccount.imageUrl,
-            "firstName": firstName,
-            "lastName": lastName,
-            "address": address,
-            "phoneNumber": phoneNumber,
-            "isDeleted": parseStringToBoolean(isDeleted),
-            "roleId": roleId
-        })
+       
         setDisableButton(true);
         await handleEditAccount(
             {
@@ -62,23 +51,14 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                 "lastName": lastName,
                 "address": address,
                 "phoneNumber": phoneNumber,
-                "isDeleted": parseStringToBoolean(isDeleted),
+                "isDeleted": isDeleted,
                 "roleId": roleId
             }
         )
         setDisableButton(false);
 
     }
-    function parseStringToBoolean(str) {
-        if (str == 'true') {
-            return true;
-        } else if (str == 'false') {
-            return false;
-        } else {
-            // Handle other cases if needed
-            return undefined; // Or throw an error
-        }
-    }
+ 
     return (<>
 
         <Modal show={show} onHide={onHide} >
@@ -151,8 +131,8 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                     <Form.Group>
                         <Form.Label>Deleted</Form.Label>
                         <Form.Select
-                            onChange={(e) => setIsDeleted(e.target.value)}
-                            value={isDeleted}
+                              onChange={(e) => setIsDeleted(e.target.value === "true")}
+                              value={isDeleted}
                         >
 
 

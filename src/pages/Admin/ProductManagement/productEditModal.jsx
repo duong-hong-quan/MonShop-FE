@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { editProduct, fetchAllCategories, fetchAllStatus } from "../../../services/productService";
+import { editProduct, fetchAllCategories, fetchAllStatus, getProductByID } from "../../../services/productService";
 
 const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) => {
     const [productId, setProductId] = useState("");
@@ -16,7 +16,6 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
     const [discount, setDiscount] = useState(0);
     const [isDeleted, setIsDeleted] = useState(false);
     const [disableButton, setDisableButton] = useState(false);
-
     const fetchCategory = async () => {
         let res = await fetchAllCategories();
 
@@ -32,9 +31,11 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
         }
     }
 
+
     useEffect((
 
     ) => {
+
         setProductId(currentProduct.productId)
         setProductName(currentProduct.productName);
         setImgUrl(currentProduct.imageUrl);
@@ -44,7 +45,10 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
         setCategoryID(currentProduct.categoryId);
         setStatusID(currentProduct.productStatusId);
         setDiscount(currentProduct.discount);
+
         setIsDeleted(currentProduct.isDeleted);
+
+
 
     }, [currentProduct])
     useEffect(() => {
@@ -54,6 +58,7 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
 
     const handleEdit = async () => {
         setDisableButton(true);
+
         await handleEditProduct
             ({
                 "productId": productId,
@@ -65,22 +70,14 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
                 "categoryID": parseInt(categoryID),
                 "productStatusId": parseInt(statusID),
                 "discount": parseFloat(discount),
-                "isDeleted": parseStringToBoolean(isDeleted)
+                "isDeleted": isDeleted
             });
         setDisableButton(false);
 
     }
 
-    function parseStringToBoolean(str) {
-        if (str == 'true') {
-            return true;
-        } else if (str == 'false') {
-            return false;
-        } else {
-            // Handle other cases if needed
-            return undefined; // Or throw an error
-        }
-    }
+
+
     return (<>
 
         <Modal show={show} onHide={onHide}>
@@ -179,7 +176,7 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
                     <Form.Group>
                         <Form.Label>Deleted</Form.Label>
                         <Form.Select
-                            onChange={(e) => setIsDeleted(e.target.value)}
+                            onChange={(e) => setIsDeleted(e.target.value === "true")}
                             value={isDeleted}
                         >
 

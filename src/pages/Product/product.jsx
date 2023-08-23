@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   fetchAllProduct,
   fetchAllCategories,
+  getProductByID,
 } from "../../services/productService";
 import { NavLink } from "react-router-dom";
 import LoadingOverlay from "../../components/Loading/LoadingOverlay";
@@ -89,12 +90,25 @@ const ProductPage = () => {
     setSelectedCategory(e.target.value);
   };
 
-  const addToCart = (product) => {
+  const addToCart = async (product) => {
+    const fetchProduct = await getProductByID(product.productId);
+    if (!fetchProduct || fetchProduct.quantity <= 0) {
+      toast.error("Product is out of stock.");
+      return;
+    }
+
     const existingItem = cartItems.find(
       (item) => item.productId === product.productId
     );
 
+
     if (existingItem) {
+      if (existingItem.quantity >= fetchProduct.quantity) {
+        // removeFromCart(existingItem.productId);
+        toast.error("Product is out of stock.");
+        return;
+      }
+
       const updatedCartItems = cartItems.map((item) =>
         item.productId === product.productId
           ? { ...item, quantity: item.quantity + 1 }
@@ -248,15 +262,7 @@ const ProductPage = () => {
                       >
                         Add to Cart
                       </button>
-                      {/* <button className="btn bg-black text-white m-1">
-                        <NavLink
-                          style={{ textDecoration: "none", color: "white" }}
-                          to={`/product/${product.productId}`}
-                        >
-                          {" "}
-                          View Detail
-                        </NavLink>
-                      </button> */}
+                    
                     </div>
                   </div>
                 </div>

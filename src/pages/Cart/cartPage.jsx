@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cart from "./cart";
-import { checkOut } from "../../services/productService";
+import { checkOut, getProductByID } from "../../services/productService";
 import { getAccountByID } from "../../services/userService";
 
 import { decodeToken } from "../../services/jwtHelper";
@@ -10,6 +10,7 @@ import {
   getURLVNPAY,
 } from "../../services/paymentService";
 import Header from "../../components/Header/header";
+import { toast } from "react-toastify";
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -29,7 +30,6 @@ const CartPage = () => {
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
       if (res) {
-        console.log(res);
         setUser(res);
       }
     }
@@ -56,7 +56,6 @@ const CartPage = () => {
   ];
 
   const handleSelectMethod = (methodId) => {
-    console.log("check method", methodId);
     setSelectedMethod(methodId);
   };
 
@@ -68,7 +67,19 @@ const CartPage = () => {
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
-  const increaseQuantity = (productId) => {
+  const increaseQuantity = async (productId) => {
+    const fetchProduct = await getProductByID(productId);
+    if (!fetchProduct || fetchProduct.quantity <= 0) {
+      toast.error("Product is out of stock.");
+      return;
+    }
+    const existingItem = cartItems.find(
+      (item) => item.productId === productId
+    );
+    if (existingItem.quantity >= fetchProduct.quantity) {
+      toast.error("Product is out of stock.");
+      return;
+    }
     const updatedCartItems = cartItems.map((item) =>
       item.productId === productId
         ? { ...item, quantity: item.quantity + 1 }
@@ -135,7 +146,7 @@ const CartPage = () => {
       }
       setDisableButton(false);
     } catch (e) {
-      console.error("Error submitting order", e);
+      toast.error(e);
     }
   };
 

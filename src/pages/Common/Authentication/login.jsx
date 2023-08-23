@@ -20,7 +20,6 @@ const Login = () => {
       localStorage.setItem("refreshToken", res.refreshToken);
     }
     let user = decodeToken();
-    console.log(user)
     if (user.userRole == "admin") {
       navigate("/management/product");
     } else if (user.userRole == "staff") {

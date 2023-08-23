@@ -67,7 +67,6 @@ const ProductManagement = () => {
     }
     useEffect(() => {
         fetchProduct();
-        console.log(products)
 
     }, []);
 
@@ -82,7 +81,6 @@ const ProductManagement = () => {
             if (res) {
                 setShowEditModal(false);
                 fetchProduct();
-                console.log(res);
                 toast.success(res);
             }
         } catch (e) { }

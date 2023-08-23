@@ -8,11 +8,7 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
 
     const handleSubmit = () =>{
-        console.log ('email', email);
-        console.log ('password', password);
-        console.log ('phoneNumber', phoneNumber);
-        console.log ('fullName', fullName);
-
+      
 
 
     }

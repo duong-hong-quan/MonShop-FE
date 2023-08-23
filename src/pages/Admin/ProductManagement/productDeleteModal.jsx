@@ -22,17 +22,7 @@ const ProductDeleteModal = ({ show, onClose, onDelete, currentProduct }) => {
         //     console.log(res)
         // }
 
-        console.log({
-            "productId": currentProduct.productId,
-            "productName": currentProduct.productName,
-            "imageUrl": currentProduct.imageUrl,
-            "price": currentProduct.price,
-            "quantity": currentProduct.quantity,
-            "description": currentProduct.description,
-            "categoryId": currentProduct.categoryId,
-            "productStatusId": currentProduct.productStatusId,
-            "discount": currentProduct.discount
-        })
+     
     }
 
     return (

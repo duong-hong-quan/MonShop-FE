@@ -118,7 +118,6 @@ const ChatManagement = () => {
 
             try {
                 await newConnection.start();
-                console.log("Connection started.");
                 setConnection(newConnection);
 
                 newConnection.on("ReceiveAdminMessage", (message) => {
@@ -130,12 +129,10 @@ const ChatManagement = () => {
                 });
                 newConnection.on("ReceiveAllRoom", (room) => {
                     // Update the messages state with the new list of messages
-                    console.log(room);
                     setRooms(room);
 
                 });
             } catch (error) {
-                console.error("Error starting connection:", error);
             }
         };
 

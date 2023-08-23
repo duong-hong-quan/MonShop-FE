@@ -33,18 +33,7 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
         } else {
             img = "https://atomic.site/wp-content/uploads/2019/02/Avatar.png";
         }
-        console.log({
-            "accountId": 0,
-            "email": email,
-            "password": password,
-            "imageUrl": img,
-            "firstName": firstName,
-            "lastName": lastName,
-            "address": address,
-            "phoneNumber": phoneNumber,
-            "isDeleted": false,
-            "roleId": roleId
-        })
+     
         await addAccount({
             "accountId": 0,
             "email": email,

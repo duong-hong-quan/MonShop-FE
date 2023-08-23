@@ -41,7 +41,6 @@ const Chat = () => {
         let res = await getAllMessageByAccountID(userToken?.accountID);
 
         if (res) {
-          console.log(res)
           setMessages(res);
         }
         if (res.status == 400) {
@@ -80,7 +79,6 @@ const Chat = () => {
 
       try {
         await newConnection.start();
-        console.log("Connection started.");
         setConnection(newConnection);
 
         newConnection.on("ReceiveMessage", (newMessageList) => {

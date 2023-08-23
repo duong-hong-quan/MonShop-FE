@@ -2,9 +2,10 @@ import { Button, Form } from "react-bootstrap";
 import Header from "../../../components/Header/header";
 import { useEffect, useState } from "react";
 import { decodeToken, isTokenExpired } from "../../../services/jwtHelper";
-import { getAccountByID, logout, refreshAccessToken } from "../../../services/userService";
+import { editAccount, getAccountByID, logout, refreshAccessToken } from "../../../services/userService";
 import jwt_decode from "jwt-decode";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
+import { toast } from "react-toastify";
 
 const Profile = () => {
     const [email, setEmail] = useState("");
@@ -14,20 +15,16 @@ const Profile = () => {
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [accountInfo, setAccountInfo] = useState({})
+    const [roleId, setRoleId] = useState(null)
     const [loading, setLoading] = useState(true);
-
+    const [accountID, setAccountID] = useState(null);
+    const [disableButton, setDisableButton] = useState(false);
     useEffect(() => {
 
 
         fetchData();
-        setEmail(accountInfo.email);
-        setFirstName(accountInfo.firstName);
-        setLastName(accountInfo.lastName);
-        setAddress(accountInfo.address);
-        setImgUrl(accountInfo.imageUrl);
-        setPhoneNumber(accountInfo.phoneNumber);
-    }, [accountInfo])
+
+    }, [])
 
 
 
@@ -37,14 +34,41 @@ const Profile = () => {
         const decoded = jwt_decode(token);
         let res = await getAccountByID(parseInt(decoded?.AccountID));
         if (res) {
-            setAccountInfo(res);
+            setEmail(res.email);
+            setFirstName(res.firstName);
+            setLastName(res.lastName);
+            setAddress(res.address);
+            setImgUrl(res.imageUrl);
+            setPhoneNumber(res.phoneNumber);
+            setAccountID(res.accountId);
+            setRoleId(res.roleId);
             setLoading(false);
+
         }
 
     }
+    const handleUpdate = async () => {
+        setDisableButton(true);
+        await editAccount(
+            {
+                "accountId": accountID,
+                "email": email,
+                "password": "",
+                "imageUrl": imgUrl,
+                "firstName": firstName,
+                "lastName": lastName,
+                "address": address,
+                "phoneNumber": phoneNumber,
+                "isDeleted": false,
+                "roleId": roleId
+            }
+        )
+        toast.success("Update successfully");
+        setDisableButton(false);
+    }
 
     return (<>
-    <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
+        <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
         <Header></Header>
         <div className="container-fluid d-flex mt-2"
             style={{
@@ -84,15 +108,7 @@ const Profile = () => {
                             onChange={(e) => setImgUrl(e.target.value)}
                         />
                     </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
 
-                    </Form.Group>
 
                     <Form.Group>
                         <Form.Label>First Name</Form.Label>
@@ -131,7 +147,7 @@ const Profile = () => {
 
 
                 </Form>
-                <Button className="mt-3" style={{ backgroundColor: 'black', color: 'white', border: 'none' }}>Update</Button>
+                <Button className="mt-3" style={{ backgroundColor: 'black', color: 'white', border: 'none' }} onClick={handleUpdate} disabled={disableButton}>Update</Button>
 
             </div>
         </div>
