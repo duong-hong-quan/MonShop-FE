@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().required('Required').min(5, "Min character is 5").max(25, "Max character is 25"),
+    password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     address: Yup.string().required('Required'),

@@ -7,11 +7,20 @@ import jwt_decode from "jwt-decode";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 import { toast } from "react-toastify";
 import ChangePasswordModal from "./ChangePasswordModal/changePasswordModal";
+import * as Yup from 'yup';
+import { Formik, Field, ErrorMessage } from 'formik';
 
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    firstName: Yup.string().required('Required'),
+    lastName: Yup.string().required('Required'),
+    address: Yup.string().required('Required'),
+    phoneNumber: Yup.string().required('Required'),
+    imgUrl: Yup.string().url('Invalid URL').required('Required'),
+});
 const Profile = () => {
     const [email, setEmail] = useState("");
     const [imgUrl, setImgUrl] = useState("");
-    const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
@@ -50,18 +59,30 @@ const Profile = () => {
         }
 
     }
-    const handleUpdate = async () => {
+    const handleUpdate = async (values) => {
         setDisableButton(true);
+        console.log({
+            "accountId": accountID,
+            "email": values.email,
+            "password": "",
+            "imageUrl": values.imgUrl,
+            "firstName": values.firstName,
+            "lastName": values.lastName,
+            "address": values.address,
+            "phoneNumber": values.phoneNumber,
+            "isDeleted": false,
+            "roleId": roleId
+        })
         await editAccount(
             {
                 "accountId": accountID,
-                "email": email,
+                "email": values.email,
                 "password": "",
-                "imageUrl": imgUrl,
-                "firstName": firstName,
-                "lastName": lastName,
-                "address": address,
-                "phoneNumber": phoneNumber,
+                "imageUrl": values.imgUrl,
+                "firstName": values.firstName,
+                "lastName": values.lastName,
+                "address": values.address,
+                "phoneNumber": values.phoneNumber,
                 "isDeleted": false,
                 "roleId": roleId
             }
@@ -108,63 +129,64 @@ const Profile = () => {
                 boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px"
             }}>
                 <img src={imgUrl} alt="" style={{ width: '70px', height: '70px', borderRadius: '50%' }}></img>
-                <Form className="w-75">
-                    <Form.Group>
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Image Avatar</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={imgUrl}
-                            onChange={(e) => setImgUrl(e.target.value)}
-                        />
-                    </Form.Group>
+                <Formik
+                    initialValues={{
+                        email: email,
+                        imgUrl: imgUrl,
+                        firstName: firstName,
+                        lastName: lastName,
+                        address: address,
+                        phoneNumber: phoneNumber,
+                    }}
+                    enableReinitialize={true} // Add this line
+
+                    validationSchema={validationSchema}
+                    onSubmit={handleUpdate}
+                >
+
+                    {({ handleSubmit }) => (
+                        <Form className="w-75" onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label>Email</Form.Label>
+                                <Field type="text" name="email" as={Form.Control} ></Field>
+                                <ErrorMessage name="email" component="div" className="text-danger" />
+
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Image Avatar</Form.Label>
+                                <Field type="text" name="imgUrl" as={Form.Control} ></Field>
+                                <ErrorMessage name="imgUrl" component="div" className="text-danger" />
+                            </Form.Group>
 
 
-                    <Form.Group>
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </Form.Group>
+                            <Form.Group>
+                                <Form.Label>First Name</Form.Label>
+                                <Field type="text" name="firstName" as={Form.Control} ></Field>
+                                <ErrorMessage name="firstName" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Last Name</Form.Label>
+                                <Field type="text" name="lastName" as={Form.Control} ></Field>
+                                <ErrorMessage name="lastName" component="div" className="text-danger" />
+                            </Form.Group>
 
-                    <Form.Group>
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                        />
-                    </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Address</Form.Label>
+                                <Field type="text" name="address" as={Form.Control} ></Field>
+                                <ErrorMessage name="address" component="div" className="text-danger" />
+                            </Form.Group>
 
-                    <Form.Group>
-                        <Form.Label>Phone Number</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                        />
-                    </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Phone Number</Form.Label>
+                                <Field type="text" name="phoneNumber" as={Form.Control} ></Field>
+                                <ErrorMessage name="phoneNumber" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Button className="mt-3 w-100" type="submit" style={{ backgroundColor: 'black', color: 'white', border: 'none' }} disabled={disableButton}>Update</Button>
 
+                        </Form>
+                    )}
+                </Formik>
 
-                </Form>
-                <Button className="mt-3" style={{ backgroundColor: 'black', color: 'white', border: 'none' }} onClick={handleUpdate} disabled={disableButton}>Update</Button>
                 <span className="text-center mt-3" style={{ color: 'blue', cursor: 'pointer' }} onClick={handleUpdatePassword}>
                     Change Password ?
 

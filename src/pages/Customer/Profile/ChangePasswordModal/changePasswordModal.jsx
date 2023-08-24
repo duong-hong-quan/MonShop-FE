@@ -1,85 +1,87 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import jwt_decode from "jwt-decode";
+import { Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+    oldPassword: Yup.string().required('Required'),
+    newPassword: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+        .required('Required'),
+});
 
 const ChangePasswordModal = ({ show, onHide, updatePassword }) => {
-    const [oldPassword, setOldPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
     const [disableButton, setDisableButton] = useState(false);
-    const handleUpdate = async () => {
+
+    const handleUpdate = async (values) => {
         setDisableButton(true);
-        if (confirmPassword !== newPassword) {
-            toast.error("Not match password");
+        if (values.confirmPassword !== values.newPassword) {
+            toast.error("Passwords do not match");
         } else {
             const token = localStorage.getItem("token");
-
             const decoded = jwt_decode(token);
-            let id = parseInt(decoded?.AccountID);
+            const id = parseInt(decoded?.AccountID);
             await updatePassword({
                 "accountId": id,
-                "oldPassword": oldPassword,
-                "newPassword": newPassword
-
+                "oldPassword": values.oldPassword,
+                "newPassword": values.newPassword
             });
-
         }
-        setConfirmPassword("");
-        setNewPassword("");
-        setOldPassword("");
         setDisableButton(false);
     }
-    return (<>
 
-        <Modal show={show} onHide={onHide} >
+    return (
+        <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title>Update password</Modal.Title>
+                <Modal.Title>Update Password</Modal.Title>
             </Modal.Header>
-            <Modal.Body >
+            <Modal.Body>
+                <Formik
+                    initialValues={{
+                        oldPassword: "",
+                        newPassword: "",
+                        confirmPassword: "",
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleUpdate}
+                >
+                    {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Form.Label>Old Password</Form.Label>
+                                <Field type="password" name="oldPassword" as={Form.Control} />
+                                <ErrorMessage name="oldPassword" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>New Password</Form.Label>
+                                <Field type="password" name="newPassword" as={Form.Control} />
+                                <ErrorMessage name="newPassword" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Confirm Password</Form.Label>
+                                <Field type="password" name="confirmPassword" as={Form.Control} />
+                                <ErrorMessage name="confirmPassword" component="div" className="text-danger" />
+                            </Form.Group>
+                            <div className="d-flex" style={{ justifyContent: 'end', marginTop: '10px' }} >
+                                <Button variant="secondary" onClick={onHide}>
+                                    Cancel
+                                </Button>
+                                <Button variant="primary" type="submit" disabled={disableButton}>
+                                    Update Password
+                                </Button>
 
-                <Form>
-                    <Form.Group>
-                        <Form.Label>Old Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>New Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-
-                    </Form.Group>
-
-                    <Form.Group>
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                    </Form.Group>
+                            </div>
 
 
-                </Form>
+                        </Form>
+                    )}
+                </Formik>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onHide}>
-                    Cancel
-                </Button>
-                <Button variant="primary" onClick={handleUpdate} disabled={disableButton} >
-                    Update Password
-                </Button>
-            </Modal.Footer>
         </Modal>
-
-    </>)
+    );
 }
 
 export default ChangePasswordModal;
