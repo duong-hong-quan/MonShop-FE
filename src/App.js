@@ -36,8 +36,6 @@ function App() {
           pauseOnHover
           theme="light"
         />
-        {/* Same as */}
-        <ToastContainer />
         <Routes>
           {[
             { path: "/home", element: <HomePage /> },
