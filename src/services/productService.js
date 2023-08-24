@@ -35,5 +35,8 @@ const deleteProduct = (productData) => {
     },
   });
 }
+const getTop4 = () => {
+  return axios.get("/Product/GetTop4");
+}
 
-export { fetchAllProductByManager,fetchAllProduct, addProduct, fetchAllCategories, getProductByID, checkOut, fetchAllStatus, editProduct, deleteProduct }
+export { getTop4 , fetchAllProductByManager, fetchAllProduct, addProduct, fetchAllCategories, getProductByID, checkOut, fetchAllStatus, editProduct, deleteProduct }

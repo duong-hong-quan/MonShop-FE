@@ -11,6 +11,7 @@ import Chat from "../Common/Chat/chat";
 import Header from "../../components/Header/header";
 import { toast } from "react-toastify";
 import "../../Utils/util"
+import { formatPrice } from "../../Utils/util";
 const ProductPage = () => {
   const [productList, setProductList] = useState([]);
   const [productListFilter, setProductListFilter] = useState([]);
@@ -32,21 +33,18 @@ const ProductPage = () => {
   const getAllProduct = async () => {
     let res = await fetchAllProduct();
     if (res) {
+      console.log(res)
       setSelectedCategory(0);
       setProductList(res);
       setProductListFilter(res);
       setLoading(false);
+      setMinMaxPriceRange(100)
     }
   };
 
   useEffect(() => {
     let filterProduct = productListFilter;
-    if (selectedCategory == 0) {
-      filterProduct = filterProduct.filter(
-        (product) => product.price <= calculatePriceForStep(minMaxPriceRange)
-      );
 
-    }
     if (selectedCategory !== 0) {
       filterProduct = productListFilter.filter(
         (product) => product.categoryId == selectedCategory
@@ -164,9 +162,7 @@ const ProductPage = () => {
               onChange={(e) => handleCategoryChange(e)}
               value={selectedCategory ? selectedCategory : ""}
             >
-              <option key={0} value={0}>
-                All
-              </option>
+
               {categories &&
                 categories.map((item, index) => {
                   return (
@@ -237,23 +233,24 @@ const ProductPage = () => {
                     </NavLink>
 
                     <div className="card-body">
+                      <div style={{ fontSize: '14px', padding: '5px', position: 'absolute', top: '0', right: '0', width: '50px', height: '50px', backgroundColor: 'rgba(255,0,0,0.8)', color: 'white' }}>
+                        <span style={{ margin: 'auto 0', height: '100%', display: 'block', fontWeight: '600' }}>{product.discount} %</span>
+                      </div>
                       <h5 className="card-title">{product.productName}</h5>
                       <div className="d-flex justify-content-evenly">
                         <p
                           className="card-text"
                           style={{ textDecorationLine: "line-through" }}
                         >
-                          {((product.price * 130) / 100).toLocaleString(
-                            "en-US"
-                          )}{" "}
-                          đ
+                          {formatPrice(product.price)}
+
                         </p>
 
                         <p
                           className="card-text"
                           style={{ fontWeight: "bold", color: "red" }}
                         >
-                          {product.price.toLocaleString("en-US")} đ
+                          {formatPrice(product.price * (100 - product.discount) / 100)}
                         </p>
                       </div>
                       <button
@@ -262,7 +259,7 @@ const ProductPage = () => {
                       >
                         Add to Cart
                       </button>
-                    
+
                     </div>
                   </div>
                 </div>

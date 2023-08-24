@@ -190,7 +190,7 @@ const AccountManagement = () => {
                                                     <td>{account.firstName} {account.lastName}</td>
                                                     <td>{account.phoneNumber}</td>
                                                     <td><Badge bg={account.role?.roleName.toLowerCase() == "admin" ? "danger" : account.role?.roleName.toLowerCase() == "staff" ? "warning" : "primary"}>{account.role?.roleName}</Badge></td>
-                                                    <td>{account.isDeleted ? "True" : "False"}</td>
+                                                    <td>{account.isDeleted === true ? "True" : "False"}</td>
 
                                                     <td>
                                                         <Button style={{ marginRight: '5px', border: 'none', color: 'blue' }} onClick={() => handleEditClick(account)} ><i className="fa-solid fa-pen-to-square"></i></Button>

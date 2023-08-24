@@ -211,7 +211,7 @@ const ProductManagement = () => {
                                                         <td>{product.category?.categoryName}</td>
 
                                                         <td><Badge bg={product.productStatus?.status.toLowerCase() == "active" ? "primary" : "danger"}>{product.productStatus?.status}</Badge></td>
-                                                        <td>{product.isDeleted ? "True" : "False"}</td>
+                                                        <td>{product.isDeleted === true ? "True" : "False"}</td>
 
                                                         <td>
                                                             <Button style={{ marginRight: '5px', border: 'none', color: 'blue' }} onClick={() => handleEditClick(product)}><i className="fa-solid fa-pen-to-square"></i></Button>
