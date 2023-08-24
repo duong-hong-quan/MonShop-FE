@@ -11,12 +11,13 @@ import {
 } from "../../services/paymentService";
 import Header from "../../components/Header/header";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [disableButton, setDisableButton] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const savedCartItems = localStorage.getItem("cartItems");
     if (savedCartItems) {
@@ -32,6 +33,11 @@ const CartPage = () => {
       if (res) {
         setUser(res);
       }
+    } else {
+      toast.error("Please Login !");
+      setTimeout(() => {
+        navigate("/login")
+      }, 3000);
     }
   };
   useEffect(() => {
@@ -153,6 +159,7 @@ const CartPage = () => {
   return (
     <div>
       <Header />
+
       <div className="container">
         <div className="row">
           <div className="col-md-9">
@@ -164,65 +171,69 @@ const CartPage = () => {
             />
           </div>
           <div className="col-md-3 container-fluid">
-            <div
-              className="information-cart mt-5 mb-3"
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                padding: "5px 15px",
-              }}
-            >
-              <h5 className="mb-1">Information</h5>
-              <div className="mb-3">
-                <label htmlFor="name" className="w-100 mb-2">
-                  Name
-                </label>
-                <input
-                  className="w-100"
-                  readOnly
-                  type="text"
-                  value={`${user?.firstName} ${user?.lastName} `}
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                />
+            {user &&
+              <div
+                className="information-cart mt-5 mb-3"
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                  padding: "5px 15px",
+                }}
+              >
+
+                <h5 className="mb-1">Information</h5>
+                <div className="mb-3">
+                  <label htmlFor="name" className="w-100 mb-2">
+                    Name
+                  </label>
+                  <input
+                    className="w-100"
+                    readOnly
+                    type="text"
+                    value={`${user?.firstName} ${user?.lastName} `}
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="name" className="w-100  mb-2">
+                    Phone Number
+                  </label>
+                  <input
+                    className="w-100"
+                    readOnly
+                    type="text"
+                    defaultValue={user.phoneNumber}
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="name" className="w-100  mb-2">
+                    Email
+                  </label>
+                  <input
+                    className="w-100"
+                    readOnly
+                    type="text"
+                    defaultValue={user.email}
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="name" className="w-100  mb-2">
+                    Address
+                  </label>
+                  <input
+                    className="w-100"
+                    readOnly
+                    type="text"
+                    value={user?.address}
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  />
+                </div>
               </div>
-              <div className="mb-3">
-                <label htmlFor="name" className="w-100  mb-2">
-                  Phone Number
-                </label>
-                <input
-                  className="w-100"
-                  readOnly
-                  type="text"
-                  defaultValue={user.phoneNumber}
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="name" className="w-100  mb-2">
-                  Email
-                </label>
-                <input
-                  className="w-100"
-                  readOnly
-                  type="text"
-                  defaultValue={user.email}
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="name" className="w-100  mb-2">
-                  Address
-                </label>
-                <input
-                  className="w-100"
-                  readOnly
-                  type="text"
-                  value={user?.address}
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                />
-              </div>
-            </div>
+            }
+
             <div
               className="payment-methods"
               style={{

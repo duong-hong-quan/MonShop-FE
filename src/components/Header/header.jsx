@@ -6,12 +6,12 @@ import { decodeToken } from "../../services/jwtHelper";
 import { toast } from "react-toastify";
 
 const Header = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
   const fetchUser = async () => {
     const userToken = decodeToken();
-
+    console.log(userToken)
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
       if (res) {
@@ -85,7 +85,7 @@ const Header = () => {
                   </NavLink>
                 </li>
 
-                <li className="nav-item" style={{display: user.roleId == 1 ? "block" :"none"}}>
+                <li className="nav-item" style={{ display: user.roleId == 1 ? "block" : "none" }}>
                   <NavLink className="nav-link" to="/management">
                     Management
                   </NavLink>
