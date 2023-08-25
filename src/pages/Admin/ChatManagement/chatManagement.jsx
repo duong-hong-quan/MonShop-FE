@@ -22,6 +22,7 @@ import hosting from '../../../Utils/config';
 import CreateRoomModal from './CreateRoomModal/createRoomModal';
 import EditRoomModal from './EditRoomModal/editRoomModal';
 import LoadingOverlay from '../../../components/Loading/LoadingOverlay';
+import { formatDate } from '../../../Utils/util';
 
 const ChatManagement = () => {
     const chatContentRef = useRef(null);
@@ -46,7 +47,7 @@ const ChatManagement = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [currentRoom, setCurrentRoom] = useState({});
     const [isDisplay, setIsDisplay] = useState(true);
-    const [loading, setLoading]= useState(true);
+    const [loading, setLoading] = useState(true);
     const [disableButton, setDisableButton] = useState(false);
 
     const navigate = useNavigate();
@@ -170,33 +171,37 @@ const ChatManagement = () => {
         }, 100);
     }
     const sendMessage = async (roomIdToSend) => {
-        setDisableButton(true);
-        console.log("Sending message...");
+        if (message != "") {
+            setDisableButton(true);
+            
+            console.log("Sending message...");
 
-        if (connection && message.trim() !== "") {
-            try {
-                console.log("About to invoke SendMessage...");
+            if (connection && message.trim() !== "") {
+                try {
+                    console.log("About to invoke SendMessage...");
 
-                console.log({
-                    "sender": parseInt(userToken.accountID),
-                    "content": message,
-                    "roomId": roomIdToSend
-                });
+                    console.log({
+                        "sender": parseInt(userToken.accountID),
+                        "content": message,
+                        "roomId": roomIdToSend
+                    });
 
-                await connection.invoke("AddMessageAdmin", {
-                    "sender": parseInt(userToken.accountID),
-                    "content": message,
-                    "roomId": roomIdToSend
-                });
+                    await connection.invoke("AddMessageAdmin", {
+                        "sender": parseInt(userToken.accountID),
+                        "content": message,
+                        "roomId": roomIdToSend
+                    });
 
-                console.log("Message sent successfully.");
-                setMessage("");
-                setContentChange(prevChange => prevChange + 1);
-                setDisableButton(false);
-            } catch (error) {
-                console.error("Error sending message:", error);
+                    console.log("Message sent successfully.");
+                    setMessage("");
+                    setContentChange(prevChange => prevChange + 1);
+                    setDisableButton(false);
+                } catch (error) {
+                    console.error("Error sending message:", error);
+                }
             }
         }
+
     };
     const handleAddClick = () => {
         setShowAddModal(true);
@@ -261,7 +266,7 @@ const ChatManagement = () => {
         setShowOptions(!showOptions);
     };
     return (<>
-    <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
+        <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
         <Layout>
             <SideMenu collapsed={collapsed} />
 
@@ -336,12 +341,12 @@ const ChatManagement = () => {
 
                             <div className={`col-sm-8 conversation ${isDisplay ? "hide-on-mobile" : "show-on-mobile"}`}>
                                 <div className="heading-room" style={{ display: 'flex', alignItems: 'center', backgroundColor: '#eee', padding: "10px 16px 10px 15px" }}>
-                                    <div style={{ margin: '0 5px' }} className={ `show-on-mobile-button`}>
+                                    <div style={{ margin: '0 5px' }} className={`show-on-mobile-button`}>
                                         <Button onClick={() => setIsDisplay(true)} > <i className="fa-solid fa-backward-step"></i></Button>
                                     </div>
                                     <div className="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                                         <div className="heading-avatar-icon">
-                                            <img src={room.roomImg} alt="" />
+                                            <img src={room.roomImg} alt="room" />
                                         </div>
                                     </div>
                                     <div className="">
@@ -364,8 +369,8 @@ const ChatManagement = () => {
                                                         <div className="message-text">
                                                             {mess.content}
                                                         </div>
-                                                        <span className="message-time pull-right">
-                                                            Sun
+                                                        <span className="message-time">
+                                                            {formatDate(mess.sendTime)}
                                                         </span>
                                                     </div>
                                                 </div>

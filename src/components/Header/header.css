@@ -1,22 +1,40 @@
 /* header.css */
 .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* Cân chỉnh theo chiều dọc */
-  }
-  
-  .nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px; /* Khoảng cách giữa các liên kết */
-  }
-  
-  .nav-link {
-    text-decoration: none;
-    color: white;
-    display: block;
-    margin: 0 5px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Cân chỉnh theo chiều dọc */
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+  /* Khoảng cách giữa các liên kết */
+}
+
+.nav-link {
+  text-decoration: none;
+  color: white;
+  display: block;
+  margin: 0 5px;
+  font-weight: 550;
+}
+
+.nav-link:hover {
+  color: rgb(136, 133, 133);
+
+}
+
+.active {
+  color: white !important;
+
+}
+.navbar-toggler-icon{
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+}

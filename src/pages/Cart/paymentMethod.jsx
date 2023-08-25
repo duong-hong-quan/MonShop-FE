@@ -36,29 +36,33 @@ const PaymentMethod = ({ OrderID, show, onHide }) => {
   };
   const handlePayment = async () => {
     console.log(selectedMethod);
-    setDisableButton(true);
-    if (selectedMethod == "paypal") {
-      let respone = await getURLPayPal(OrderID);
-      console.log(respone);
-      if (respone) {
-        setDisableButton(false);
-        window.location.href = respone;
+    if (selectedMethod != null) {
+      setDisableButton(true);
 
-      }
-    } else if (selectedMethod == "momo") {
-      let respone = await getURLMomo(OrderID);
-      if (respone) {
-        setDisableButton(false);
-        window.location.href = respone;
-      }
-    } else if (selectedMethod == "vnpay") {
-      let respone = await getURLVNPAY(OrderID);
-      if (respone) {
-        setDisableButton(false);
-        window.location.href = respone;
+      if (selectedMethod == "paypal") {
+        let respone = await getURLPayPal(OrderID);
+        console.log(respone);
+        if (respone) {
+          setDisableButton(false);
+          window.location.href = respone;
 
+        }
+      } else if (selectedMethod == "momo") {
+        let respone = await getURLMomo(OrderID);
+        if (respone) {
+          setDisableButton(false);
+          window.location.href = respone;
+        }
+      } else if (selectedMethod == "vnpay") {
+        let respone = await getURLVNPAY(OrderID);
+        if (respone) {
+          setDisableButton(false);
+          window.location.href = respone;
+
+        }
       }
     }
+
   }
   return (
     // <div className="">

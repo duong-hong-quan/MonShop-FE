@@ -17,7 +17,7 @@ const ProductDetail = () => {
     let res = await getProductByID(productId);
     if (res) {
       setProduct(res);
-      setLoading(false)
+      setLoading(false);
 
     }
   };
@@ -77,13 +77,15 @@ const ProductDetail = () => {
 
     }
   };
+ 
+
   return (
     <>
       <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
 
       <Header></Header>
-      <div className="container mt-5" style={{ backgroundColor: "rgb(245, 249, 252)", padding: '20px 40px' }}>
-        <div className="row">
+      <div className="container mt-5" style={{ padding: '20px 40px' }}>
+        <div className="row" style={{ backgroundColor: "rgb(245, 249, 252)", }}>
           <div className="col-md-6 p-3">
             <img
               src={product.imageUrl}
@@ -105,7 +107,7 @@ const ProductDetail = () => {
           </div>
         </div>
         <div className="row">
-          <h5 style={{ textAlign: 'center' }}>New Product</h5>
+          <h5 style={{ textAlign: 'center', fontSize: '30px', fontWeight: '600' }}>New Products</h5>
           {productList.map((product) => (
             <div
               key={product.productId}
@@ -164,6 +166,7 @@ const ProductDetail = () => {
           ))}
         </div>
       </div>
+
       <Chat></Chat>
     </>
   );

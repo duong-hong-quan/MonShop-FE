@@ -35,7 +35,9 @@ const CartPage = () => {
       }
     } else {
       toast.error("Please Login !");
+
       setTimeout(() => {
+
         navigate("/login")
       }, 3000);
     }

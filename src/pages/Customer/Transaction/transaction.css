@@ -21,7 +21,7 @@
   }
   
   .nav-tabs .nav-link.active {
-    color: #000;
+    color: #000 !important;
     background-color: #f8f9fa;
     font-weight: bold;
   }

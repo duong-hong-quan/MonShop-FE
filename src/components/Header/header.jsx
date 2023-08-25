@@ -29,13 +29,14 @@ const Header = () => {
     toast.success("Log out successfully")
   };
   return (
-    <header className="bg-dark text-white">
-      <nav className="d-flex justify-content-between container navbar navbar-expand-lg navbar-dark">
+ 
+  <header className=" text-black" style={{boxShadow:'  rgba(0, 0, 0, 0.15) 0px 2px 8px', backgroundColor:'#000'}}>
+      <nav className="d-flex justify-content-between container navbar navbar-expand-lg ">
         <div className="d-flex justify-content-between align-items-center w-100">
           <NavLink
             className="navbar-brand"
             to="/"
-            style={{ fontSize: "1.6rem", fontWeight: "600" }}
+            style={{ fontSize: "1.6rem", fontWeight: "600" , color:'white'}}
           >
             Mon Shop
           </NavLink>

@@ -9,6 +9,7 @@ import jwtDecode from "jwt-decode";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import hosting from "../../../Utils/config";
+import { formatDate } from "../../../Utils/util";
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -111,33 +112,37 @@ const Chat = () => {
   };
   const sendMessage = async () => {
     if (user != null) {
-      setDisableButton(true);
-      console.log("Sending message...");
-      const userToken = await decodeToken();
+      if (message != "") {
+        setDisableButton(true);
+        console.log("Sending message...");
+        const userToken = await decodeToken();
+        if (connection && message.trim() !== "") {
+          try {
+            console.log("About to invoke SendMessage...");
 
-      if (connection && message.trim() !== "") {
-        try {
-          console.log("About to invoke SendMessage...");
+            console.log({
+              accountID: parseInt(userToken?.accountID),
+              message: message,
+            });
 
-          console.log({
-            accountID: parseInt(userToken?.accountID),
-            message: message,
-          });
+            await connection.invoke("SendMessage", {
+              accountID: parseInt(userToken?.accountID),
+              message: message,
+            });
 
-          await connection.invoke("SendMessage", {
-            accountID: parseInt(userToken?.accountID),
-            message: message,
-          });
+            console.log("Message sent successfully.");
 
-          console.log("Message sent successfully.");
-
-          setMessage("");
-          chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
-          setDisableButton(false);
-        } catch (error) {
-          console.error("Error sending message:", error);
+            setMessage("");
+            chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+            setDisableButton(false);
+          } catch (error) {
+            console.error("Error sending message:", error);
+          }
         }
       }
+
+
+
     } else {
       toast.error("Please log in to chat");
       navigator("/login");
@@ -157,7 +162,7 @@ const Chat = () => {
         <div className="page-content page-container" id="page-content" style={{ borderRadius: '5px', display: showModal ? "block" : "none" }}>
           <div className="row  d-flex justify-content-center">
             <div className="col-md-12">
-              <div className="title d-flex" style={{ justifyContent: 'space-between', backgroundColor: 'rgb(233,233,233)', padding: '10px', alignItems:'center' }}>
+              <div className="title d-flex" style={{ justifyContent: 'space-between', backgroundColor: 'rgb(233,233,233)', padding: '10px', alignItems: 'center' }}>
                 <span>Chat</span>
                 <span><Button style={{ backgroundColor: 'red', border: 'none' }} onClick={() => handleCloseModal()}><i className="fa-solid fa-xmark"></i></Button></span>
               </div>
@@ -180,11 +185,14 @@ const Chat = () => {
                           alt="..."
                         />
                         <div className="media-body" width="100%">
-                          <p>{item.content}</p>
+                          <p>{item.content}
+                            <span style={{ display: 'block', fontSize: '10px' }}>{formatDate(item.sendTime)}</span>
 
-                          {/* <p class="meta">
-                        <time datetime="2018">{item.sendTime}</time>
-                      </p> */}
+                          </p>
+                          <br />
+
+
+
                         </div>
                       </div>
 
@@ -235,7 +243,7 @@ const Chat = () => {
                   <Button
                     className="publisher-btn text-info"
                     onClick={sendMessage}
-                    disabled= {disableButton}
+                    disabled={disableButton}
                   >
                     <i className="fa fa-paper-plane"></i>
                   </Button>

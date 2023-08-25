@@ -217,7 +217,7 @@ const ProductPage = () => {
                     textAlign: "center",
                   }}
                 >
-                  <div className="card p-3" style={{ border: "none", borderRadius: '10px ', boxShadow: ' rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px' }}>
+                  <div className="card p-3" style={{ border: "none", borderRadius: '10px '}}>
                     <NavLink
                       style={{ textDecoration: "none", color: "white" }}
                       to={`/product/${product.productId}`}
@@ -234,7 +234,7 @@ const ProductPage = () => {
 
                     <div className="card-body">
                       <div style={{ fontSize: '14px', padding: '5px', position: 'absolute', top: '0', right: '0', width: '50px', height: '50px', backgroundColor: 'rgba(255,0,0,0.8)', color: 'white' }}>
-                        <span style={{ margin: 'auto 0', height: '100%', display: 'block', fontWeight: '600' }}>{product.discount} %</span>
+                        <span style={{ margin: 'auto 0', height: '100%', display: 'block', fontWeight: '600' }}>{product.discount}%</span>
                       </div>
                       <h5 className="card-title">{product.productName}</h5>
                       <div className="d-flex justify-content-evenly">

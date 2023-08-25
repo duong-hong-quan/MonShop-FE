@@ -318,6 +318,7 @@
 
 .message-body {
   height: 50px;
+  margin: 15px 0;
 }
 
 .message-main-receiver {
@@ -340,13 +341,8 @@
 }
 
 .message-time {
-  margin: 0 !important;
-  margin-left: 50px !important;
-  font-size: 12px;
-  text-align: right;
-  color: #000;
-  display: none;
-
+  margin-left: 20px !important;
+  font-size: 10px;
 }
 
 .receiver {
@@ -433,9 +429,11 @@
   .show-on-mobile {
     display: block;
   }
-  .show-on-mobile-button{
+
+  .show-on-mobile-button {
     display: block;
   }
+
   .show-on-desktop {
     display: none;
   }

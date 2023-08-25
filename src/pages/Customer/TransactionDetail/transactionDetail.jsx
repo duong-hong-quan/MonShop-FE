@@ -30,6 +30,7 @@ const TransactionDetail = () => {
   useEffect(() => {
     fetchUser();
   }, []);
+
   useEffect(() => {
     const fetchOrderDetail = async () => {
       try {
@@ -45,7 +46,6 @@ const TransactionDetail = () => {
 
     fetchOrderDetail();
   }, [id]);
-  const handlePayment = () => { };
   return (
     <>
       <Header />
