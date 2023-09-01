@@ -226,27 +226,26 @@ const Chat = () => {
                     src="https://img.icons8.com/color/36/000000/administrator-male.png"
                     alt="..."
                   />
-                  <input
-                    className="publisher-input"
-                    type="text"
-                    placeholder="Write something"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                  />
-                  <span className="publisher-btn file-group">
-                    <i className="fa fa-paperclip file-browser"></i>
-                    <input type="file" />
-                  </span>
-                  <a className="publisher-btn" href="#" data-abc="true">
-                    <i className="fa fa-smile"></i>
-                  </a>
-                  <Button
-                    className="publisher-btn text-info"
-                    onClick={sendMessage}
-                    disabled={disableButton}
-                  >
-                    <i className="fa fa-paper-plane"></i>
-                  </Button>
+
+                  <form onSubmit={sendMessage} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                    <input
+                      className="publisher-input"
+                      type="text"
+                      placeholder="Write something"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+
+                    <Button
+                      type="submit"
+                      className="publisher-btn text-info"
+                      onClick={sendMessage}
+                      disabled={disableButton}
+                    >
+                      <i className="fa fa-paper-plane"></i>
+                    </Button>
+                  </form>
+
                 </div>
               </div>
             </div>

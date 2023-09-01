@@ -20,12 +20,12 @@ import LoadingOverlay from '../../../components/Loading/LoadingOverlay';
 const ProductManagement = () => {
 
     const [products, setProducts] = useState([]);
+    const [productsFilter, setProductsFilter] = useState([]);
 
     const [showEditModal, setShowEditModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const [searchTerm, setSearchTerm] = useState('');
     const [currentProduct, setCurrentProduct] = useState({});
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -62,6 +62,7 @@ const ProductManagement = () => {
         let res = await fetchAllProductByManager();
         if (res) {
             setProducts(res);
+            setProductsFilter(res);
             setLoading(false);
         }
     }
@@ -125,14 +126,13 @@ const ProductManagement = () => {
 
 
     const handleSearchChange = (event) => {
-        let data = _.cloneDeep(products);
-        setSearchTerm(event.target.value);
-        if (searchTerm != "") {
-            let temp = data.filter(product =>
-                product.productName.toLowerCase().includes(searchTerm.toLowerCase()));
-            setProducts(temp);
+        let temp = event.target.value;
+        if (temp != "") {
+            let tempData = productsFilter.filter(product =>
+                product.productName.toLowerCase().includes(temp.toLowerCase()));
+            setProducts(tempData);
 
-        } else if (searchTerm == "") {
+        } else if (temp == "") {
             fetchProduct();
         }
 
@@ -167,7 +167,6 @@ const ProductManagement = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Search products..."
-                                    value={searchTerm}
                                     onChange={handleSearchChange}
                                 />
                             </div>

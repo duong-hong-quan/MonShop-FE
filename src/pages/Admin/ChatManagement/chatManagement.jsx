@@ -1,4 +1,4 @@
-import { Layout, Menu, Button, theme, Collapse } from 'antd';
+import { Layout, Menu, theme, Collapse } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import { useEffect, useRef, useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Table, Form, Modal, Badge } from 'react-bootstrap';
+import { Table, Form, Modal, Badge, Button } from 'react-bootstrap';
 import "./chatManagement.css"
 import * as signalR from "@microsoft/signalr";
 import { getAllRoom, getMessageByRoomID, getRoomByID } from "../../../services/chatServices";
@@ -23,6 +23,7 @@ import CreateRoomModal from './CreateRoomModal/createRoomModal';
 import EditRoomModal from './EditRoomModal/editRoomModal';
 import LoadingOverlay from '../../../components/Loading/LoadingOverlay';
 import { formatDate } from '../../../Utils/util';
+import _ from 'lodash';
 
 const ChatManagement = () => {
     const chatContentRef = useRef(null);
@@ -34,11 +35,13 @@ const ChatManagement = () => {
     const userToken = decodeToken();
     const [room, setRoom] = useState({});
     const [contentChange, setContentChange] = useState(0);
-
+    const [searchKey, setSearchKey] = useState("");
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     const [rooms, setRooms] = useState([]);
+    const [roomsFilter, setRoomsFilter] = useState([]);
+
     const [account, setAccount] = useState({});
     const [user, setUser] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -131,6 +134,7 @@ const ChatManagement = () => {
                 newConnection.on("ReceiveAllRoom", (room) => {
                     // Update the messages state with the new list of messages
                     setRooms(room);
+                    setRoomsFilter(room);
 
                 });
             } catch (error) {
@@ -144,6 +148,7 @@ const ChatManagement = () => {
         let res = await getAllRoom();
         if (res) {
             setRooms(res);
+            setRoomsFilter(res);
             setLoading(false);
         }
     }
@@ -173,7 +178,7 @@ const ChatManagement = () => {
     const sendMessage = async (roomIdToSend) => {
         if (message != "") {
             setDisableButton(true);
-            
+
             console.log("Sending message...");
 
             if (connection && message.trim() !== "") {
@@ -265,6 +270,20 @@ const ChatManagement = () => {
         setSelectedRoomId(id);
         setShowOptions(!showOptions);
     };
+    const handleSearch = (e) => {
+        let temp = e.target.value;
+
+        if (temp != "") {
+            let tempData = roomsFilter.filter(room =>
+                room.roomName.toLowerCase().includes(temp.toLowerCase()));
+            setRooms(tempData);
+
+        } else if (temp == "") {
+            fetchRoom();
+        }
+
+
+    }
     return (<>
         <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
         <Layout>
@@ -294,7 +313,7 @@ const ChatManagement = () => {
                                     <div className="row searchBox">
                                         <div className="col-sm-12 searchBox-inner">
                                             <div className="form-group has-feedback">
-                                                <input id="searchText" type="text" className="form-control" name="searchText" placeholder="Search" />
+                                                <input id="searchText" type="text" className="form-control" name="searchText" placeholder="Search" onChange={(e) => handleSearch(e)} />
                                                 <span className="glyphicon glyphicon-search form-control-feedback"></span>
                                             </div>
                                         </div>
@@ -383,14 +402,16 @@ const ChatManagement = () => {
                                 </div>
 
                                 <div className=" reply">
+                                    <form onSubmit={() => sendMessage(roomId)} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                                        <div className=" reply-main" >
+                                            <input className="form-control" rows="1" id="comment" value={message} onChange={(e) => setMessage(e.target.value)}></input>
+                                        </div>
 
-                                    <div className=" reply-main" >
-                                        <input className="form-control" rows="1" id="comment" value={message} onChange={(e) => setMessage(e.target.value)}></input>
-                                    </div>
+                                        <Button className=" reply-send" onClick={() => sendMessage(roomId)} disabled={disableButton} type="submit">
+                                            <i className="fa-solid fa-paper-plane"></i>
+                                        </Button>
+                                    </form>
 
-                                    <Button className=" reply-send" onClick={() => sendMessage(roomId)} disabled={disableButton}>
-                                        <i className="fa-solid fa-paper-plane"></i>
-                                    </Button>
                                 </div>
                             </div>
                         </div>
