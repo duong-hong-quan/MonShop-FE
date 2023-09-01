@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./chat.css"; // Import your custom CSS for the chat component
 import * as signalR from "@microsoft/signalr";
-import { Button, Modal } from "react-bootstrap"; // Import necessary components
+import { Button, Form, Modal } from "react-bootstrap"; // Import necessary components
 import { getAllMessageByAccountID } from "../../../services/chatServices";
 import { decodeToken, isTokenExpired } from "../../../services/jwtHelper";
 import { refreshAccessToken, logout } from "../../../services/userService"
@@ -227,7 +227,10 @@ const Chat = () => {
                     alt="..."
                   />
 
-                  <form onSubmit={sendMessage} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                  <Form onSubmit={(e) => {
+                    e.preventDefault(); // Ngăn chặn tải lại trang mặc định
+                    sendMessage(); // Gửi tin nhắn
+                  }} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                     <input
                       className="publisher-input"
                       type="text"
@@ -244,7 +247,7 @@ const Chat = () => {
                     >
                       <i className="fa fa-paper-plane"></i>
                     </Button>
-                  </form>
+                  </Form>
 
                 </div>
               </div>

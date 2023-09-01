@@ -402,7 +402,10 @@ const ChatManagement = () => {
                                 </div>
 
                                 <div className=" reply">
-                                    <form onSubmit={() => sendMessage(roomId)} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                                    <Form onSubmit={(e) => {
+                                        e.preventDefault(); // Ngăn chặn tải lại trang mặc định
+                                        sendMessage(roomId); // Gửi tin nhắn
+                                    }} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                                         <div className=" reply-main" >
                                             <input className="form-control" rows="1" id="comment" value={message} onChange={(e) => setMessage(e.target.value)}></input>
                                         </div>
@@ -410,7 +413,7 @@ const ChatManagement = () => {
                                         <Button className=" reply-send" onClick={() => sendMessage(roomId)} disabled={disableButton} type="submit">
                                             <i className="fa-solid fa-paper-plane"></i>
                                         </Button>
-                                    </form>
+                                    </Form>
 
                                 </div>
                             </div>
