@@ -45,15 +45,15 @@ const Profile = () => {
 
         const decoded = jwt_decode(token);
         let res = await getAccountByID(parseInt(decoded?.AccountID));
-        if (res) {
-            setEmail(res.email);
-            setFirstName(res.firstName);
-            setLastName(res.lastName);
-            setAddress(res.address);
-            setImgUrl(res.imageUrl);
-            setPhoneNumber(res.phoneNumber);
-            setAccountID(res.accountId);
-            setRoleId(res.roleId);
+        if (res.isSuccess) {
+            setEmail(res.data.email);
+            setFirstName(res.data.firstName);
+            setLastName(res.data.lastName);
+            setAddress(res.data.address);
+            setImgUrl(res.data.imageUrl);
+            setPhoneNumber(res.data.phoneNumber);
+            setAccountID(res.data.accountId);
+            setRoleId(res.data.roleId);
             setLoading(false);
 
         }
@@ -96,7 +96,7 @@ const Profile = () => {
 
     const updatePassword = async (data) => {
         let res = await changePassword(data);
-        if (res && res.status == 400) {
+        if (!res.isSuccess) {
             toast.error(res.data);
         }
         else {

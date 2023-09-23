@@ -30,9 +30,9 @@ const OrderManagement = () => {
 
     const fetchOrder = async () => {
         let res = await getAllOrder();
-        if (res) {
-            setOrderList(res);
-            setDataFilter(res);
+        if (res.isSuccess) {
+            setOrderList(res.data);
+            setDataFilter(res.data);
             setLoading(false);
         }
     }
@@ -47,14 +47,14 @@ const OrderManagement = () => {
 
     const handleUpdateStatus = async (orderID, status) => {
         let res = await updateStatusForOrder(orderID, status);
-        if (res) {
+        if (res.isSuccess) {
             setShowDetailModal(false);
             fetchOrder();
-            toast.success(res);
+            toast.success(res.message);
 
         }
-        if (res.status == 400 && res.data) {
-            toast.error(res.data);
+        if (res.message) {
+            toast.error(res.message);
         }
     }
     const handleSearch = (event) => {

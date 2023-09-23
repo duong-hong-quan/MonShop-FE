@@ -24,14 +24,14 @@ const ProductEditModal = ({ show, onHide, currentProduct, handleEditProduct }) =
 
     const fetchCategory = async () => {
         let res = await fetchAllCategories();
-        if (res) {
-            setCategory(res);
+        if (res.data) {
+            setCategory(res.data);
         }
     }
     const fetchStatus = async () => {
         let res = await fetchAllStatus();
         if (res) {
-            setStatus(res);
+            setStatus(res.data);
         }
     }
     useEffect(() => {

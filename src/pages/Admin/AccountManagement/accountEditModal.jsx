@@ -18,8 +18,8 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
 
     const fetchRole = async () => {
         let res = await fetchAllRole();
-        if (res) {
-            setRoles(res);
+        if (res.isSuccess) {
+            setRoles(res.data);
         }
     }
 

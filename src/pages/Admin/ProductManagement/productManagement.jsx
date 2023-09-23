@@ -60,9 +60,9 @@ const ProductManagement = () => {
 
     const fetchProduct = async () => {
         let res = await fetchAllProductByManager();
-        if (res) {
-            setProducts(res);
-            setProductsFilter(res);
+        if (res.data) {
+            setProducts(res.data);
+            setProductsFilter(res.data);
             setLoading(false);
         }
     }
@@ -82,7 +82,7 @@ const ProductManagement = () => {
             if (res) {
                 setShowEditModal(false);
                 fetchProduct();
-                toast.success(res);
+                toast.success(res.message)
             }
         } catch (e) { }
 
@@ -91,10 +91,10 @@ const ProductManagement = () => {
     const handleSaveAdd = async (data) => {
         try {
             let res = await addProduct(data);
-            if (res) {
+            if (res.isSuccess) {
                 setShowAddModal(false);
                 fetchProduct();
-                toast.success(res)
+                toast.success(res.message)
             }
         } catch (e) { }
 
@@ -107,11 +107,10 @@ const ProductManagement = () => {
     const handleDelete = async (data) => {
         try {
             let res = await deleteProduct(data);
-            if (res) {
-
+            if (res.isSuccess) {
                 setShowDeleteModal(false);
                 fetchProduct();
-                toast.success(res);
+                toast.success(res.message)
             }
         } catch (e) {
 

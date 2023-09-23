@@ -24,22 +24,36 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState("");
   const getAllCategory = async () => {
-    let res = await fetchAllCategories();
-    if (res) {
-      setCategories(res);
+    try {
+      let res = await fetchAllCategories();
+      if (res) {
+        setCategories(res.data);
+      }
+
+    } catch (e) {
+      toast.error(e);
     }
+
   };
 
   const getAllProduct = async () => {
-    let res = await fetchAllProduct();
-    if (res) {
-      console.log(res)
-      setSelectedCategory(0);
-      setProductList(res);
-      setProductListFilter(res);
-      setLoading(false);
-      setMinMaxPriceRange(100)
+    try{
+
+      let res = await fetchAllProduct();
+      if (res) {
+        console.log(res)
+        setSelectedCategory(0);
+        setProductList(res.data);
+        setProductListFilter(res.data);
+        setLoading(false);
+        setMinMaxPriceRange(100)
+      }
+
+    } catch(e){
+
+      toast.error(e);
     }
+  
   };
 
   useEffect(() => {
@@ -217,7 +231,7 @@ const ProductPage = () => {
                     textAlign: "center",
                   }}
                 >
-                  <div className="card p-3" style={{ border: "none", borderRadius: '10px '}}>
+                  <div className="card p-3" style={{ border: "none", borderRadius: '10px ' }}>
                     <NavLink
                       style={{ textDecoration: "none", color: "white" }}
                       to={`/product/${product.productId}`}

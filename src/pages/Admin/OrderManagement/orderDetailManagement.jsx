@@ -13,18 +13,17 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
 
     const fetchData = async () => {
         let res = await getListItemByOrderID(currentOrder.orderId);
-        console.log(res);
-        if (res) {
-            setOrder(res.order);
+        if (res.isSuccess) {
+            setOrder(res.data.order);
 
-            setOrderItems(res.orderItem);
-            setPayment(res.paymentMethod);
-            setCustomer(res.order?.buyerAccount);
-            setOrderStatusId(res.order?.orderStatus?.orderStatusId)
+            setOrderItems(res.data.orderItem);
+            setPayment(res.data.paymentMethod);
+            setCustomer(res.data.order?.buyerAccount);
+            setOrderStatusId(res.data.order?.orderStatus?.orderStatusId)
         }
         let res2 = await getAllOrderStatus();
-        if (res2) {
-            setOrderStatusList(res2);
+        if (res2.isSuccess) {
+            setOrderStatusList(res2.data);
         }
     }
     useEffect(() => {

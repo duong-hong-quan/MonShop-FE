@@ -27,6 +27,7 @@ const Chat = () => {
       const decodedToken = jwtDecode(token);
       setUser(decodedToken);
       let user = decodeToken();
+      console.log(user.userRole)
       if (user.userRole == "admin" || user.userRole == "staff") {
         setIsManager(true);
       }
@@ -41,8 +42,8 @@ const Chat = () => {
       try {
         let res = await getAllMessageByAccountID(userToken?.accountID);
 
-        if (res) {
-          setMessages(res);
+        if (res.data) {
+          setMessages(res.data);
         }
         if (res.status == 400) {
           setMessages([]);

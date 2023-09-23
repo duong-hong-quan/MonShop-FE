@@ -92,8 +92,8 @@ const ChatManagement = () => {
         if (token) {
             const decodedToken = jwtDecode(token);
             let res = await getAccountByID(decodedToken?.AccountID);
-            if (res) {
-                setAccount(res);
+            if (res.isSuccess) {
+                setAccount(res.data);
 
             }
         }
@@ -146,9 +146,9 @@ const ChatManagement = () => {
 
     const fetchRoom = async () => {
         let res = await getAllRoom();
-        if (res) {
-            setRooms(res);
-            setRoomsFilter(res);
+        if (res.isSuccess) {
+            setRooms(res.data);
+            setRoomsFilter(res.data);
             setLoading(false);
         }
     }
@@ -165,9 +165,9 @@ const ChatManagement = () => {
         console.log(roomId)
         let res = await getMessageByRoomID(id);
         let room = await getRoomByID(id);
-        if (res && room) {
-            setMessages(res);
-            setRoom(room);
+        if (res.isSuccess && room.isSuccess) {
+            setMessages(res.data);
+            setRoom(room.data);
 
 
         }

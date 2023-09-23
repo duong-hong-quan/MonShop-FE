@@ -18,8 +18,8 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
     const [roles, setRoles] = useState([]);
     const fetchRole = async () => {
         let res = await fetchAllRole();
-        if (res) {
-            setRoles(res);
+        if (res.isSuccess) {
+            setRoles(res.data);
         }
     }
     useEffect(() => {

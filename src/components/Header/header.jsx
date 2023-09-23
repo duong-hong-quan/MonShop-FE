@@ -14,8 +14,8 @@ const Header = () => {
     console.log(userToken)
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
-      if (res) {
-        setUser(res);
+      if (res.data) {
+        setUser(res.data);
       }
     }
   };

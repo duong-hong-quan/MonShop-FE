@@ -14,20 +14,35 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const getProduct = async (productId) => {
-    let res = await getProductByID(productId);
-    if (res) {
-      setProduct(res);
-      setLoading(false);
+    try {
+
+      let res = await getProductByID(productId);
+      if (res) {
+        setProduct(res.data);
+        setLoading(false);
+
+      }
+    } catch (e) {
+      toast.error(e);
 
     }
+
   };
 
   const fetchListProduct = async () => {
-    let res = await getTop4();
-    if (res) {
-      console.log(res)
-      setProductList(res);
+    try {
+      let res = await getTop4();
+      if (res) {
+        console.log(res.data)
+        setProductList(res.data);
+      }
+
+    } catch (e) {
+
+      toast.error(e);
+
     }
+
   }
   useEffect(() => {
 
@@ -77,7 +92,7 @@ const ProductDetail = () => {
 
     }
   };
- 
+
 
   return (
     <>
@@ -113,7 +128,6 @@ const ProductDetail = () => {
               key={product.productId}
               className="col-md-3 mb-3"
               style={{
-                //  maxHeight:'300px'
                 textAlign: "center",
               }}
             >
