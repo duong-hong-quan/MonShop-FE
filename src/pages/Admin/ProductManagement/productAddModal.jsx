@@ -21,14 +21,14 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
 
     const fetchCategory = async () => {
         let res = await fetchAllCategories();
-        if (res) {
-            setCategory(res);
+        if (res.data) {
+            setCategory(res.data);
         }
     }
     const fetchStatus = async () => {
         let res = await fetchAllStatus();
-        if (res) {
-            setStatus(res);
+        if (res.data) {
+            setStatus(res.data);
         }
     }
     useEffect(() => {

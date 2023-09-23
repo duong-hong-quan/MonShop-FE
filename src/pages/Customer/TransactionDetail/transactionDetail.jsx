@@ -22,8 +22,8 @@ const TransactionDetail = () => {
 
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
-      if (res) {
-        setUser(res);
+      if (res.isSuccess) {
+        setUser(res.data);
       }
     }
   };
@@ -35,9 +35,9 @@ const TransactionDetail = () => {
     const fetchOrderDetail = async () => {
       try {
         const res = await getListItemByOrderID(id); // Replace with your API call to get order detail
-        setOrderItemList(res.orderItem);
-        setOrder(res.order);
-        setPaymentMethod(res.paymentMethod);
+        setOrderItemList(res.data.orderItem);
+        setOrder(res.data.order);
+        setPaymentMethod(res.data.paymentMethod);
         console.log(res);
       } catch (error) {
         console.error("Error fetching order detail:", error);

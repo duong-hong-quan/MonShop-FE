@@ -41,23 +41,23 @@ const PaymentMethod = ({ OrderID, show, onHide }) => {
 
       if (selectedMethod == "paypal") {
         let respone = await getURLPayPal(OrderID);
-        console.log(respone);
-        if (respone) {
+        if (respone.isSuccess) {
           setDisableButton(false);
-          window.location.href = respone;
+          window.location.href = respone.data;
 
         }
       } else if (selectedMethod == "momo") {
         let respone = await getURLMomo(OrderID);
-        if (respone) {
+        if (respone.isSuccess) {
           setDisableButton(false);
-          window.location.href = respone;
+          window.location.href = respone.data;
+
         }
       } else if (selectedMethod == "vnpay") {
         let respone = await getURLVNPAY(OrderID);
-        if (respone) {
+        if (respone.isSuccess) {
           setDisableButton(false);
-          window.location.href = respone;
+          window.location.href = respone.data;
 
         }
       }

@@ -24,8 +24,8 @@ const HeaderAdmin = ({ collapsed, setCollapsed }) => {
             setUser(decodedToken);
             const fetchInfo = async () => {
                 let res = await getAccountByID(decodedToken?.AccountID);
-                if (res) {
-                    setAccountInfo(res);
+                if (res.data) {
+                    setAccountInfo(res.data);
                 }
             }
             fetchInfo();

@@ -22,12 +22,12 @@ const Transaction = () => {
 
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
-      if (res) {
-        setUser(res);
+      if (res.isSuccess) {
+        setUser(res.data);
       }
       let res2 = await getOrderStatistic(userToken.accountID);
-      if (res2) {
-        setTabCounts(res2);
+      if (res2.isSuccess) {
+        setTabCounts(res2.data);
       }
     }
   };
@@ -53,8 +53,8 @@ const Transaction = () => {
       status = 6;
     }
     let res = await getOrderByAccountID(userToken.accountID, status);
-    if (res) {
-      setOrderList(res);
+    if (res.isSuccess) {
+      setOrderList(res.data);
       setLoading(false);
     }
   };

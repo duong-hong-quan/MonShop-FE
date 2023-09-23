@@ -69,9 +69,9 @@ const AccountManagement = () => {
     }, [user]);
     const fetchUserList = async () => {
         let res = await fetchAllAccount();
-        if (res) {
-            setUserList(res);
-            setDataFilter(res);
+        if (res.isSuccess) {
+            setUserList(res.data);
+            setDataFilter(res.data);
             setLoading(false);
         }
     }
@@ -83,18 +83,18 @@ const AccountManagement = () => {
 
     const handleAddAccount = async (data) => {
         let res = await addAccount(data);
-        if (res) {
+        if (res.isSuccess) {
             setShowAddModal(false);
             await fetchUserList();
-            toast.success(res);
+            toast.success(res.message);
         }
     }
     const handleEditAccount = async (data) => {
         let res = await editAccount(data);
-        if (res) {
+        if (res.isSuccess) {
             setShowEditModal(false);
             await fetchUserList();
-            toast.success(res);
+            toast.success(res.message);
 
         }
     }
@@ -109,8 +109,8 @@ const AccountManagement = () => {
     }
     const handleDelete = async (data) => {
         let res = await deleteAccount(data);
-        if (res) {
-            toast.success(res);
+        if (res.isSuccess) {
+            toast.success(res.message);
             setShowDeleteModal(false);
             await fetchUserList();
         }
