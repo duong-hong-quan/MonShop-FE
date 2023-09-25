@@ -10,280 +10,160 @@ import "./product.css";
 import Chat from "../Common/Chat/chat";
 import Header from "../../components/Header/header";
 import { toast } from "react-toastify";
-import "../../Utils/util"
+import "../../Utils/util";
 import { formatPrice } from "../../Utils/util";
 const ProductPage = () => {
-  const [productList, setProductList] = useState([]);
-  const [productListFilter, setProductListFilter] = useState([]);
-
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(0);
-
-  const [cartItems, setCartItems] = useState([]);
-  const [minMaxPriceRange, setMinMaxPriceRange] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const getAllCategory = async () => {
-    try {
-      let res = await fetchAllCategories();
-      if (res) {
-        setCategories(res.data);
-      }
-
-    } catch (e) {
-      toast.error(e);
-    }
-
-  };
-
-  const getAllProduct = async () => {
-    try{
-
-      let res = await fetchAllProduct();
-      if (res) {
-        console.log(res)
-        setSelectedCategory(0);
-        setProductList(res.data);
-        setProductListFilter(res.data);
-        setLoading(false);
-        setMinMaxPriceRange(100)
-      }
-
-    } catch(e){
-
-      toast.error(e);
-    }
-  
-  };
-
-  useEffect(() => {
-    let filterProduct = productListFilter;
-
-    if (selectedCategory !== 0) {
-      filterProduct = productListFilter.filter(
-        (product) => product.categoryId == selectedCategory
-      );
-    } else {
-      filterProduct = filterProduct.filter(
-        (product) => product.price <= calculatePriceForStep(minMaxPriceRange)
-      );
-      setProductList(filterProduct);
-    }
-    if (minMaxPriceRange > 0) {
-      filterProduct = filterProduct.filter(
-        (product) => product.price <= calculatePriceForStep(minMaxPriceRange)
-      );
-    }
-    setTimeout(() => { }, 500);
-    setProductList(filterProduct);
-  }, [selectedCategory, minMaxPriceRange]);
-
-  useEffect(() => {
-    getAllCategory();
-    getAllProduct();
-    const savedCartItems = localStorage.getItem("cartItems");
-    if (savedCartItems) {
-      setCartItems(JSON.parse(savedCartItems));
-    }
-  }, []);
-
-  useEffect(() => {
-    let filterProduct = productListFilter;
-    filterProduct = filterProduct.filter((product) =>
-      product.productName.toLowerCase().includes(searchKeyword)
-    );
-    setProductList(filterProduct);
-  }, [searchKeyword]);
-
-  const resetFilter = () => {
-    getAllProduct();
-  };
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
-
-  const addToCart = async (product) => {
-    const fetchProduct = await getProductByID(product.productId);
-    if (!fetchProduct || fetchProduct.quantity <= 0) {
-      toast.error("Product is out of stock.");
-      return;
-    }
-
-    const existingItem = cartItems.find(
-      (item) => item.productId === product.productId
-    );
-
-
-    if (existingItem) {
-      if (existingItem.quantity >= fetchProduct.quantity) {
-        // removeFromCart(existingItem.productId);
-        toast.error("Product is out of stock.");
-        return;
-      }
-
-      const updatedCartItems = cartItems.map((item) =>
-        item.productId === product.productId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-      setCartItems(updatedCartItems);
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-      toast.success("Add to cart successfully !");
-    } else {
-      const newCartItem = { ...product, quantity: 1 };
-      setCartItems((prevCartItems) => [...prevCartItems, newCartItem]);
-      localStorage.setItem(
-        "cartItems",
-        JSON.stringify([...cartItems, newCartItem])
-      );
-      toast.success("Add to cart successfully !");
-
-    }
-  };
-
-  const removeFromCart = (productId) => {
-    const updatedCartItems = cartItems.filter(
-      (item) => item.productId !== productId
-    );
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-  };
-  const calculatePriceForStep = (stepValue) => {
-    const maxPrice = 1000000;
-    return (maxPrice * stepValue) / 100;
-  };
-
   return (
     <>
-      <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
+      {/* <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay> */}
 
       <Header></Header>
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-3">
-            <div className="d-flex align-items-center mb-3">
-              <h6 className="m-0">Filter Options</h6>
-              <span
-                onClick={() => resetFilter()}
-                className="text-black d-block"
-                style={{ marginLeft: "10px", cursor: "pointer" }}
-              >
-                <i className="fa-solid fa-rotate-left"></i>
-              </span>
-            </div>
-            <select
-              className="form-select mb-3"
-              onChange={(e) => handleCategoryChange(e)}
-              value={selectedCategory ? selectedCategory : ""}
-            >
-
-              {categories &&
-                categories.map((item, index) => {
-                  return (
-                    <option key={item.categoryId} value={item.categoryId}>
-                      {item.categoryName}
-                    </option>
-                  );
-                })}
-            </select>
-            <div>
-              <h6>Price Range</h6>
-              <div className="d-flex justify-content-between"></div>
-              <input
-                type="range"
-                className="form-range"
-                min="0"
-                step="20"
-                max="100"
-                value={minMaxPriceRange}
-                onChange={(e) => setMinMaxPriceRange(e.target.value)}
-              />
-              <div className="d-flex justify-content-between">
-                <span>0đ </span>
-                <span>
-                  {calculatePriceForStep(minMaxPriceRange).toLocaleString(
-                    "en-US"
-                  )}
-                  đ
-                </span>
+      <div className="container-fluid">
+        <img
+          style={{ width: "100%" }}
+          src="https://media.coolmate.me/cdn-cgi/image/width=1920,quality=80,format=auto/uploads/September2023/back-2-school-banner-desktop.jpg"
+          alt=""
+        />
+        <div style={{ pointerEvents: "none" }}>
+          <video
+            controls="controls"
+            muted="muted"
+            autoplay="autoplay"
+            loop="loop"
+            id="vid"
+            style={{ width: "100%", height: "50%" }}
+            src="https://mcdn.coolmate.me/uploads/84_basketball_web.mp4"
+            type="video/mp4"
+          ></video>
+          
+        </div>
+        <div className="container">
+            <h1>Product</h1>
+            <div className="row ">
+              <div className="col-3 mt-3">
+                <div className="product">
+                  <div className="product-above">
+                    <span className="badge">Worth Buying</span>
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                      alt=""
+                      className="product-img"
+                    />
+                    <div className="size-option p-3">
+                      <div className="size-option-child p-2">
+                        <h6 className="text-center m-3">Add to cart</h6>
+                        <div
+                          className="d-flex"
+                          style={{ justifyContent: "center" }}
+                        >
+                          <a className="size-option-link">S</a>
+                          <a className="size-option-link"> M</a>
+                          <a className="size-option-link"> XL</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="product-bottom mt-3">
+                    <h5 className="product-bottom-title">T-Shirt</h5>
+                    <span className="product-bottom-size">S/M/L/XL</span>
+                    <h6 className="product-bottom-price mt-2">99.000d</h6>
+                  </div>
+                </div>
+              </div>
+              <div className="col-3 mt-3">
+                <div className="product">
+                  <div className="product-above">
+                    <span className="badge">Worth Buying</span>
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                      alt=""
+                      className="product-img"
+                    />
+                    <div className="size-option p-3">
+                      <div className="size-option-child p-2">
+                        <h6 className="text-center m-3">Add to cart</h6>
+                        <div
+                          className="d-flex"
+                          style={{ justifyContent: "center" }}
+                        >
+                          <a className="size-option-link">S</a>
+                          <a className="size-option-link"> M</a>
+                          <a className="size-option-link"> XL</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="product-bottom mt-3">
+                    <h5 className="product-bottom-title">T-Shirt</h5>
+                    <span className="product-bottom-size">S/M/L/XL</span>
+                    <h6 className="product-bottom-price mt-2">99.000d</h6>
+                  </div>
+                </div>
+              </div>{" "}
+              <div className="col-3 mt-3">
+                <div className="product">
+                  <div className="product-above">
+                    <span className="badge">Worth Buying</span>
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                      alt=""
+                      className="product-img"
+                    />
+                    <div className="size-option p-3">
+                      <div className="size-option-child p-2">
+                        <h6 className="text-center m-3">Add to cart</h6>
+                        <div
+                          className="d-flex"
+                          style={{ justifyContent: "center" }}
+                        >
+                          <a className="size-option-link">S</a>
+                          <a className="size-option-link"> M</a>
+                          <a className="size-option-link"> XL</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="product-bottom mt-3">
+                    <h5 className="product-bottom-title">T-Shirt</h5>
+                    <span className="product-bottom-size">S/M/L/XL</span>
+                    <h6 className="product-bottom-price mt-2">99.000d</h6>
+                  </div>
+                </div>
+              </div>{" "}
+              <div className="col-3 mt-3">
+                <div className="product">
+                  <div className="product-above">
+                    <span className="badge">Worth Buying</span>
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                      alt=""
+                      className="product-img"
+                    />
+                    <div className="size-option p-3">
+                      <div className="size-option-child p-2">
+                        <h6 className="text-center m-3">Add to cart</h6>
+                        <div
+                          className="d-flex"
+                          style={{ justifyContent: "center" }}
+                        >
+                          <a className="size-option-link">S</a>
+                          <a className="size-option-link"> M</a>
+                          <a className="size-option-link"> XL</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="product-bottom mt-3">
+                    <h5 className="product-bottom-title">T-Shirt</h5>
+                    <span className="product-bottom-size">S/M/L/XL</span>
+                    <h6 className="product-bottom-price mt-2">99.000d</h6>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="col-md-9">
-            <div className="d-flex justify-content-end">
-              <input
-                type="text"
-                id="search"
-                placeholder="Search Product"
-                className="mb-2 p-2"
-                style={{ borderRadius: "5px", border: "1px solid #ccc" }}
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-              ></input>
-            </div>
-            <div className="row">
-              {productList.map((product) => (
-                <div
-                  key={product.productId}
-                  className="col-md-4 mb-4"
-                  style={{
-                    //  maxHeight:'300px'
-                    textAlign: "center",
-                  }}
-                >
-                  <div className="card p-3" style={{ border: "none", borderRadius: '10px ' }}>
-                    <NavLink
-                      style={{ textDecoration: "none", color: "white" }}
-                      to={`/product/${product.productId}`}
-                    >
-                      <img
-                        src={product.imageUrl}
-                        alt={product.productName}
-                        className="card-img-top"
-                        style={{
-                          maxHeight: "250px",
-                        }}
-                      />
-                    </NavLink>
-
-                    <div className="card-body">
-                      <div style={{ fontSize: '14px', padding: '5px', position: 'absolute', top: '0', right: '0', width: '50px', height: '50px', backgroundColor: 'rgba(255,0,0,0.8)', color: 'white' }}>
-                        <span style={{ margin: 'auto 0', height: '100%', display: 'block', fontWeight: '600' }}>{product.discount}%</span>
-                      </div>
-                      <h5 className="card-title">{product.productName}</h5>
-                      <div className="d-flex justify-content-evenly">
-                        <p
-                          className="card-text"
-                          style={{ textDecorationLine: "line-through" }}
-                        >
-                          {formatPrice(product.price)}
-
-                        </p>
-
-                        <p
-                          className="card-text"
-                          style={{ fontWeight: "bold", color: "red" }}
-                        >
-                          {formatPrice(product.price * (100 - product.discount) / 100)}
-                        </p>
-                      </div>
-                      <button
-                        className="btn bg-black text-white m-1"
-                        onClick={() => addToCart(product)}
-                      >
-                        Add to Cart
-                      </button>
-
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
       <Chat></Chat>
-
     </>
   );
 };

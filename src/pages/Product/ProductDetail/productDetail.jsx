@@ -1,209 +1,206 @@
-import { Carousel } from "antd";
-import Header from "../../components/Header/header";
-import "./homePage.css";
-
-const HomePage = () => {
-  const contentStyle = {
-    height: "100vh",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-    width: "100%",
-  };
+import React, { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import { getProductByID, getTop4 } from "../../../services/productService";
+import Chat from "../../Common/Chat/chat";
+import Header from "../../../components/Header/header";
+import { toast } from "react-toastify";
+import { formatPrice } from "../../../Utils/util";
+import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
+import "./productDetail.css";
+const ProductDetail = () => {
   return (
     <>
       <Header></Header>
-      <img
-        style={{ marginTop: "80px", width: "100%" }}
-        src="https://media.coolmate.me/cdn-cgi/image/width=1920,quality=80,format=auto/uploads/September2023/ldp-DO-MAC-HANG-NGAY.png"
-        alt=""
-      />
-      {/* <Carousel autoplay>
-            <div>
-                <img style={contentStyle} src="https://levents.asia/wp-content/uploads/IMG_0879.jpeg-1-1200x988.jpg" alt="" />
 
-            </div>
-            <div>
-                <img src="https://levents.asia/wp-content/uploads/elementor/thumbs/homepage-ngang-4-1-scaled-prlzs731tmqluu3qoxoodpyzvmm53nywlrfokljhu8.jpg" style={contentStyle}></img>
-            </div>
-            <div>
-                <img src="https://levents.asia/wp-content/uploads/elementor/thumbs/homepage-ngang-2-1-scaled-prlzqw34bwy9qc00bddbx1ty6d1sessbratekrh6hc.jpg" style={contentStyle}></img>
-            </div>
-
-        </Carousel> */}
-      <div className="container" style={{ padding: "5% 10%" }}>
+      {/* <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay> */}
+      <div className="container" style={{ backgroundColor: "white" }}>
         <div className="row">
-          <div className="col-4 d-flex" style={{justifyContent:'center'}} >
-            <div className="type-card">
+          <div className="col-6" style={{ marginTop: "80px" }}>
+            <div className="product-img mt-3">
               <img
-                className="type-card-img"
-                src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=80,format=auto/uploads/September2023/Refdfdctangle_178.png"
+                src="https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/September2023/LOVISONG_TRUOC_(BE).png"
                 alt=""
+                style={{ width: "100%", height: "800px" }}
               />
-              <h5 className="type-card-title">T-Shirt</h5>
-              <p className="type-card-desc">T-Shirt/ Coat/...</p>
             </div>
           </div>
-          <div className="col-4 d-flex" style={{justifyContent:'center'}} >
-            <div className="type-card">
-              <img
-                className="type-card-img"
-                src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=80,format=auto/uploads/September2023/Refdfdctangle_178.png"
-                alt=""
-              />
-              <h5 className="type-card-title">T-Shirt</h5>
-              <p className="type-card-desc">T-Shirt/ Coat/...</p>
+          <div className="col-6" style={{ marginTop: "80px" }}>
+            <div className="product-detail mt-5">
+              <h3>
+                <b>Áo thun oversize 84RISING Microwave</b>
+              </h3>
+              <h6>
+                <b>100.000d</b>
+              </h6>
+              <h5>Product Size</h5>
+              <div className="d-flex" style={{ justifyContent: "flex-start" }}>
+                <a className="size-option-link size-option-link-first">S</a>
+                <a className="size-option-link"> M</a>
+                <a className="size-option-link"> XL</a>
+              </div>
+              <div className="d-flex mt-3" style={{ alignItems: "center" }}>
+                <div className="d-flex">
+                  <span className="quantity"> +</span>
+                  <input
+                    type="number"
+                    className="quantity-input"
+                    readOnly
+                    value={1}
+                  />
+                  <span className="quantity"> -</span>
+                </div>
+                <button className="btn btn-cart">Add to cart</button>
+              </div>
+              <hr />
+              <div className="purchasing-policy">
+                <ul>
+                  <li>Extremely easy return. Just need a phone number</li>
+                  <li>Free shipping. For orders over 200k</li>
+                  <li>60 days return for any reason</li>
+                  <li>
+                    Hotline 1900.27.27.37. Support from 8:30 am - 10:00 pm
+                    everyday
+                  </li>
+                  <li>
+                    Return goods at your door. Come to your place to receive
+                    returned goods, refund within 24 hours
+                  </li>
+                  <li>Fast delivery nationwide</li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div className="col-4 d-flex" style={{justifyContent:'center'}} >
-            <div className="type-card">
-              <img
-                className="type-card-img"
-                src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=80,format=auto/uploads/September2023/Refdfdctangle_178.png"
-                alt=""
-              />
-              <h5 className="type-card-title">T-Shirt</h5>
-              <p className="type-card-desc">T-Shirt/ Coat/...</p>
+        </div>
+        <div className="row ">
+          <h1 className="text-center">Top Products</h1>
+          <div className="col-3 mt-3">
+            <div className="product">
+              <div className="product-above">
+                <span className="badge">Worth Buying</span>
+                <img
+                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                  alt=""
+                  className="product-img"
+                />
+                <div className="size-option p-3">
+                  <div className="size-option-child p-2">
+                    <h6 className="text-center m-3">Add to cart</h6>
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "center" }}
+                    >
+                      <a className="size-option-link">S</a>
+                      <a className="size-option-link"> M</a>
+                      <a className="size-option-link"> XL</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="product-bottom mt-3">
+                <h5 className="product-bottom-title">T-Shirt</h5>
+                <span className="product-bottom-size">S/M/L/XL</span>
+                <h6 className="product-bottom-price mt-2">99.000d</h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-3 mt-3">
+            <div className="product">
+              <div className="product-above">
+                <span className="badge">Worth Buying</span>
+                <img
+                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                  alt=""
+                  className="product-img"
+                />
+                <div className="size-option p-3">
+                  <div className="size-option-child p-2">
+                    <h6 className="text-center m-3">Add to cart</h6>
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "center" }}
+                    >
+                      <a className="size-option-link size-option-link-first">
+                        S
+                      </a>
+                      <a className="size-option-link"> M</a>
+                      <a className="size-option-link"> XL</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="product-bottom mt-3">
+                <h5 className="product-bottom-title">T-Shirt</h5>
+                <span className="product-bottom-size">S/M/L/XL</span>
+                <h6 className="product-bottom-price mt-2">99.000d</h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-3 mt-3">
+            <div className="product">
+              <div className="product-above">
+                <span className="badge">Worth Buying</span>
+                <img
+                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                  alt=""
+                  className="product-img"
+                />
+                <div className="size-option p-3">
+                  <div className="size-option-child p-2">
+                    <h6 className="text-center m-3">Add to cart</h6>
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "center" }}
+                    >
+                      <a className="size-option-link">S</a>
+                      <a className="size-option-link"> M</a>
+                      <a className="size-option-link"> XL</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="product-bottom mt-3">
+                <h5 className="product-bottom-title">T-Shirt</h5>
+                <span className="product-bottom-size">S/M/L/XL</span>
+                <h6 className="product-bottom-price mt-2">99.000d</h6>
+              </div>
+            </div>
+          </div>
+          <div className="col-3 mt-3">
+            <div className="product">
+              <div className="product-above">
+                <span className="badge">Worth Buying</span>
+                <img
+                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
+                  alt=""
+                  className="product-img"
+                />
+                <div className="size-option p-3">
+                  <div className="size-option-child p-2">
+                    <h6 className="text-center m-3">Add to cart</h6>
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "center" }}
+                    >
+                      <a className="size-option-link">S</a>
+                      <a className="size-option-link"> M</a>
+                      <a className="size-option-link"> XL</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="product-bottom mt-3">
+                <h5 className="product-bottom-title">T-Shirt</h5>
+                <span className="product-bottom-size">S/M/L/XL</span>
+                <h6 className="product-bottom-price mt-2">99.000d</h6>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container d-flex" style={{ alignItems: "center" }}>
-        <h3>Daily wear</h3>
-        <select className="filter" name="" id="">
-          <option value="0">Low to high</option>
-          <option value="0">High to low</option>
-        </select>
-        <a href="" style={{ textDecoration: "none" }}>
-          Delete filter
-        </a>
-      </div>
-      <div className="container">
-        <div className="row ">
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div><div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div><div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Chat></Chat>
     </>
   );
 };
 
-export default HomePage;
+export default ProductDetail;

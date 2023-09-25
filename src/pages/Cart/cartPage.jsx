@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Cart from "./cart";
 import { checkOut, getProductByID } from "../../services/productService";
 import { getAccountByID } from "../../services/userService";
-
+import "./cart.css";
 import { decodeToken } from "../../services/jwtHelper";
 import {
   getURLMomo,
@@ -37,8 +37,7 @@ const CartPage = () => {
       toast.error("Please Login !");
 
       setTimeout(() => {
-
-        navigate("/login")
+        navigate("/login");
       }, 3000);
     }
   };
@@ -81,9 +80,7 @@ const CartPage = () => {
       toast.error("Product is out of stock.");
       return;
     }
-    const existingItem = cartItems.find(
-      (item) => item.productId === productId
-    );
+    const existingItem = cartItems.find((item) => item.productId === productId);
     if (existingItem.quantity >= fetchProduct.quantity) {
       toast.error("Product is out of stock.");
       return;
@@ -162,121 +159,277 @@ const CartPage = () => {
     <div>
       <Header />
 
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
-          <div className="col-md-9">
-            <Cart
-              cartItems={cartItems}
-              removeFromCart={removeFromCart}
-              increaseQuantity={increaseQuantity}
-              decreaseQuantity={decreaseQuantity}
-            />
-          </div>
-          <div className="col-md-3 container-fluid">
-            {user &&
-              <div
-                className="information-cart mt-5 mb-3"
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                  padding: "5px 15px",
-                }}
-              >
+          <div className="col-7" style={{ margin: "80px 0 0 60px" }}>
+            <div className="shipping-info mt-4">
+              <h4>
+                <b>Shipping information</b>
+              </h4>
+              <div className="row">
+                <div className="col-6">
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    className="w-100 cart-input"
+                  />
+                </div>
+                <div className="col-6">
+                  <input
+                    type="text"
+                    placeholder="Phone number"
+                    className="w-100 cart-input"
+                  />
+                </div>
 
-                <h5 className="mb-1">Information</h5>
-                <div className="mb-3">
-                  <label htmlFor="name" className="w-100 mb-2">
-                    Name
-                  </label>
+                <div className="col-12">
                   <input
-                    className="w-100"
-                    readOnly
                     type="text"
-                    value={`${user?.firstName} ${user?.lastName} `}
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                    placeholder="Address"
+                    className="w-100 cart-input"
                   />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="name" className="w-100  mb-2">
-                    Phone Number
-                  </label>
                   <input
-                    className="w-100"
-                    readOnly
                     type="text"
-                    defaultValue={user.phoneNumber}
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="name" className="w-100  mb-2">
-                    Email
-                  </label>
-                  <input
-                    className="w-100"
-                    readOnly
-                    type="text"
-                    defaultValue={user.email}
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="name" className="w-100  mb-2">
-                    Address
-                  </label>
-                  <input
-                    className="w-100"
-                    readOnly
-                    type="text"
-                    value={user?.address}
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                    placeholder="Full Name"
+                    className="w-100 cart-input"
                   />
                 </div>
               </div>
-            }
-
-            <div
-              className="payment-methods"
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                padding: "5px 15px",
-              }}
-            >
-              <h5 style={{ fontSize: "1.2rem" }}>Select Payment Method</h5>
-              <div className="method-list d-flex flex-md-column " style={{ flexWrap: 'wrap' }}>
-                {paymentMethods.map((method) => (
-                  <div key={method.id} className="d-flex m-2">
-                    <input
-                      readOnly
-                      type="radio"
-                      name="paymentMethod" // Add this attribute
-                      onClick={() => handleSelectMethod(method.id)}
-                      defaultChecked={selectedMethod === method.id} // Add this attribute
-                    />
+              <div className="payment">
+                <h4>
+                  <b>Payments</b>
+                </h4>
+                <div className="payment-list">
+                  <div
+                    className="d-flex "
+                    style={{
+                      margin: "10px 0",
+                      alignItems: "center",
+                      width: "100%",
+                      border: "1px solid #ccc",
+                      padding: "15px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <input type="radio"></input>
                     <img
-                      src={method.icon}
-                      alt={method.name}
-                      className="m-2"
-                      style={{ maxWidth: "40px", height: "30px" }}
-                    />
-                    <p className="m-2">{method.name}</p>
+                      src="https://www.coolmate.me/images/COD.svg"
+                      alt=""
+                      className="payment-img"
+                    />{" "}
+                    COD
                   </div>
-                ))}
+                  <div
+                    className="d-flex "
+                    style={{
+                      margin: "10px 0",
+                      alignItems: "center",
+                      width: "100%",
+                      border: "1px solid #ccc",
+                      padding: "15px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <input type="radio"></input>
+                    <img
+                      src="https://www.coolmate.me/images/vnpay.png"
+                      alt=""
+                      className="payment-img"
+                    />
+                    VN Pay
+                  </div>
+                  <div
+                    className="d-flex "
+                    style={{
+                      margin: "10px 0",
+                      alignItems: "center",
+                      width: "100%",
+                      border: "1px solid #ccc",
+                      padding: "15px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <input type="radio"></input>
+                    <img
+                      src="https://www.coolmate.me/images/momo-icon.png"
+                      alt=""
+                      style={{
+                        width: "35px",
+                        height: "35px",
+                        margin: "0 10px",
+                      }}
+                    />{" "}
+                    Momo
+                  </div>
+                  <div
+                    className="d-flex "
+                    style={{
+                      margin: "10px 0",
+                      alignItems: "center",
+                      width: "100%",
+                      border: "1px solid #ccc",
+                      padding: "15px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <input type="radio"></input>
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/174/174861.png"
+                      alt=""
+                      style={{
+                        width: "35px",
+                        height: "35px",
+                        margin: "0 10px",
+                      }}
+                    />
+                    Pay Pal
+                  </div>
+                  <button className="btn w-100 bg-dark text-white">
+                    Check Out
+                  </button>
+                </div>
               </div>
-              <h5 className="mb-3">
-                Total: {calculateTotalPrice().toLocaleString("en-US")}đ
-              </h5>
-
-              <button
-                className="btn bg-black text-white "
-                onClick={handleCheckout}
-                disabled={cartItems.length < 1 || !selectedMethod || disableButton}
-              >
-                Checkout
-              </button>
+            </div>
+          </div>
+          <div className="col-4" style={{ marginTop: "80px" }}>
+            <div className="cart mt-4">
+              <h4>
+                <b>Cart</b>
+              </h4>
+              <div className="cart-detail">
+                <div className="row p-5">
+                  <div className="col-4 ">
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/QSCB.BSC-1_10.jpg"
+                      alt=""
+                      style={{ width: "100%", height: "200px" }}
+                    />
+                  </div>
+                  <div className="col-8">
+                    <span>
+                      <b>Shorts chạy bộ Coolmate Basics</b>
+                    </span>
+                    <div className="">
+                      <select style={{ borderRadius: "10px" }} name="" id="">
+                        <option value="">S</option>
+                        <option value="">M</option>
+                        <option value="">L</option>
+                        <option value="">XL</option>
+                      </select>
+                      <div
+                        className="d-flex"
+                        style={{ justifyContent: "space-between" }}
+                      >
+                        <div className="">
+                          <h6>Quantity</h6>
+                          <div className="d-flex">
+                            <span className="quantity"> +</span>
+                            <input
+                              type="number"
+                              className="quantity-input"
+                              readOnly
+                              value={1}
+                            />
+                            <span className="quantity"> -</span>{" "}
+                          </div>
+                        </div>
+                        <div className="d-flex">
+                          <span>Total</span>
+                          <span style={{ marginLeft: "10px" }}>100.000d</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row p-5">
+                  <div className="col-4 ">
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/QSCB.BSC-1_10.jpg"
+                      alt=""
+                      style={{ width: "100%", height: "200px" }}
+                    />
+                  </div>
+                  <div className="col-8">
+                    <span>
+                      <b>Shorts chạy bộ Coolmate Basics</b>
+                    </span>
+                    <div className="">
+                      <select style={{ borderRadius: "10px" }} name="" id="">
+                        <option value="">S</option>
+                        <option value="">M</option>
+                        <option value="">L</option>
+                        <option value="">XL</option>
+                      </select>
+                      <div
+                        className="d-flex"
+                        style={{ justifyContent: "space-between" }}
+                      >
+                        <div className="">
+                          <h6>Quantity</h6>
+                          <div className="d-flex">
+                            <span className="quantity"> +</span>
+                            <input
+                              type="number"
+                              className="quantity-input"
+                              readOnly
+                              value={1}
+                            />
+                            <span className="quantity"> -</span>{" "}
+                          </div>
+                        </div>
+                        <div className="d-flex">
+                          <span>Total</span>
+                          <span style={{ marginLeft: "10px" }}>100.000d</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row p-5">
+                  <div className="col-4 ">
+                    <img
+                      src="https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/QSCB.BSC-1_10.jpg"
+                      alt=""
+                      style={{ width: "100%", height: "200px" }}
+                    />
+                  </div>
+                  <div className="col-8">
+                    <span>
+                      <b>Shorts chạy bộ Coolmate Basics</b>
+                    </span>
+                    <div className="">
+                      <select style={{ borderRadius: "10px" }} name="" id="">
+                        <option value="">S</option>
+                        <option value="">M</option>
+                        <option value="">L</option>
+                        <option value="">XL</option>
+                      </select>
+                      <div
+                        className="d-flex"
+                        style={{ justifyContent: "space-between" }}
+                      >
+                        <div className="">
+                          <h6>Quantity</h6>
+                          <div className="d-flex">
+                            <span className="quantity"> +</span>
+                            <input
+                              type="number"
+                              className="quantity-input"
+                              readOnly
+                              value={1}
+                            />
+                            <span className="quantity"> -</span>{" "}
+                          </div>
+                        </div>
+                        <div className="d-flex">
+                          <span>Total</span>
+                          <span style={{ marginLeft: "10px" }}>100.000d</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

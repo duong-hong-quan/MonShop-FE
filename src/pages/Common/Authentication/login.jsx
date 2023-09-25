@@ -19,13 +19,19 @@ const Login = () => {
 
   const handleSubmit = async (values) => {
     setDisableButton(true);
-    const res = await login({ email: values.email, password: values.password });
-    if (res.message ) {
+    const res = await login
+    (
+      { 
+      email: values.email, 
+      password: values.password 
+    }
+    );
+    if (!res.isSuccess ) {
       toast.error("User name or password incorrect");
       setDisableButton(false);
 
     }
-    if (res.data.token && res.data.refreshToken) {
+    if (res.data) {
       toast.success("Login sucess");
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("refreshToken", res.data.refreshToken);

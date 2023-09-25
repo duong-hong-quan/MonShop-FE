@@ -1,0 +1,23 @@
+.cart-input {
+  border-radius: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+.payment-list {
+  list-style: none;
+}
+
+.payment-img {
+  width: 40px;
+  height: 10px;
+  margin: 0 10px;
+}
+
+.cart-detail {
+  border: 1px solid #000;
+  border-radius: 10px;
+  height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

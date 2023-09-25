@@ -11,7 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
   const fetchUser = async () => {
     const userToken = decodeToken();
-    console.log(userToken)
+    console.log(userToken);
     if (userToken !== null) {
       let res = await getAccountByID(userToken.accountID);
       if (res.data) {
@@ -26,88 +26,67 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     navigate("/login");
-    toast.success("Log out successfully")
+    toast.success("Log out successfully");
   };
   return (
- 
-  <header className=" text-black" style={{boxShadow:'  rgba(0, 0, 0, 0.15) 0px 2px 8px', backgroundColor:'#000'}}>
-      <nav className="d-flex justify-content-between container navbar navbar-expand-lg ">
-        <div className="d-flex justify-content-between align-items-center w-100">
+    <div
+      className=" container-fluid"
+      style={{ backgroundColor: "black", color: "white", height: "80px", position:'fixed', zIndex:'1' }}
+    >
+      <div className="row h-100">
+        <div className="col-3 d-flex" style={{ alignItems: "center" }}>
           <NavLink
             className="navbar-brand"
             to="/"
-            style={{ fontSize: "1.6rem", fontWeight: "600" , color:'white'}}
+            style={{ fontSize: "1.6rem", fontWeight: "600", color: "white" }}
           >
-            Mon Shop
+           <b>Mon Shop</b>
           </NavLink>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
         </div>
-        <div
-          className="collapse navbar-collapse"
-          id="navbarNav"
-          style={{ flexDirection: "row-reverse" }}
-        >
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
+        <div className="col-6">
+          <ul className="nav-list">
+            <li className="nav-list-link  ">
               <NavLink className="nav-link" to="/home">
-                Home
+                Pants
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li className="nav-list-link">
               <NavLink className="nav-link" to="/products">
-                Product
+                Shirt{" "}
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li className="nav-list-link">
               <NavLink className="nav-link" to="/cart">
-                Cart
+                Shoes{" "}
               </NavLink>
             </li>
-            {user ? (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/transaction">
-                    Transaction
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/profile">
-                    Profile
-                  </NavLink>
-                </li>
-
-                <li className="nav-item" style={{ display: user.roleId == 1 ? "block" : "none" }}>
-                  <NavLink className="nav-link" to="/management">
-                    Management
-                  </NavLink>
-                </li>
-                <li className="nav-item" onClick={handleLogout}>
-                  <NavLink className="nav-link">Logout</NavLink>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/login">
-                    Login
-                  </NavLink>
-                </li>
-              </>
-            )}
+            <li className="nav-list-link">
+              <NavLink className="nav-link" to="/cart">
+                Accessories{" "}
+              </NavLink>
+            </li>
           </ul>
         </div>
-      </nav>
-    </header>
+        <div className="col-3 d-flex" style={{ alignItems: "center" }}>
+          <div className="input-search">
+            <input
+              className="input-search-text"
+              type="text"
+              placeholder=" Search Product"
+            ></input>
+            <a className="btn-search">
+              <i class="fa-solid fa-magnifying-glass "></i>
+            </a>
+            <a className="btn-search">
+              <i class="fa-solid fa-user"></i>{" "}
+            </a>
+            <a className="btn-search">
+              <i class="fa-solid fa-cart-shopping"></i>{" "}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

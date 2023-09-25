@@ -3,7 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup'; // Import Yup for validation
-import { signUp } from "../../../services/userService";
+import { assignRole, signUp } from "../../../services/userService";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
@@ -11,40 +11,36 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
   firstName: Yup.string().required('Required'),
   lastName: Yup.string().required('Required'),
-  address: Yup.string().required('Required'),
-  phoneNumber: Yup.string().required('Required'),
+  phoneNumber: Yup.string().required('Required')
 });
 
 const SignUp = () => {
-  const [gender, setGender] = useState(true);
   const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     setDisableButton(true);
-    const img = gender
-      ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOfiKG1ZEI-srUuW6d7peaILhzVM1tsk5hcL1UGBK1LQeanMqcrQmrXk6c0A18MzcDKA&usqp=CAU"
-      : "https://atomic.site/wp-content/uploads/2019/02/Avatar.png";
+
 
     const data = {
-      "accountId": 0,
       "email": values.email,
+      "userName": values.email,
       "password": values.password,
-      "imageUrl": img,
       "firstName": values.firstName,
       "lastName": values.lastName,
-      "address": values.address,
       "phoneNumber": values.phoneNumber,
-      "isDeleted": false,
-      "roleId": 3
     };
 
     let res = await signUp(data);
 
-    if (res) {
-      setDisableButton(false);
-      toast.success(res);
-      navigate("/login");
+    if (res.isSuccess && res.data) {
+      let res2 = await assignRole(res.data.id, "user");
+      if (res2.isSuccess && res2.data) {
+        setDisableButton(false);
+        toast.success(res.message);
+        navigate("/login");
+      }
+
     }
   };
 
@@ -61,7 +57,6 @@ const SignUp = () => {
                   password: "",
                   firstName: "",
                   lastName: "",
-                  address: "",
                   phoneNumber: "",
                 }}
                 validationSchema={validationSchema}
@@ -89,18 +84,7 @@ const SignUp = () => {
                       <Field type="text" name="lastName" as={Form.Control} />
                       <ErrorMessage name="lastName" component="div" className="text-danger" />
                     </Form.Group>
-                    <Form.Group className="w-100">
-                      <Form.Label>Gender</Form.Label>
-                      <Field as="select" name="gender" className="form-select" onChange={(e) => setGender(e.target.value === "true")}>
-                        <option value={true}>Male</option>
-                        <option value={false}>Female</option>
-                      </Field>
-                    </Form.Group>
-                    <Form.Group className="w-100">
-                      <Form.Label>Address</Form.Label>
-                      <Field type="text" name="address" as={Form.Control} />
-                      <ErrorMessage name="address" component="div" className="text-danger" />
-                    </Form.Group>
+
                     <Form.Group className="w-100">
                       <Form.Label>Phone Number</Form.Label>
                       <Field type="text" name="phoneNumber" as={Form.Control} />
@@ -122,7 +106,7 @@ const SignUp = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div> 
   );
 };
 

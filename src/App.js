@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import ProductPage from "./pages/Product/product";
-import ProductDetail from "./pages/Product/productDetail";
+import ProductDetail from "./pages/Product/ProductDetail/productDetail";
 import CartPage from "./pages/Cart/cartPage";
 import Login from "./pages/Common/Authentication/login";
 import SignUp from "./pages/Common/Authentication/signup";
@@ -14,8 +14,8 @@ import ChatManagement from "./pages/Admin/ChatManagement/chatManagement";
 import Chat from "./pages/Common/Chat/chat";
 import OrderManagement from "./pages/Admin/OrderManagement/orderManagement";
 import HomePage from "./pages/HomePage/homePage";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import SettingManagement from "./pages/Admin/SettingManagement/settingManagement";
 import VerifyPayment from "./pages/Customer/VerifyPayment/verifyPayment";
 import Profile from "./pages/Customer/Profile/profile";
@@ -58,10 +58,7 @@ function App() {
             { path: "/management/orders", element: <OrderManagement /> },
             { path: "/management/settings", element: <SettingManagement /> },
 
-
             { path: "/chat", element: <Chat /> },
-
-
           ].map((route, index) => (
             <Route
               key={index}
@@ -70,7 +67,6 @@ function App() {
               exact
             />
           ))}
-
         </Routes>
       </div>
     </BrowserRouter>

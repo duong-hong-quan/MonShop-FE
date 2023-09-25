@@ -1,40 +1,52 @@
-/* header.css */
-.header-content {
+.navbar-brand {
+  margin-left: 30px;
+  text-transform: uppercase;
+}
+.nav-list {
+  text-decoration: none;
+  list-style: none;
+  display: flex;
+  height: 100%;
+  margin: 0;
+  align-items: center;
+}
+
+.nav-list-link {
+  text-decoration: none;
+  margin: 5px;
+  font-size: 1.4rem;
+  font-weight: 450;
+  padding: 0 25px;
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.nav-link {
+  display: block;
+  text-transform: uppercase;
+}
+.nav-list-link:hover,
+.btn-search:hover {
+  background-color: rgb(245, 27, 86);
+}
+
+.input-search {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  /* Cân chỉnh theo chiều dọc */
+}
+.input-search-text[type="text"] {
+  display: block;
+  border-radius: 15px;
+  height: 45px;
+  padding: 10 15px ;
+  margin: 0 10px;
 }
 
-.nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 20px;
-  /* Khoảng cách giữa các liên kết */
-}
-
-.nav-link {
-  text-decoration: none;
+.btn-search {
+  padding: 10px 15px;
+  background-color: black;
   color: white;
   display: block;
-  margin: 0 5px;
-  font-weight: 550;
-}
-
-.nav-link:hover {
-  color: rgb(136, 133, 133);
-
-}
-
-.active {
-  color: white !important;
-
-}
-.navbar-toggler-icon{
-  border: 1px solid #ccc;
-  padding: 5px;
-  border-radius: 5px;
-  color: white;
+  cursor: pointer;
 }

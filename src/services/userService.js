@@ -1,4 +1,3 @@
-import instance from "./customizeAxios";
 import axios from "./customizeAxios";
 
 const fetchAllAccount = () => {
@@ -15,7 +14,7 @@ const logout = () => {
   localStorage.removeItem("refreshToken");
 };
 const getAccountByID = (accountID) => {
-  return axios.get(`Account/GetAccountByID?AccountID=${accountID}`);
+  return axios.get(`Account/GetAccountByID/${accountID}`);
 };
 
 const addAccount = (data) => {
@@ -43,7 +42,11 @@ const signUp = (data) => {
   return axios.post("/Account/SignUp", data);
 }
 
+const assignRole = (userId , role)=>{
+  return axios.post(`/Account/AssignRole?userId=${userId}&roleName=${role}`)
+}
+
 const changePassword = (data) => {
   return axios.post("/Account/ChangePassword", data);
 }
-export { changePassword, signUp, addAccount, fetchAllAccount, fetchAllRole, login, getAccountByID, logout, refreshAccessToken, deleteAccount, editAccount };
+export { changePassword, signUp, addAccount, fetchAllAccount, fetchAllRole, login, getAccountByID, logout, refreshAccessToken, deleteAccount, editAccount, assignRole };
