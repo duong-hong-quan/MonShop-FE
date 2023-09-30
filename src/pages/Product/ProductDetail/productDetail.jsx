@@ -1,13 +1,105 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import { getProductByID, getTop4 } from "../../../services/productService";
+import { getAllSize, getProductByID, getProductInventory, getTopX } from "../../../services/productService";
 import Chat from "../../Common/Chat/chat";
 import Header from "../../../components/Header/header";
 import { toast } from "react-toastify";
 import { formatPrice } from "../../../Utils/util";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 import "./productDetail.css";
+import Footer from "../../../components/Footer/footer";
+import { addToCart } from "../../../services/cartService";
+import { decodeToken } from "../../../services/jwtHelper";
 const ProductDetail = () => {
+  const { id } = useParams();
+  const [productDetail, setProductDetail] = useState(null)
+  const [product, setProduct] = useState(null)
+
+  const [products, setProducts] = useState([])
+  const [sizes, setSizes] = useState([])
+  const [sizeId, setSizeId] = useState(1)
+  const [quantity, setQuantity] = useState(0)
+  const [quantityCart, setQuantityCart] = useState(1)
+
+
+
+  const fetchData = async () => {
+    try {
+      let res = await getProductInventory(id, sizeId);
+      let res2 = await getTopX(4);
+      let res3 = await getAllSize();
+      if (res.isSuccess & res.data === null) {
+        let res4 = await getProductByID(id);
+        if (res4.isSuccess && res4.data) {
+          console.log(res4.data)
+          setProductDetail(null)
+          setProduct(res4.data);
+          setQuantity(0)
+
+        }
+
+      } if (res.isSuccess && res.data) {
+        setProductDetail(res.data);
+        setQuantity(res.data.quantity);
+        setSizeId(res.data.size?.sizeId)
+
+      }
+      if (res2.isSuccess && res2.data && res3.isSuccess && res3.data) {
+        setSizes(res3.data);
+        setProducts(res2.data);
+
+
+      }
+
+
+    } catch (ex) {
+
+      console.log(ex)
+    }
+  }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchData();
+
+  }, [id, sizeId])
+
+  const handleQuantity = (bool) => {
+    if (bool == true) {
+      setQuantityCart(quantityCart + 1)
+      console.log(quantityCart)
+    } else {
+      if (quantityCart <= 0) {
+        toast.error("The quantity must be equal or greater than 1")
+      } else {
+        setQuantityCart(quantityCart - 1)
+
+      }
+
+      console.log(quantityCart)
+
+    }
+  }
+
+
+  const handleAddToCart = async () => {
+    try {
+      let res = await addToCart({
+        "applicationUserId": decodeToken(localStorage.getItem("token"))?.accountID,
+        "item": {
+          "productId": id,
+          "quantity": quantityCart,
+          "sizeId": sizeId
+        }
+      });
+      if (res.isSuccess && res.data) {
+        toast.success("Add to cart successfully")
+      }
+    }
+    catch (ex) {
+      console.log(ex)
+    }
+
+  }
   return (
     <>
       <Header></Header>
@@ -18,7 +110,7 @@ const ProductDetail = () => {
           <div className="col-6" style={{ marginTop: "80px" }}>
             <div className="product-img mt-3">
               <img
-                src="https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/September2023/LOVISONG_TRUOC_(BE).png"
+                src={productDetail ? productDetail?.product?.imageUrl : product?.imageUrl}
                 alt=""
                 style={{ width: "100%", height: "800px" }}
               />
@@ -27,29 +119,45 @@ const ProductDetail = () => {
           <div className="col-6" style={{ marginTop: "80px" }}>
             <div className="product-detail mt-5">
               <h3>
-                <b>Áo thun oversize 84RISING Microwave</b>
+                <b>{productDetail ? productDetail?.product?.productName : product?.productName}</b>
               </h3>
               <h6>
-                <b>100.000d</b>
+                <b>{productDetail ? productDetail?.product?.price : product?.price}</b>
               </h6>
+              <div className="d-flex align-items-center" style={{ justifyContent: 'flex-start' }}>
+                <h6 className="m-0 d-block"><b>Quantity:</b></h6>
+                <p className="d-block" style={{ margin: '0 0 0 10px' }}>{quantity}</p>
+              </div>
               <h5>Product Size</h5>
               <div className="d-flex" style={{ justifyContent: "flex-start" }}>
-                <a className="size-option-link size-option-link-first">S</a>
-                <a className="size-option-link"> M</a>
-                <a className="size-option-link"> XL</a>
+                {sizes && sizes.map((item, index) => (
+                  <NavLink key={index} className={`size-option-link size-option-link-first ${item.sizeId === sizeId ? "size-option-link-active" : ""}`} onClick={() => setSizeId(item.sizeId)}>{item.sizeName}</NavLink>
+                ))}
               </div>
               <div className="d-flex mt-3" style={{ alignItems: "center" }}>
-                <div className="d-flex">
-                  <span className="quantity"> +</span>
-                  <input
-                    type="number"
-                    className="quantity-input"
-                    readOnly
-                    value={1}
-                  />
-                  <span className="quantity"> -</span>
-                </div>
-                <button className="btn btn-cart">Add to cart</button>
+
+                {quantity > 0 ?
+                  <>
+
+                    <div className="d-flex">
+                      <button className="quantity" onClick={() => handleQuantity(false)}> -</button>
+                      <input
+                        type="number"
+                        className="quantity-input"
+                        readOnly
+                        value={quantityCart}
+                      />
+                      <button className="quantity" onClick={() => handleQuantity(true)}> +</button>
+
+                    </div>
+                    <button className="btn btn-cart" onClick={() => handleAddToCart()}>Add to cart</button>
+
+                  </>
+                  :
+                  <>
+                    <p className="m-0" style={{ color: 'red', fontWeight: 'bold' }}>Product is out of stock</p>
+                  </>
+                }
               </div>
               <hr />
               <div className="purchasing-policy">
@@ -73,131 +181,48 @@ const ProductDetail = () => {
         </div>
         <div className="row ">
           <h1 className="text-center">Top Products</h1>
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
+          {products && products.map((item, index) => (
+
+            <div className="col-3 mt-3" key={index}>
+              <div className="product">
+                <div className="product-above">
+                  <NavLink to={`/product/${item.productId}`}>
+
+
+                    <span className="badge">Worth Buying</span>
+                    <img
+                      src={item.imageUrl}
+                      alt=""
+                      className="product-img"
+                    />
+                    <div className="size-option p-3">
+                      <div className="size-option-child p-2">
+                        <h6 className="text-center m-3">Add to cart</h6>
+                        <div
+                          className="d-flex"
+                          style={{ justifyContent: "center" }}
+                        >
+                          <span className="size-option-link">S</span>
+                          <span className="size-option-link"> M</span>
+                          <span className="size-option-link"> XL</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </NavLink>
+                </div>
+                <div className="product-bottom mt-3">
+                  <h5 className="product-bottom-title">{item.productName}</h5>
+                  <span className="product-bottom-size">S/M/L/XL</span>
+                  <h6 className="product-bottom-price mt-2">{item.price}</h6>
                 </div>
               </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
             </div>
-          </div>
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link size-option-link-first">
-                        S
-                      </a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div>
+          ))}
+
+
         </div>
       </div>
-
+      <Footer></Footer>
       <Chat></Chat>
     </>
   );

@@ -1,16 +1,31 @@
 import { Carousel } from "antd";
 import Header from "../../components/Header/header";
 import "./homePage.css";
+import Footer from "../../components/Footer/footer";
+import { getTopX } from "../../services/productService";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const HomePage = () => {
-  const contentStyle = {
-    height: "100vh",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-    width: "100%",
-  };
+  const [products, setProducts] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      let res = await getTopX(4);
+      if (res.isSuccess && res.data) {
+        setProducts(res.data)
+      }
+    } catch (ex) {
+
+      console.log(ex)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+
+  }, [])
+
   return (
     <>
       <Header></Header>
@@ -34,7 +49,7 @@ const HomePage = () => {
         </Carousel> */}
       <div className="container" style={{ padding: "5% 10%" }}>
         <div className="row">
-          <div className="col-4 d-flex" style={{justifyContent:'center'}} >
+          <div className="col-4 d-flex" style={{ justifyContent: 'center' }} >
             <div className="type-card">
               <img
                 className="type-card-img"
@@ -45,7 +60,7 @@ const HomePage = () => {
               <p className="type-card-desc">T-Shirt/ Coat/...</p>
             </div>
           </div>
-          <div className="col-4 d-flex" style={{justifyContent:'center'}} >
+          <div className="col-4 d-flex" style={{ justifyContent: 'center' }} >
             <div className="type-card">
               <img
                 className="type-card-img"
@@ -56,7 +71,7 @@ const HomePage = () => {
               <p className="type-card-desc">T-Shirt/ Coat/...</p>
             </div>
           </div>
-          <div className="col-4 d-flex" style={{justifyContent:'center'}} >
+          <div className="col-4 d-flex" style={{ justifyContent: 'center' }} >
             <div className="type-card">
               <img
                 className="type-card-img"
@@ -82,126 +97,48 @@ const HomePage = () => {
       </div>
       <div className="container">
         <div className="row ">
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
+          {products && products.map((item, index) => (
+
+            <div className="col-3 mt-3" key={index}>
+              <div className="product">
+                <div className="product-above">
+                  <NavLink to={`/product/${item.productId}`}>
+
+
+                    <span className="badge">Worth Buying</span>
+                    <img
+                      src={item.imageUrl}
+                      alt=""
+                      className="product-img"
+                    />
+                    <div className="size-option p-3">
+                      <div className="size-option-child p-2">
+                        <h6 className="text-center m-3">Add to cart</h6>
+                        <div
+                          className="d-flex"
+                          style={{ justifyContent: "center" }}
+                        >
+                          <a className="size-option-link">S</a>
+                          <a className="size-option-link"> M</a>
+                          <a className="size-option-link"> XL</a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </NavLink>
+                </div>
+                <div className="product-bottom mt-3">
+                  <h5 className="product-bottom-title">{item.productName}</h5>
+                  <span className="product-bottom-size">S/M/L/XL</span>
+                  <h6 className="product-bottom-price mt-2">{item.price}</h6>
                 </div>
               </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
             </div>
-          </div>
-          <div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div><div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div><div className="col-3 mt-3">
-            <div className="product">
-              <div className="product-above">
-                <span className="badge">Worth Buying</span>
-                <img
-                  src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
-                  alt=""
-                  className="product-img"
-                />
-                <div className="size-option p-3">
-                  <div className="size-option-child p-2">
-                    <h6 className="text-center m-3">Add to cart</h6>
-                    <div
-                      className="d-flex"
-                      style={{ justifyContent: "center" }}
-                    >
-                      <a className="size-option-link">S</a>
-                      <a className="size-option-link"> M</a>
-                      <a className="size-option-link"> XL</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="product-bottom mt-3">
-                <h5 className="product-bottom-title">T-Shirt</h5>
-                <span className="product-bottom-size">S/M/L/XL</span>
-                <h6 className="product-bottom-price mt-2">99.000d</h6>
-              </div>
-            </div>
-          </div>
+          ))}
+
+
         </div>
       </div>
+      <Footer></Footer>
     </>
   );
 };

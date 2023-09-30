@@ -1,126 +1,105 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, redirect, useNavigate } from "react-router-dom";
-import { login } from "../../../services/userService";
-import { decodeToken } from "../../../services/jwtHelper";
-import { toast } from "react-toastify";
-import * as Yup from 'yup'; // Import Yup for validation
+import React from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Button, Form } from "react-bootstrap";
+import * as Yup from 'yup';
+import { login } from "../../../services/userService";
+import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Required').email('Invalid email'),
-  password: Yup.string().required('Required')
-
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required"),
 });
-const Login = () => {
 
-  const [disableButton, setDisableButton] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = async (values) => {
-    setDisableButton(true);
-    const res = await login
-    (
-      { 
-      email: values.email, 
-      password: values.password 
-    }
-    );
-    if (!res.isSuccess ) {
-      toast.error("User name or password incorrect");
-      setDisableButton(false);
-
-    }
-    if (res.data) {
-      toast.success("Login sucess");
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
-      setDisableButton(false);
-
-    }
-    let user = decodeToken();
-    if (user?.userRole == "admin") {
-      navigate("/management/product");
-    } else if (user?.userRole == "staff") {
-      navigate("/management/product");
-    } else if (user?.userRole == "user") {
-      navigate("/products");
-
-    } else {
-      navigate("/login")
-
-    }
+const Login = ({ show, onHide, handleShowSignUp, handleLogin }) => {
+  const initialValues = {
+    email: "",
+    password: "",
   };
 
-  useEffect(() => {
 
-    let user = localStorage.getItem("token");
-    if (user) {
-      navigate("/products");
-    }
-  }, [])
+
+
   return (
-    <div
-      className="container-fluid"
-      style={{
-        background:
-          "url(https://www.highsnobiety.com/static-assets/thumbor/4bW6iFabL1KNxEzgSniFj97GNzY=/1600x1067/www.highsnobiety.com/static-assets/wp-content/uploads/2021/04/16162418/how-to-care-for-clothes-02.jpg) center/cover",
-      }}
-    >
-      <div className="row justify-content-center align-items-center min-vh-100">
-        <div className="col-md-4">
-          <div
-            className="card"
-            style={{
-              borderRadius: "15px",
-
-              backdropFilter: "blur(15px)", // Add backdrop blur
-
-              backgroundColor: "rgba(255, 255, 255, 0.5)",
-            }}
+    <>
+      <Modal show={show} onHide={onHide} size="lg">
+        <div className="p-3">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={LoginSchema}
+            onSubmit={handleLogin}
           >
-            <div className="card-body p-5">
-              <h2 className="card-title text-center">Login</h2>
-              <Formik
-                initialValues={{
-                  email: "",
-                  password: ""
-
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-              >
-                {({ handleSubmit }) => (
-                  <Form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                    <Form.Group className="w-100">
-                      <Form.Label>Email</Form.Label>
-                      <Field type="text" name="email" as={Form.Control} />
+            {({ handleSubmit, handleChange, values, errors }) => (
+              <Form onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col-6">
+                    <h3 style={{ fontSize: "40px" }}>
+                      <b>Login</b>
+                    </h3>
+                    <p>Log in to avoid missing out on benefits and refunds for any order.</p>
+                    <hr />
+                    <Form.Group>
+                      <Field
+                        type="text"
+                        name="email"
+                        placeholder="Email"
+                        className="form-control mt-2"
+                        style={{ borderRadius: '15px', padding: '10px', marginBottom: '10px', border: '1px solid #ccc', width: '100%' }}
+                        onChange={handleChange}
+                        value={values.email}
+                      />
                       <ErrorMessage name="email" component="div" className="text-danger" />
                     </Form.Group>
-                    <Form.Group className="w-100">
-                      <Form.Label>Password</Form.Label>
-                      <Field type="password" name="password" as={Form.Control} />
+                    <Form.Group>
+                      <Field
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        className="form-control mt-2"
+                        style={{ borderRadius: '15px', padding: '10px', marginBottom: '10px', border: '1px solid #ccc', width: '100%' }}
+                        onChange={handleChange}
+                        value={values.password}
+                      />
                       <ErrorMessage name="password" component="div" className="text-danger" />
                     </Form.Group>
-
-                    <Button className="mt-3" style={{ backgroundColor: 'black', border: 'none', color: 'white', width: '100px' }} type="submit" disabled={disableButton}>
+                    <Button
+                      type="submit"
+                      className="mt-3 btn btn-dark text-white w-100"
+                      style={{ borderRadius: '15px' }}
+                    >
                       Login
                     </Button>
-                  </Form>
-                )}
-              </Formik>
-
-              <p className="text-center mt-3">
-                Don't have an account?{" "}
-                <NavLink className=" text-decoration-none" to="/signup">
-                  Sign up
-                </NavLink>
-              </p>
-            </div>
-          </div>
+                    <div className="d-flex" style={{ justifyContent: 'space-between' }}>
+                      <NavLink
+                        onClick={handleShowSignUp}
+                        style={{ display: 'block', textDecoration: 'none', fontSize: '14px' }}
+                      >
+                        Register a new account
+                      </NavLink>
+                      <NavLink
+                        style={{ display: 'block', textDecoration: 'none', fontSize: '14px' }}
+                      >
+                        Forgot password
+                      </NavLink>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <img
+                      style={{ width: '100%' }}
+                      src="https://mcdn.coolmate.me/image/September2023/mceclip0_49.jpg"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
-      </div>
-    </div>
+      </Modal>
+    </>
   );
 };
 

@@ -53,7 +53,7 @@ const AccountManagement = () => {
 
             }
         } else {
-            navigate("/login");
+            navigate("/home");
         }
     }, []);
 

@@ -1,37 +1,89 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "./header.css";
 import { useEffect, useState } from "react";
-import { getAccountByID, logout } from "../../services/userService";
+import { assignRole, getAccountByID, login, logout, signUp } from "../../services/userService";
 import { decodeToken } from "../../services/jwtHelper";
 import { toast } from "react-toastify";
+import Login from "../../pages/Common/Authentication/login";
+import SignUp from "../../pages/Common/Authentication/signup";
 
 const Header = () => {
+
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
   const [user, setUser] = useState(null);
 
-  const navigate = useNavigate();
-  const fetchUser = async () => {
-    const userToken = decodeToken();
-    console.log(userToken);
-    if (userToken !== null) {
-      let res = await getAccountByID(userToken.accountID);
-      if (res.data) {
-        setUser(res.data);
-      }
+  const handleCloseLoginModal = () => {
+    setShowLogin(false);
+  };
+  const handleShowLoginModal = () => {
+    setShowLogin(true)
+  };
+  const handleCloseSignUpModal = () => {
+    setShowSignUp(false);
+  };
+  const handleShowSignUpModal = () => {
+    setShowLogin(false);
+    setShowSignUp(true)
+  };
+
+  const handleShowLogin = () => {
+    setShowLogin(true);
+    setShowSignUp(false)
+  };
+  const handleLogin = async (object) => {
+    let res = await login({
+      email: object.email,
+      password: object.password,
+      firstName: object.firstName,
+      lastName: object.lastName,
+      phoneNumber: object.phoneNumber
+    });
+    if (res.isSuccess && res.data) {
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+      toast.success("Login success !");
+      setShowLogin(false);
+    } else if (res.data == null) {
+      toast.error("Email or Password incorrect !")
+
     }
   };
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  const handleSignUp = async (object) => {
+    let res = await signUp(object);
+    if (res.isSuccess && res.data) {
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-    toast.success("Log out successfully");
+      let assignRespone = await assignRole(res.data.id, "user");
+      if (assignRespone.isSucess && assignRespone.data) {
+        toast.success("Login success !");
+        setShowSignUp(false);
+        setShowLogin(true);
+      }
+
+    } else if (res.data == null) {
+      toast.error("Failure !")
+
+    }
   };
+
+  useEffect(() => {
+    let tokenDecode = decodeToken(localStorage.getItem("token"));
+    if (tokenDecode) {
+      setUser(tokenDecode)
+      console.log(tokenDecode)
+    } else {
+      setUser({ accountID: null, userRole: null })
+
+    }
+
+
+  }, [localStorage.getItem("token")])
+
+
   return (
     <div
       className=" container-fluid"
-      style={{ backgroundColor: "black", color: "white", height: "80px", position:'fixed', zIndex:'1' }}
+      style={{ backgroundColor: "black", color: "white", height: "80px", position: 'fixed', zIndex: '1' }}
     >
       <div className="row h-100">
         <div className="col-3 d-flex" style={{ alignItems: "center" }}>
@@ -40,11 +92,16 @@ const Header = () => {
             to="/"
             style={{ fontSize: "1.6rem", fontWeight: "600", color: "white" }}
           >
-           <b>Mon Shop</b>
+            <b>Mon Shop</b>
           </NavLink>
         </div>
         <div className="col-6">
           <ul className="nav-list">
+            <li className="nav-list-link  ">
+              <NavLink className="nav-link" to="/home">
+                Home
+              </NavLink>
+            </li>
             <li className="nav-list-link  ">
               <NavLink className="nav-link" to="/home">
                 Pants
@@ -52,17 +109,17 @@ const Header = () => {
             </li>
             <li className="nav-list-link">
               <NavLink className="nav-link" to="/products">
-                Shirt{" "}
+                Shirt
               </NavLink>
             </li>
             <li className="nav-list-link">
               <NavLink className="nav-link" to="/cart">
-                Shoes{" "}
+                Shoes
               </NavLink>
             </li>
             <li className="nav-list-link">
               <NavLink className="nav-link" to="/cart">
-                Accessories{" "}
+                Accessories
               </NavLink>
             </li>
           </ul>
@@ -74,18 +131,29 @@ const Header = () => {
               type="text"
               placeholder=" Search Product"
             ></input>
-            <a className="btn-search">
-              <i class="fa-solid fa-magnifying-glass "></i>
-            </a>
-            <a className="btn-search">
-              <i class="fa-solid fa-user"></i>{" "}
-            </a>
-            <a className="btn-search">
-              <i class="fa-solid fa-cart-shopping"></i>{" "}
-            </a>
+            <NavLink className=" btn-search">
+              <i className="fa-solid fa-magnifying-glass "></i>
+            </NavLink>
+            {user?.accountID == null ?
+              <NavLink className=" btn-search" onClick={handleShowLoginModal}>
+                <i className="fa-solid fa-user"></i>{" "}
+              </NavLink>
+              :
+              <>
+                <NavLink className=" btn-search" to={"/profile"}>
+                  <i className="fa-solid fa-user"></i>{" "}
+                </NavLink>
+              </>
+            }
+
+            <NavLink className=" btn-search" to="/cart">
+              <i className="fa-solid fa-cart-shopping"></i>{" "}
+            </NavLink>
           </div>
         </div>
       </div>
+      <Login show={showLogin} onHide={handleCloseLoginModal} handleShowSignUp={handleShowSignUpModal} handleLogin={handleLogin}></Login>
+      <SignUp show={showSignUp} onHide={handleCloseSignUpModal} handleShowLogin={handleShowLogin} handleSignUp={handleSignUp}></SignUp>
     </div>
   );
 };

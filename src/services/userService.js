@@ -1,4 +1,5 @@
 import axios from "./customizeAxios";
+import { decodeToken } from "./jwtHelper";
 
 const fetchAllAccount = () => {
   return axios.get("/Account/GetAllAccount");
@@ -22,8 +23,10 @@ const addAccount = (data) => {
 }
 const refreshAccessToken = () => {
   let refreshToken = localStorage.getItem("refreshToken");
+  let decode = decodeToken(localStorage.getItem("token"));
 
-  return axios.get(`/Account/GetNewToken?refreshToken=${refreshToken}`);
+
+  return axios.get(`/Account/GetNewToken?refreshToken=${refreshToken}&accountId=${decode.accountID}`);
 }
 const deleteAccount = (data) => {
   return axios.delete("/Account/DeleteAccount", {

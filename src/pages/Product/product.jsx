@@ -12,13 +12,14 @@ import Header from "../../components/Header/header";
 import { toast } from "react-toastify";
 import "../../Utils/util";
 import { formatPrice } from "../../Utils/util";
+import Footer from "../../components/Footer/footer";
 const ProductPage = () => {
   return (
     <>
       {/* <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay> */}
 
       <Header></Header>
-      <div className="container-fluid">
+      <div className="">
         <img
           style={{ width: "100%" }}
           src="https://media.coolmate.me/cdn-cgi/image/width=1920,quality=80,format=auto/uploads/September2023/back-2-school-banner-desktop.jpg"
@@ -163,6 +164,7 @@ const ProductPage = () => {
             </div>
           </div>
       </div>
+      <Footer></Footer>
       <Chat></Chat>
     </>
   );

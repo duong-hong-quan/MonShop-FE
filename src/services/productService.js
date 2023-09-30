@@ -13,7 +13,7 @@ const editProduct = (productData) => {
   return axios.put("/Product/UpdateProduct", productData);
 }
 const getProductByID = (id) => {
-  return axios.get(`/Product/GetProductByID?id=${id}`);
+  return axios.get(`/Product/GetProductByID/${id}`);
 };
 
 const fetchAllCategories = async () => {
@@ -35,8 +35,14 @@ const deleteProduct = (productData) => {
     },
   });
 }
-const getTop4 = () => {
-  return axios.get("/Product/GetTop4");
+const getTopX = (x) => {
+  return axios.get(`/Product/GetTopXProduct/${x}`);
 }
 
-export { getTop4 , fetchAllProductByManager, fetchAllProduct, addProduct, fetchAllCategories, getProductByID, checkOut, fetchAllStatus, editProduct, deleteProduct }
+const getAllSize = () => {
+  return axios.get("/Product/GetAllSize");
+}
+const getProductInventory = (productId, sizeId) => {
+  return axios.get(`/Product/GetProductInventory/${productId}/${sizeId}`);
+}
+export { getProductInventory, getAllSize, getTopX, fetchAllProductByManager, fetchAllProduct, addProduct, fetchAllCategories, getProductByID, checkOut, fetchAllStatus, editProduct, deleteProduct }

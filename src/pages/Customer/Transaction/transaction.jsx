@@ -11,154 +11,83 @@ import Chat from "../../Common/Chat/chat";
 import { formatDate } from "../../../Utils/util";
 import Header from "../../../components/Header/header";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
+import SideBarProfile from "../Profile/SidebarProfile/sideBarProfile";
 const Transaction = () => {
-  const [orderList, setOrderList] = useState([]);
-  const [activeTab, setActiveTab] = useState("Pending");
-  const [user, setUser] = useState({});
-  const [tabCounts, setTabCounts] = useState({});
-  const [loading, setLoading]= useState(true);
-  const fetchData = async () => {
-    const userToken = await decodeToken();
-
-    if (userToken !== null) {
-      let res = await getAccountByID(userToken.accountID);
-      if (res.isSuccess) {
-        setUser(res.data);
-      }
-      let res2 = await getOrderStatistic(userToken.accountID);
-      if (res2.isSuccess) {
-        setTabCounts(res2.data);
-      }
-    }
-  };
 
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  const fetchOrder = async () => {
-    const userToken = await decodeToken();
-    var status = 1;
-    if (activeTab.toLowerCase() == "pending") {
-      status = 1;
-    } else if (activeTab.toLowerCase() == "success pay") {
-      status = 2;
-    } else if (activeTab.toLowerCase() == "fail pay") {
-      status = 3;
-    } else if (activeTab.toLowerCase() == "shipped") {
-      status = 4;
-    } else if (activeTab.toLowerCase() == "delivered") {
-      status = 5;
-    } else if (activeTab.toLowerCase() == "cancelled") {
-      status = 6;
-    }
-    let res = await getOrderByAccountID(userToken.accountID, status);
-    if (res.isSuccess) {
-      setOrderList(res.data);
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchOrder();
-  }, [activeTab]);
 
-  const transactionData = [
-    {
-      id: 1,
-      status: "Pending",
-      data: "Transaction data for Pending status...",
-    },
-    {
-      id: 2,
-      status: "Success Pay",
-      data: "Transaction data for Success Pay status...",
-    },
-    {
-      id: 3,
-      status: "Fail Pay",
-      data: "Transaction data for Fail Pay status...",
-    },
-    {
-      id: 4,
-      status: "Shipped",
-      data: "Transaction data for Shipped status...",
-    },
-    {
-      id: 5,
-      status: "Delivered",
-      data: "Transaction data for Delivered status...",
-    },
-    {
-      id: 6,
-      status: "Cancelled",
-      data: "Transaction data for Cancelled status...",
-    },
-  ];
-
-  const handleTabSelect = (status) => {
-    setActiveTab(status);
-  };
 
 
   return (
     <>
-      <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay>
+      {/* <LoadingOverlay loading={loading} type={"Please wait..."}></LoadingOverlay> */}
+
 
       <Header />
-      <div className="container mt-5">
-        <h2>Transaction Order</h2>
-        <Tabs
-          id="transaction-tabs"
-          activeKey={activeTab}
-          onSelect={handleTabSelect}
+      <div className="container">
+        <div className="row " >
+          <SideBarProfile></SideBarProfile>
 
-        >
-          {transactionData.map((transaction) => (
-            <Tab
-              key={transaction.id}
-              eventKey={transaction.status}
-              title={transaction.status}
-
-            >
-              <div className="mt-3" style={{ backgroundColor: '#fff', borderRadius: '10px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px', padding: '5px 15px' }}>
-                {activeTab === transaction.status && (
-                  <div className="table-responsive">
-                    <table className="table" bordered>
-                      <thead>
-                        <tr>
-                          <th>Order ID</th>
-                          <th>Order Date</th>
-                          <th>Total</th>
-                          <th>Customer</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {orderList.map((order, index) => (
-                          <tr key={index}>
-                            <td>{order.orderId}</td>
-                            <td>{formatDate(order.orderDate)}</td>
-                            <td>{order.total}</td>
-                            <td>{user.firstName}</td>
-                            <td>
-                              <Button style={{ backgroundColor: 'black', border: 'none' }}>
-
-                                <NavLink to={`/transaction/${order.orderId}`} style={{ textDecoration: 'none', color: 'white', border: 'none' }}>View Detail</NavLink>
-
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+          <div className="col-8" style={{ marginTop: '100px' }}>
+            <div className="row">
+              <h4><b>Order List</b></h4>
+              <div className="order" style={{ cursor: 'pointer' }}>
+                <div className="d-flex" style={{ justifyContent: 'space-between' }}>
+                  <span className="d-block">Order ID: </span>
+                  <div className="d-flex" style={{ alignItems: 'center' }}>
+                    <span className="d-block" style={{ marginRight: '10px' }}>Status: Completed</span>
+                    <i className="fa-solid fa-circle-arrow-down d-block"></i>
                   </div>
-
-                )}
+                </div>
               </div>
-            </Tab>
-          ))}
-        </Tabs>
+              <div className="" >
+                <Table responsive="md">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Product Name</th>
+                      <th>Product Image</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Sub Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                      <td>Table cell</td>
+                    </tr>
+                  </tbody>
+                </Table>
+                <h6>Total:</h6>
+                <h6>Payment method:</h6>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+
       <Chat></Chat>
     </>
   );

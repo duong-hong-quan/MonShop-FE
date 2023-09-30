@@ -23,11 +23,18 @@
   border-radius: 10px;
   border: 1px solid #ccc;
 }
+
 .btn-cart {
   background-color: #000;
   color: white;
   margin-left: 10px;
 }
+
 .btn-cart:hover {
   background-color: #ccc;
+}
+
+.size-option-link-active {
+  background-color: black !important;
+  color: white !important;
 }
