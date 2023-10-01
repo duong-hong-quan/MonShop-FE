@@ -9,6 +9,7 @@ import PaymentMethod from "../../Cart/paymentMethod";
 import Chat from "../../Common/Chat/chat";
 import Header from "../../../components/Header/header";
 import PaymentBadge from "../../../components/PaymentBadge/paymentBadge";
+import RefreshTokenAuthentication from "../../Common/Authentication/refreshTokenAuthentication";
 
 const TransactionDetail = () => {
   const { id } = useParams();
@@ -48,6 +49,8 @@ const TransactionDetail = () => {
   }, [id]);
   return (
     <>
+      <RefreshTokenAuthentication></RefreshTokenAuthentication>
+
       <Header />
       <div
         className="container mt-5 "

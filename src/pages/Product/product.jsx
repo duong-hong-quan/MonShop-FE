@@ -44,7 +44,7 @@ const ProductPage = () => {
               <div className="col-3 mt-3">
                 <div className="product">
                   <div className="product-above">
-                    <span className="badge">Worth Buying</span>
+                    <span className="product-badge">Worth Buying</span>
                     <img
                       src="https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/May2022/thumb_polo_prmx_bong_dem.jpg"
                       alt=""

@@ -52,4 +52,25 @@ const assignRole = (userId , role)=>{
 const changePassword = (data) => {
   return axios.post("/Account/ChangePassword", data);
 }
-export { changePassword, signUp, addAccount, fetchAllAccount, fetchAllRole, login, getAccountByID, logout, refreshAccessToken, deleteAccount, editAccount, assignRole };
+
+
+const getAllAddress = (userId) =>{
+  return axios.get(`/Address/GetAllAddressByUserId/${userId}`)
+}
+const addAddress = (data)=>{
+  return axios.post("/Address/AddAddress", data)
+}
+
+const updateAddress = (data)=>{
+  return axios.put("/Address/UpdateAddress", data)
+}
+
+const deleteAddress = (data)=>{
+  return axios.delete("/Address/RemoveAddress", {
+    data: data,
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
+export { deleteAddress, updateAddress,addAddress,getAllAddress,changePassword, signUp, addAccount, fetchAllAccount, fetchAllRole, login, getAccountByID, logout, refreshAccessToken, deleteAccount, editAccount, assignRole };
