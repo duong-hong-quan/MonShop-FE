@@ -9,23 +9,13 @@ const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
-    address: Yup.string().required('Required'),
     phoneNumber: Yup.string().required('Required'),
 });
 const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) => {
-    const [roles, setRoles] = useState([]);
     const [disableButton, setDisableButton] = useState(false);
 
-    const fetchRole = async () => {
-        let res = await fetchAllRole();
-        if (res.isSuccess) {
-            setRoles(res.data);
-        }
-    }
 
-    useEffect(() => {
-        fetchRole();
-    }, [])
+
 
     const handleEdit = async (values) => {
         setDisableButton(true);
@@ -36,10 +26,8 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
             "imageUrl": currentAccount.imageUrl,
             "firstName": values.firstName,
             "lastName": values.lastName,
-            "address": values.address,
             "phoneNumber": values.phoneNumber,
             "isDeleted": parseStringToBoolean(values.isDeleted),
-            "roleId": values.roleId
         });
         setDisableButton(false);
     }
@@ -56,9 +44,7 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                         email: currentAccount.email,
                         firstName: currentAccount.firstName,
                         lastName: currentAccount.lastName,
-                        address: currentAccount.address,
                         phoneNumber: currentAccount.phoneNumber,
-                        roleId: currentAccount.roleId,
                         isDeleted: currentAccount.isDeleted
                     }}
                     onSubmit={handleEdit}
@@ -80,25 +66,13 @@ const AccountEditModal = ({ show, onHide, currentAccount, handleEditAccount }) =
                                 <Field type="text" name="lastName" as={Form.Control} />
                                 <ErrorMessage name="lastName" component="div" className="text-danger" />
                             </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Address</Form.Label>
-                                <Field type="text" name="address" as={Form.Control} />
-                                <ErrorMessage name="address" component="div" className="text-danger" />
-                            </Form.Group>
+
                             <Form.Group>
                                 <Form.Label>Phone Number</Form.Label>
                                 <Field type="text" name="phoneNumber" as={Form.Control} />
                                 <ErrorMessage name="phoneNumber" component="div" className="text-danger" />
                             </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Role</Form.Label>
-                                <Field as="select" name="roleId" className="form-select">
-                                    {roles.map((item, index) => (
-                                        <option key={index} value={item.roleId}>{item.roleName}</option>
-                                    ))}
-                                </Field>
-                                <ErrorMessage name="roleId" component="div" className="text-danger" />
-                            </Form.Group>
+
                             <Form.Group>
                                 <Form.Label>Deleted</Form.Label>
                                 <Field as="select" name="isDeleted" className="form-select">

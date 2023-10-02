@@ -174,7 +174,6 @@ const AccountManagement = () => {
                                             <th>Email</th>
                                             <th>Full Name </th>
                                             <th>Phone Number</th>
-                                            <th>Role</th>
                                             <th>Deleted</th>
 
                                             <th></th>
@@ -189,7 +188,6 @@ const AccountManagement = () => {
                                                     <td>{account.email}</td>
                                                     <td>{account.firstName} {account.lastName}</td>
                                                     <td>{account.phoneNumber}</td>
-                                                    <td><Badge bg={account.role?.roleName.toLowerCase() == "admin" ? "danger" : account.role?.roleName.toLowerCase() == "staff" ? "warning" : "primary"}>{account.role?.roleName}</Badge></td>
                                                     <td>{account.isDeleted === true ? "True" : "False"}</td>
 
                                                     <td>

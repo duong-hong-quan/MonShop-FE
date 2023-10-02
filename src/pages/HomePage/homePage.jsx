@@ -1,10 +1,11 @@
 import { Carousel } from "antd";
 import Header from "../../components/Header/header";
-import "./homePage.css";
+import "./homePage.scss";
 import Footer from "../../components/Footer/footer";
 import { getTopX } from "../../services/productService";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import Chat from "../Common/Chat/chat";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -112,7 +113,9 @@ const HomePage = () => {
                           >
                             <a className="size-option-link">S</a>
                             <a className="size-option-link"> M</a>
+                            <a className="size-option-link"> L</a>
                             <a className="size-option-link"> XL</a>
+
                           </div>
                         </div>
                       </div>
@@ -129,6 +132,7 @@ const HomePage = () => {
         </div>
       </div>
       <Footer></Footer>
+      <Chat ></Chat>
     </>
   );
 };

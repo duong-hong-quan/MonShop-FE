@@ -187,7 +187,6 @@ const ProductManagement = () => {
                                                 <th>Name</th>
                                                 <th>Price (đ)</th>
                                                 <th>Discount (%)</th>
-                                                <th>Quantity</th>
                                                 <th>Category</th>
                                                 <th>Status</th>
                                                 <th>Deleted</th>
@@ -205,7 +204,6 @@ const ProductManagement = () => {
 
                                                         <td>{product.price.toLocaleString("en-US")} đ</td>
                                                         <td>{product.discount}</td>
-                                                        <td>{product.quantity}</td>
                                                         <td>{product.category?.categoryName}</td>
 
                                                         <td><Badge bg={product.productStatus?.status.toLowerCase() == "active" ? "primary" : "danger"}>{product.productStatus?.status}</Badge></td>

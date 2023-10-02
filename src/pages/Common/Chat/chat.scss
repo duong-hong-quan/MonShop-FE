@@ -1,14 +1,5 @@
-.card-bordered {
-  border: 1px solid #ebebeb;
-}
-
 .card {
-  border: 0;
-  border-radius: 0px;
-  -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.03);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.03);
-  -webkit-transition: .5s;
-  transition: .5s;
+  border-radius: 15px;
 }
 
 .padding {
@@ -25,11 +16,8 @@ body {
 
 
 .card-header {
-  display: -webkit-box;
   display: flex;
-  -webkit-box-pack: justify;
   justify-content: space-between;
-  -webkit-box-align: center;
   align-items: center;
   padding: 15px 20px;
   background-color: transparent;
@@ -55,7 +43,6 @@ h4.card-title {
 }
 
 .btn-secondary {
-  color: #4d5259 !important;
   background-color: #e4e7ea;
   border-color: #e4e7ea;
   color: #fff;
@@ -75,7 +62,6 @@ h4.card-title {
 
 
 .card-title {
-  font-family: Roboto, sans-serif;
   font-weight: 300;
   line-height: 1.5;
   margin-bottom: 0;
@@ -89,8 +75,6 @@ h4.card-title {
 }
 
 .ps-container {
-  -ms-touch-action: auto;
-  touch-action: auto;
   overflow: hidden !important;
   -ms-overflow-style: none;
 }
@@ -98,12 +82,11 @@ h4.card-title {
 .media-chat {
   padding-right: 64px;
   margin-bottom: 0;
+
 }
 
 .media {
   padding: 16px 12px;
-  -webkit-transition: background-color .2s linear;
-  transition: background-color .2s linear;
 }
 
 .media .avatar {
@@ -124,13 +107,13 @@ h4.card-title {
 }
 
 .media-chat .media-body {
-  -webkit-box-flex: initial;
-  /* flex: initial; */
   display: flex;
+
 }
 
 .media-body {
   min-width: 0;
+
 }
 
 .media-chat .media-body p {
@@ -141,6 +124,8 @@ h4.card-title {
   border-radius: 3px;
   font-weight: 100;
   color: #9b9b9b;
+  width: 200px;
+
 }
 
 .media>* {
@@ -148,15 +133,12 @@ h4.card-title {
 }
 
 .media-chat .media-body {
-  background-color: transparent !important;
   padding: 0;
-  opacity: .8;
+
 }
 
 .media {
   padding: 16px 12px;
-  -webkit-transition: background-color .2s linear;
-  transition: background-color .2s linear;
   display: flex;
 }
 
@@ -164,10 +146,8 @@ h4.card-title {
 .media-chat.media-chat-reverse {
   padding-right: 12px;
   padding-left: 64px;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
-  /* display: flex; */
   flex-direction: row-reverse !important;
+
 }
 
 .media-chat {
@@ -177,7 +157,6 @@ h4.card-title {
 
 .media {
   padding: 16px 12px;
-  -webkit-transition: background-color .2s linear;
   transition: background-color .2s linear;
 }
 
@@ -207,9 +186,7 @@ h4.card-title {
 
 .publisher {
   position: relative;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
   padding: 12px 20px;
   background-color: #f9fafb;
@@ -224,7 +201,6 @@ h4.card-title {
 }
 
 .publisher-input {
-  -webkit-box-flex: 1;
   flex-grow: 1;
   border: none;
   outline: none !important;
@@ -236,7 +212,6 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: Roboto, sans-serif;
   font-weight: 300;
 }
 
@@ -246,8 +221,6 @@ textarea {
   color: #8b95a5;
   font-size: 16px;
   cursor: pointer;
-  overflow: -moz-hidden-unscrollable;
-  -webkit-transition: .2s linear;
   transition: .2s linear;
 }
 
@@ -262,8 +235,6 @@ textarea {
   color: #cac7c7;
   font-size: 16px;
   cursor: pointer;
-  overflow: -moz-hidden-unscrollable;
-  -webkit-transition: .2s linear;
   transition: .2s linear;
 }
 
@@ -287,12 +258,12 @@ textarea {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 999;
+  z-index: 1;
 }
 
 .modal-bottom-right {
   position: fixed;
   bottom: -15px;
   right: 0;
-  z-index: 1000;
+  z-index: 1;
 }

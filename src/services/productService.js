@@ -45,4 +45,21 @@ const getAllSize = () => {
 const getProductInventory = (productId, sizeId) => {
   return axios.get(`/Product/GetProductInventory/${productId}/${sizeId}`);
 }
-export { getProductInventory, getAllSize, getTopX, fetchAllProductByManager, fetchAllProduct, addProduct, fetchAllCategories, getProductByID, checkOut, fetchAllStatus, editProduct, deleteProduct }
+const GetAllProductByCategoryId = (categoryId) => {
+  return axios.get(`/Product/GetAllProductByCategoryId/${categoryId}`)
+}
+export {
+  GetAllProductByCategoryId,
+  getProductInventory,
+  getAllSize,
+  getTopX,
+  fetchAllProductByManager,
+  fetchAllProduct,
+  addProduct,
+  fetchAllCategories,
+  getProductByID,
+  checkOut,
+  fetchAllStatus,
+  editProduct,
+  deleteProduct
+}

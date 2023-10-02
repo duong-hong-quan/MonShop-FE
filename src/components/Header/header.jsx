@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "./header.css";
+import "./header.scss";
 import { useEffect, useState } from "react";
 import { assignRole, getAccountByID, login, logout, signUp } from "../../services/userService";
 import { decodeToken } from "../../services/jwtHelper";
@@ -103,22 +103,22 @@ const Header = () => {
               </NavLink>
             </li>
             <li className="nav-list-link  ">
-              <NavLink className="nav-link" to="/home">
+              <NavLink className="nav-link" to="/products/1">
                 Pants
               </NavLink>
             </li>
             <li className="nav-list-link">
-              <NavLink className="nav-link" to="/products">
+              <NavLink className="nav-link" to="/products/2">
                 Shirt
               </NavLink>
             </li>
             <li className="nav-list-link">
-              <NavLink className="nav-link" to="/cart">
+              <NavLink className="nav-link" to="/products/3">
                 Shoes
               </NavLink>
             </li>
             <li className="nav-list-link">
-              <NavLink className="nav-link" to="/cart">
+              <NavLink className="nav-link" to="/products/4">
                 Accessories
               </NavLink>
             </li>

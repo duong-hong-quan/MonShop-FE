@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Cart from "./cart";
 import {
   checkOut,
   getAllSize,
   getProductByID,
 } from "../../services/productService";
 import { getAccountByID, getAllAddress } from "../../services/userService";
-import "./cart.css";
 import { decodeToken } from "../../services/jwtHelper";
 import {
   addOrderRequest,
@@ -21,6 +19,7 @@ import Footer from "../../components/Footer/footer";
 import DeliveryAddress from "../Customer/DeliveryAddress/deliveryAddress";
 import { getCartByUserId, updateCartItem } from "../../services/cartService";
 import RefreshTokenAuthentication from "../Common/Authentication/refreshTokenAuthentication";
+import "./cartPage.scss"
 const CartPage = () => {
   const [user, setUser] = useState(null);
   const [disableButton, setDisableButton] = useState(false);
@@ -73,7 +72,7 @@ const CartPage = () => {
         setCartItems(res.data);
       }
       console.log(res);
-    } catch (ex) {}
+    } catch (ex) { }
   };
 
   const getSizes = async () => {
@@ -189,7 +188,7 @@ const CartPage = () => {
       console.log(error);
     }
   };
-
+  console.log(cartItems)
   return (
     <div>
       <RefreshTokenAuthentication></RefreshTokenAuthentication>
@@ -298,6 +297,7 @@ const CartPage = () => {
                       src="https://www.coolmate.me/images/vnpay.png"
                       alt=""
                       className="payment-img"
+                      style={{ width: '50px', height: '100%' }}
                     />
                     VNPAY
                   </div>
@@ -407,12 +407,12 @@ const CartPage = () => {
                               }}
                               name=""
                               id=""
-                              defaultValue={item.sizeId}
                               onChange={(e) => handleChangeItem(e, item)}
+                              value={item.sizeId}
                             >
                               {sizes &&
                                 sizes.map((item, index) => (
-                                  <option key={index} value={item.sizeId}>
+                                  <option key={index} value={item.sizeId} >
                                     {item.sizeName}
                                   </option>
                                 ))}
@@ -501,7 +501,7 @@ const CartPage = () => {
                   ))
                 ) : (
                   <>
-                  <img src="https://rtworkspace.com/wp-content/plugins/rtworkspace-ecommerce-wp-plugin/assets/img/empty-cart.png" style={{width:'100%'}} alt="" />
+                    <img src="https://rtworkspace.com/wp-content/plugins/rtworkspace-ecommerce-wp-plugin/assets/img/empty-cart.png" style={{ width: '100%' }} alt="" />
                   </>
                 )}
               </div>

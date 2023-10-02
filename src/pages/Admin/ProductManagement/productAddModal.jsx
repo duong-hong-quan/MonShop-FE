@@ -8,7 +8,6 @@ const validationSchema = Yup.object().shape({
     imgUrl: Yup.string().required('Required'),
     price: Yup.number().required('Required').positive('Price must be a positive number'),
     discount: Yup.number().min(0, 'Discount cannot be negative').max(100, 'Discount cannot exceed 100'),
-    quantity: Yup.number().required('Required').positive('Quantity must be a positive number'),
     description: Yup.string().required('Required'),
     categoryID: Yup.number().required('Required'),
     statusID: Yup.number().required('Required'),
@@ -42,7 +41,6 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
             "productName": values.productName,
             "ImageUrl": values.imgUrl,
             "price": parseFloat(values.price),
-            "quantity": parseInt(values.quantity),
             "description": values.description,
             "categoryID": parseInt(values.categoryID),
             "productStatusId": parseInt(values.statusID),
@@ -64,7 +62,6 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
                         imgUrl: "",
                         price: "",
                         discount: "",
-                        quantity: "",
                         description: "",
                         categoryID: 1,
                         statusID: 1
@@ -94,11 +91,7 @@ const ProductAddModal = ({ show, onHide, handleSaveAdd }) => {
                                 <Field type="number" name="discount" as={Form.Control} />
                                 <ErrorMessage name="discount" component="div" className="text-danger" />
                             </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Quantity</Form.Label>
-                                <Field type="number" name="quantity" as={Form.Control} />
-                                <ErrorMessage name="quantity" component="div" className="text-danger" />
-                            </Form.Group>
+                           
                             <Form.Group>
                                 <Form.Label>Description</Form.Label>
                                 <Field type="text" name="description" as={Form.Control} />

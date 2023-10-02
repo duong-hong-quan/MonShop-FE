@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { FaCheckCircle, FaExclamationCircle, FaCreditCard, FaPaypal } from 'react-icons/fa';
-import './paymentBadge.css';
+import './paymentBadge.scss';
 function PaymentBadge({ paymentMethod }) {
   let badgeVariant, icon, iconColor;
 

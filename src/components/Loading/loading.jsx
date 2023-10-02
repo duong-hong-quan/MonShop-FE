@@ -1,5 +1,5 @@
 import React from 'react';
-import './loading.css'; // Đảm bảo bạn đã tạo file CSS để căn giữa phù hợp
+import './loading.scss'; // Đảm bảo bạn đã tạo file CSS để căn giữa phù hợp
 
 const LoadingCenter = ({ loading }) => {
   return (

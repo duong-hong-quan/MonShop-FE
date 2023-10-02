@@ -9,7 +9,7 @@ import {
     VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Table, Form, Modal, Badge, Button } from 'react-bootstrap';
-import "./chatManagement.css"
+import "./chatManagement.scss"
 import * as signalR from "@microsoft/signalr";
 import { getAllRoom, getMessageByRoomID, getRoomByID } from "../../../services/chatServices";
 import { decodeToken, isTokenExpired } from "../../../services/jwtHelper";
@@ -92,7 +92,7 @@ const ChatManagement = () => {
         if (token) {
             const decodedToken = jwtDecode(token);
             let res = await getAccountByID(decodedToken?.AccountID);
-            if (res.isSuccess) {
+            if (res.isSuccess && res.data) {
                 setAccount(res.data);
 
             }
@@ -186,13 +186,13 @@ const ChatManagement = () => {
                     console.log("About to invoke SendMessage...");
 
                     console.log({
-                        "sender": parseInt(userToken.accountID),
+                        "sender": userToken.accountID,
                         "content": message,
                         "roomId": roomIdToSend
                     });
 
                     await connection.invoke("AddMessageAdmin", {
-                        "sender": parseInt(userToken.accountID),
+                        "sender": userToken.accountID,
                         "content": message,
                         "roomId": roomIdToSend
                     });
@@ -311,7 +311,7 @@ const ChatManagement = () => {
                                     </div>
 
                                     <div className="row searchBox">
-                                        <div className="col-sm-12 searchBox-inner">
+                                        <div className="col-sm-12 searchBox-inner ">
                                             <div className="form-group has-feedback">
                                                 <input id="searchText" type="text" className="form-control" name="searchText" placeholder="Search" onChange={(e) => handleSearch(e)} />
                                                 <span className="glyphicon glyphicon-search form-control-feedback"></span>
@@ -322,10 +322,10 @@ const ChatManagement = () => {
                                         {rooms && rooms.map((room, index) => {
                                             return (
                                                 <div key={index} className="row sideBar-body" onClick={() => handleGetMessByRoom(room.roomId)}>
-                                                    <div className="d-flex" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <div className="d-flex" style={{ justifyContent: 'space-between', alignItems: 'center',color:'black' }}>
                                                         <div className='d-flex' style={{ alignItems: 'center' }}>
                                                             <div className="avatar-icon">
-                                                                <img src={room.roomImg} />
+                                                                <img src="https://img.icons8.com/color/36/000000/administrator-male.png" />
                                                             </div>
                                                             <div className="">
                                                                 <span className="name-meta">{room.roomName}
@@ -359,13 +359,13 @@ const ChatManagement = () => {
                             </div>
 
                             <div className={`col-sm-8 conversation ${isDisplay ? "hide-on-mobile" : "show-on-mobile"}`}>
-                                <div className="heading-room" style={{ display: 'flex', alignItems: 'center', backgroundColor: '#eee', padding: "10px 16px 10px 15px" }}>
+                                <div className="heading-room" style={{ display: 'flex', alignItems: 'center', padding: "10px 16px 10px 15px" }}>
                                     <div style={{ margin: '0 5px' }} className={`show-on-mobile-button`}>
                                         <Button onClick={() => setIsDisplay(true)} > <i className="fa-solid fa-backward-step"></i></Button>
                                     </div>
                                     <div className="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                                         <div className="heading-avatar-icon">
-                                            <img src={room.roomImg} alt="room" />
+                                            <img src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="room" />
                                         </div>
                                     </div>
                                     <div className="">
@@ -375,7 +375,7 @@ const ChatManagement = () => {
 
                                 </div>
 
-                                <div className=" message" id="conversation"
+                                <div className=" message " id="conversation"
                                     ref={chatContentRef}
 
                                 >
@@ -383,8 +383,8 @@ const ChatManagement = () => {
 
                                         return (
                                             <div key={index} className=" message-body">
-                                                <div className={mess.sender != userToken.accountID ? "message-main-receiver" : "message-main-sender"}>
-                                                    <div className={mess.sender != userToken.accountID ? "receiver" : "sender"}>
+                                                <div className={mess.applicationUserId != userToken.accountID ? "message-main-receiver" : "message-main-sender"}>
+                                                    <div className={mess.applicationUserId != userToken.accountID ? "receiver" : "sender"}>
                                                         <div className="message-text">
                                                             {mess.content}
                                                         </div>
@@ -403,8 +403,8 @@ const ChatManagement = () => {
 
                                 <div className=" reply">
                                     <Form onSubmit={(e) => {
-                                        e.preventDefault(); // Ngăn chặn tải lại trang mặc định
-                                        sendMessage(roomId); // Gửi tin nhắn
+                                        e.preventDefault();
+                                        sendMessage(roomId);
                                     }} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                                         <div className=" reply-main" >
                                             <input className="form-control" rows="1" id="comment" value={message} onChange={(e) => setMessage(e.target.value)}></input>

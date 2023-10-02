@@ -50,7 +50,7 @@ const HeaderAdmin = ({ collapsed, setCollapsed }) => {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate("/home");
         toast.success("Log out successfully")
     }
     return (<>
@@ -72,8 +72,7 @@ const HeaderAdmin = ({ collapsed, setCollapsed }) => {
             </div>
             <div className="d-flex h-100" style={{ flexWrap: 'nowrap', alignItems: 'center' }}>
                 <div className="d-flex h-100" style={{ flexWrap: 'nowrap', alignItems: 'center' }}>
-                    <img src={AccountInfo?.imageUrl} alt="" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
-                    <NavLink to={"/profile"} style={{ margin: '0 10px', textDecoration:'none', color:'black' }} >{AccountInfo?.firstName}</NavLink>
+                    <NavLink to={"/profile"} style={{ margin: '0 10px', textDecoration: 'none', color: 'black' }} >{AccountInfo?.firstName}</NavLink>
                 </div>
 
                 <Button style={{ backgroundColor: '#1677ff', color: '#fff' }} onClick={handleLogout}> <i className="fa-solid fa-arrow-right-from-bracket" style={{ marginRight: '5px' }}></i>Log out</Button>

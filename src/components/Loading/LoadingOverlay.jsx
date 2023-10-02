@@ -1,5 +1,5 @@
 import React from "react";
-import "./LoadingOverlay.css";
+import "./LoadingOverlay.scss";
 
 const LoadingOverlay = ({ loading, type }) => {
   if (!loading) return null;

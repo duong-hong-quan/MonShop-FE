@@ -11,20 +11,10 @@ const validationSchema = Yup.object().shape({
     lastName: Yup.string().required('Required'),
     address: Yup.string().required('Required'),
     phoneNumber: Yup.string().required('Required'),
-    roleId: Yup.number().required('Required'),
     gender: Yup.boolean().required('Required'),
 });
 const AccountAddModal = ({ show, onHide, addAccount }) => {
-    const [roles, setRoles] = useState([]);
-    const fetchRole = async () => {
-        let res = await fetchAllRole();
-        if (res.isSuccess) {
-            setRoles(res.data);
-        }
-    }
-    useEffect(() => {
-        fetchRole();
-    }, [])
+   
 
     const handleAddAccount = async (values) => {
         let img = "";
@@ -44,7 +34,6 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
             "address": values.address,
             "phoneNumber": values.phoneNumber,
             "isDeleted": false,
-            "roleId": values.roleId
         });
     }
 
@@ -63,7 +52,6 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
                         address: "",
                         phoneNumber: "",
                         gender: true,
-                        roleId: 1
                     }}
                     validationSchema={validationSchema}
                     onSubmit={handleAddAccount}
@@ -113,14 +101,7 @@ const AccountAddModal = ({ show, onHide, addAccount }) => {
                                 <ErrorMessage name="phoneNumber" component="div" className="text-danger" />
 
                             </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Role</Form.Label>
-                                <Field as="select" name="roleId" className="form-select">
-                                    {roles && roles.map((item, index) => (
-                                        <option key={index} value={item.roleId}>{item.roleName}</option>
-                                    ))}
-                                </Field>
-                            </Form.Group>
+                           
                             <div className="d-flex" style={{ justifyContent: 'end', marginTop: '10px' }} >
                                 <Button variant="secondary" onClick={onHide}>
                                     Cancel

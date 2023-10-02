@@ -54,10 +54,10 @@
   margin: 0;
   height: 60px;
   width: 100%;
-  background-color: #eee;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: black;
 }
 
 .heading-avatar {
@@ -81,7 +81,6 @@
 .heading-name-meta {
   font-weight: 700;
   font-size: 100%;
-  color: #000;
   display: block;
   text-decoration: none;
   margin: 0 10px;
@@ -116,13 +115,13 @@
   margin: 0 !important;
   height: 60px;
   width: 100%;
+
 }
 
 .searchBox-inner {
   height: 100%;
   width: 100%;
   padding: 10px !important;
-  background-color: #fbfbfb;
 }
 
 
@@ -134,29 +133,24 @@
   outline: none;
   border: none;
   box-shadow: none;
+
 }
 
 .sideBar {
   padding: 0 !important;
   margin: 0 !important;
-  background-color: #fff;
   overflow-y: scroll !important;
   height: 485px;
-  border: 1px solid #f7f7f7;
+  color: black ;
 }
 
 .sideBar-body {
   position: relative;
   padding: 10px !important;
-  border-bottom: 1px solid #f7f7f7;
-
   margin: 0 !important;
   cursor: pointer;
 }
 
-.sideBar-body:hover {
-  background-color: #f2f2f2;
-}
 
 .sideBar-avatar {
   text-align: center;
@@ -184,7 +178,6 @@
 
 .name-meta {
   font-size: 100%;
-  color: #000;
   display: block;
   margin: 0 10px;
 }
@@ -273,7 +266,6 @@
   margin: 0 !important;
   background-color: #fff;
   overflow-y: auto;
-  border: 1px solid #f7f7f7;
   height: calc(100% - 160px);
 }
 
@@ -283,7 +275,6 @@
   padding: 0 !important;
   margin: 0 !important;
 
-  border-left: 1px solid rgba(0, 0, 0, .08);
   /*overflow-y: auto;*/
 }
 
@@ -292,7 +283,6 @@
   margin: 0 !important;
 
   background-size: cover;
-  border: 1px solid #f7f7f7;
   overflow-y: scroll !important;
   height: 485px;
 }
@@ -374,7 +364,6 @@
 .reply {
   height: 60px;
   width: 100%;
-  background-color: #f5f1ee;
   padding: 10px 5px 10px 5px !important;
   margin: 0 !important;
   display: flex;
@@ -407,6 +396,7 @@
   box-shadow: none;
   height: 100%;
   font-size: 16px;
+
 }
 
 .reply-main input:focus {
@@ -414,6 +404,7 @@
   border: none;
   text-indent: 5px;
   box-shadow: none;
+
 }
 
 .show-on-mobile-button {

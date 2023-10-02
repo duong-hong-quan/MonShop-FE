@@ -25,7 +25,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <ToastContainer
-          position="top-right"
+          position="bottom-left"
           autoClose={3000}
           hideProgressBar={false}
           newestOnTop={false}
@@ -45,7 +45,7 @@ function App() {
 
             { path: "/login", element: <Login /> },
             { path: "/signup", element: <SignUp /> },
-            { path: "/products", element: <ProductPage /> },
+            { path: "/products/:categoryId", element: <ProductPage /> },
             { path: "/product/:id", element: <ProductDetail /> },
             { path: "/cart", element: <CartPage /> },
             { path: "/transaction", element: <Transaction /> },

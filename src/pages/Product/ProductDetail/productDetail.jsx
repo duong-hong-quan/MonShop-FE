@@ -6,7 +6,7 @@ import Header from "../../../components/Header/header";
 import { toast } from "react-toastify";
 import { formatPrice } from "../../../Utils/util";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
-import "./productDetail.css";
+import "./productDetail.scss";
 import Footer from "../../../components/Footer/footer";
 import { addToCart } from "../../../services/cartService";
 import { decodeToken } from "../../../services/jwtHelper";
@@ -189,7 +189,7 @@ const ProductDetail = () => {
                   <NavLink to={`/product/${item.productId}`}>
 
 
-                    <span className="badge">Worth Buying</span>
+                    <span className="product-badge">Worth Buying</span>
                     <img
                       src={item.imageUrl}
                       alt=""
@@ -204,6 +204,7 @@ const ProductDetail = () => {
                         >
                           <span className="size-option-link">S</span>
                           <span className="size-option-link"> M</span>
+                          <span className="size-option-link"> L</span>
                           <span className="size-option-link"> XL</span>
                         </div>
                       </div>

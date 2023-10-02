@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import "./transaction.css";
+import "./transaction.scss";
 import {
+  getAllOrderStatus,
   getListItemByOrderID,
   getOrderByAccount,
   getOrderByAccountID,
@@ -26,6 +27,7 @@ const Transaction = () => {
   const [orderDetails, setOrderDetails] = useState({});
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [show, setshow] = useState(false);
+  const [statuses, setStatuses] = useState([]);
   const fetchData = async () => {
     try {
       let res = await getOrderByAccount(
@@ -34,6 +36,14 @@ const Transaction = () => {
       if (res.isSuccess && res.data) {
         setOrders(res.data);
       }
+
+      let res2 = await getAllOrderStatus();
+      if (res2.data && res2.isSuccess) {
+        setStatuses(res2.data)
+        console.log(res2)
+      }
+
+
     } catch (error) {
       console.log(error);
     }
@@ -63,6 +73,20 @@ const Transaction = () => {
   const handlePay = async () => {
     setshow(true);
   };
+
+
+  const handleChangeStatus = async (e) => {
+    try {
+      let res = await getOrderByAccountID(decodeToken(localStorage.getItem("token"))?.accountID, parseInt(e.target.value));
+      if (res.isSuccess && res.data) {
+        console.log(res.data)
+        setOrders(res.data)
+      }
+    } catch (error) {
+
+    }
+  }
+
   return (
     <>
       <RefreshTokenAuthentication />
@@ -84,11 +108,16 @@ const Transaction = () => {
                   class="form-select"
                   aria-label="Default select example"
                   style={{ width: "200px", marginLeft: "10px" }}
+                  onChange={(e) => handleChangeStatus(e)}
                 >
-                  <option selected>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option selected disabled>Choose status</option>
+
+                  {statuses && statuses.map((item, index) => (
+                    <option key={index} value={item.orderStatusId}>{item.status}</option>
+
+
+                  ))}
+
                 </select>
               </div>
               {orders &&
@@ -99,9 +128,10 @@ const Transaction = () => {
                       style={{
                         justifyContent: "space-between",
                         cursor: "pointer",
-                        backgroundColor: "black",
-                        color: "white",
+                        border: '1px solid #ccc',
                         borderRadius: "15px",
+                        backgroundColor: 'black',
+                        color: 'white'
                       }}
                       onClick={() => handleOpen(item.orderId)}
                     >
@@ -111,7 +141,7 @@ const Transaction = () => {
                           className="d-block"
                           style={{ marginRight: "10px" }}
                         >
-                          Status: {item.orderStatus?.status}
+                          <PaymentBadge paymentMethod={item.orderStatus?.status}></PaymentBadge>
                         </span>
                         <i className="fa-solid fa-circle-arrow-down d-block"></i>
                       </div>
@@ -167,11 +197,11 @@ const Transaction = () => {
                         </h6>
                         <h6>
                           <b>Payment method: </b>
-                          <span style={{backgroundColor:'green', color:'white', borderRadius:'10px'}} className="p-1">
-                            {orderDetails?.paymentMethod == null
-                              ? "Pending"
-                              : orderDetails?.paymentMethod}
-                          </span>
+
+
+                          <PaymentBadge paymentMethod={orderDetails?.paymentMethod == null
+                            ? "Pending"
+                            : orderDetails?.paymentMethod}></PaymentBadge>
                         </h6>
 
                         {orderDetails?.paymentMethod == null && (

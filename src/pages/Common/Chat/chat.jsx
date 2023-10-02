@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./chat.css"; // Import your custom CSS for the chat component
+import "./chat.scss"; // Import your custom CSS for the chat component
 import * as signalR from "@microsoft/signalr";
 import { Button, Form, Modal } from "react-bootstrap"; // Import necessary components
 import { getAllMessageByAccountID } from "../../../services/chatServices";
@@ -14,7 +14,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [connection, setConnection] = useState(null);
-  const [senderId, setSenderId] = useState(0);
+  const [senderId, setSenderId] = useState("");
   const chatContentRef = useRef(null);
   const [user, setUser] = useState(null);
   const [isManager, setIsManager] = useState(false);
@@ -27,7 +27,6 @@ const Chat = () => {
       const decodedToken = jwtDecode(token);
       setUser(decodedToken);
       let user = decodeToken();
-      console.log(user.userRole)
       if (user.userRole == "admin" || user.userRole == "staff") {
         setIsManager(true);
       }
@@ -35,7 +34,7 @@ const Chat = () => {
   }, []);
 
   const getAllMessageByAccount = async () => {
-    const userToken = decodeToken();
+    const userToken = decodeToken(localStorage.getItem("token"));
     setSenderId(userToken?.accountID);
 
     if (userToken !== null) {
@@ -61,7 +60,7 @@ const Chat = () => {
   }, []);
   useEffect(() => {
     const startConnection = async () => {
-      const userToken = await decodeToken();
+      const userToken = decodeToken();
       setSenderId(userToken?.accountID);
       const newConnection = new signalR.HubConnectionBuilder()
         .withUrl(`${hosting}/chat`)
@@ -116,18 +115,18 @@ const Chat = () => {
       if (message != "") {
         setDisableButton(true);
         console.log("Sending message...");
-        const userToken = await decodeToken();
+        const userToken = decodeToken();
         if (connection && message.trim() !== "") {
           try {
             console.log("About to invoke SendMessage...");
 
             console.log({
-              accountID: parseInt(userToken?.accountID),
+              accountID: userToken?.accountID,
               message: message,
             });
 
             await connection.invoke("SendMessage", {
-              accountID: parseInt(userToken?.accountID),
+              accountID: userToken?.accountID,
               message: message,
             });
 
@@ -146,7 +145,6 @@ const Chat = () => {
 
     } else {
       toast.error("Please log in to chat");
-      navigator("/login");
     }
 
   };
@@ -156,100 +154,99 @@ const Chat = () => {
       <div className="chat-button">
         {!showModal &&
           <Button style={{ backgroundColor: 'black', color: 'white', border: 'none', height: '50px', width: '50px', borderRadius: '50%', display: isManager == true ? "none" : "block" }} onClick={handleOpenModal}>
-            <i className="fa-solid fa-comment-dots"></i>{" "}
+            <i className="fa-solid fa-comment-dots"></i>
           </Button>
         }
 
-        <div className="page-content page-container" id="page-content" style={{ borderRadius: '5px', display: showModal ? "block" : "none" }}>
+        <div className="page-content page-container" id="page-content" style={{ display: showModal ? "block" : "none" }}>
           <div className="row  d-flex justify-content-center">
             <div className="col-md-12">
-              <div className="title d-flex" style={{ justifyContent: 'space-between', backgroundColor: 'rgb(233,233,233)', padding: '10px', alignItems: 'center' }}>
-                <span>Chat</span>
-                <span><Button style={{ backgroundColor: 'red', border: 'none' }} onClick={() => handleCloseModal()}><i className="fa-solid fa-xmark"></i></Button></span>
-              </div>
-              <div className="card card-bordered">
-                <div
-                  className="ps-container ps-theme-default ps-active-y"
-                  id="chat-content"
-                  ref={chatContentRef}
-                >
-                  {messages && messages.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`media media-chat ${item.sender == senderId ? "media-chat-reverse" : ""
-                          }`}
-                      >
-                        <img
-                          className="avatar"
-                          src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                          alt="..."
-                        />
-                        <div className="media-body" width="100%">
-                          <p>{item.content}
-                            <span style={{ display: 'block', fontSize: '10px' }}>{formatDate(item.sendTime)}</span>
+              <div className="" style={{ borderRadius: '15px' }}>
 
-                          </p>
-                          <br />
+                <div className="card">
+                  <div className=" d-flex p-3" style={{ justifyContent: 'space-between', borderBottom:'1px solid #ccc' }}>
+             <h6>Chat Now</h6>
+                    <Button style={{ width: '40px', backgroundColor: 'red', border: 'none' }} onClick={() => handleCloseModal()}><i className="fa-solid fa-xmark"></i></Button>
+                  </div>
+                  <div
+                    className="ps-container ps-theme-default ps-active-y "
+                    id="chat-content"
+                    ref={chatContentRef}
+                  >
+                    {messages && messages.map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`media media-chat ${item.applicationUserId == senderId ? "media-chat-reverse" : ""
+                            }`}
+                        >
+                          <img
+                            className="avatar"
+                            src="https://img.icons8.com/color/36/000000/administrator-male.png"
+                            alt="..."
+                          />
+                          <div className="media-body" width="100%">
+                            <p>{item.content}
+                              <span style={{ display: 'block', fontSize: '10px' }}>{formatDate(item.sendTime)}</span>
+
+                            </p>
+                            <br />
 
 
 
+                          </div>
                         </div>
-                      </div>
 
-                    )
-                  }
-                  )}
+                      )
+                    }
+                    )}
 
-                  <div
-                    className="ps-scrollbar-x-rail"
-                    style={{ left: 0, bottom: 0 }}
-                  >
                     <div
-                      className="ps-scrollbar-x"
-                      style={{ left: 0, width: 0 }}
-                    ></div>
-                  </div>
-                  <div
-                    className="ps-scrollbar-y-rail"
-                    style={{ top: 0, height: 0, right: "2px" }}
-                  >
-                    <div
-                      className="ps-scrollbar-y"
-                      style={{ top: 0, height: "2px" }}
-                    ></div>
-                  </div>
-                </div>
-
-                <div className="publisher bt-1 border-light">
-                  <img
-                    className="avatar avatar-xs"
-                    src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                    alt="..."
-                  />
-
-                  <Form onSubmit={(e) => {
-                    e.preventDefault(); // Ngăn chặn tải lại trang mặc định
-                    sendMessage(); // Gửi tin nhắn
-                  }} style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-                    <input
-                      className="publisher-input"
-                      type="text"
-                      placeholder="Write something"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-
-                    <Button
-                      type="submit"
-                      className="publisher-btn text-info"
-                      onClick={sendMessage}
-                      disabled={disableButton}
+                      className="ps-scrollbar-x-rail"
+                      style={{ left: 0, bottom: 0 }}
                     >
-                      <i className="fa fa-paper-plane"></i>
-                    </Button>
-                  </Form>
+                      <div
+                        className="ps-scrollbar-x"
+                        style={{ left: 0, width: 0 }}
+                      ></div>
+                    </div>
+                    <div
+                      className="ps-scrollbar-y-rail"
+                      style={{ top: 0, height: 0, right: "2px" }}
+                    >
+                      <div
+                        className="ps-scrollbar-y"
+                        style={{ top: 0, height: "2px" }}
+                      ></div>
+                    </div>
+                  </div>
 
+                  <div className="publisher bt-1 border-light ">
+
+
+                    <Form onSubmit={(e) => {
+                      e.preventDefault();
+                      sendMessage();
+                    }} style={{ display: 'flex', width: '100%', alignItems: 'center', color: 'white' }}>
+                      <input
+                        className="publisher-input"
+                        type="text"
+                        placeholder="Chat here"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                      />
+
+                      <Button
+                        type="submit"
+                        className="publisher-btn text-info"
+                        onClick={sendMessage}
+                        disabled={disableButton}
+                      >
+                        <i className="fa fa-paper-plane"></i>
+                      </Button>
+                    </Form>
+
+                  </div>
                 </div>
               </div>
             </div>

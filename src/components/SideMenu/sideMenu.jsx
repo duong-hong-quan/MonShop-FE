@@ -31,7 +31,7 @@ const SideMenu = ({ collapsed }) => {
       collapsedWidth="0"
     >
       <div className="demo-logo-vertical" />
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+      <Menu theme="dark" mode="inline" >
         <Menu.Item key="1" icon={<i className="fa-solid fa-bag-shopping"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/product" >Product</NavLink>
         </Menu.Item>
