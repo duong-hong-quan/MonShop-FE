@@ -54,7 +54,7 @@ const Header = () => {
     if (res.isSuccess && res.data) {
 
       let assignRespone = await assignRole(res.data.id, "user");
-      if (assignRespone.isSucess && assignRespone.data) {
+      if (assignRespone.isSuccess && assignRespone.data) {
         toast.success("Login success !");
         setShowSignUp(false);
         setShowLogin(true);
