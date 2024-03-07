@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SettingManagement from "./pages/Admin/SettingManagement/settingManagement";
 import VerifyPayment from "./pages/Customer/VerifyPayment/verifyPayment";
 import Profile from "./pages/Customer/Profile/profile";
+import InventoryManagement from "./pages/Admin/InventoryManagement/inventoryManagement";
 
 function App() {
   return (
@@ -57,6 +58,8 @@ function App() {
             { path: "/management/chat", element: <ChatManagement /> },
             { path: "/management/orders", element: <OrderManagement /> },
             { path: "/management/settings", element: <SettingManagement /> },
+            { path: "/management/inventory", element: <InventoryManagement /> },
+
 
             { path: "/chat", element: <Chat /> },
           ].map((route, index) => (

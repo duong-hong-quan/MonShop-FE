@@ -35,16 +35,19 @@ const SideMenu = ({ collapsed }) => {
         <Menu.Item key="1" icon={<i className="fa-solid fa-bag-shopping"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/product" >Product</NavLink>
         </Menu.Item>
-        <Menu.Item key="2" icon={<i className="fa-solid fa-user"></i>}>
+        <Menu.Item key="2" icon={<i className="fa-solid fa-bag-shopping"></i>}>
+          <NavLink style={{ textDecoration: 'none' }} to="/management/product" >Product Inventory</NavLink>
+        </Menu.Item>
+        <Menu.Item key="3" icon={<i className="fa-solid fa-user"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/user">User</NavLink>
         </Menu.Item>
-        <Menu.Item key="3" icon={<i className="fa-solid fa-comments"></i>}>
+        <Menu.Item key="4" icon={<i className="fa-solid fa-comments"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/chat">Chat</NavLink>
         </Menu.Item>
-        <Menu.Item key="4" icon={<i className="fa-solid fa-receipt"></i>}>
+        <Menu.Item key="5" icon={<i className="fa-solid fa-receipt"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/orders">Orders</NavLink>
         </Menu.Item>
-        <Menu.Item key="5" icon={<i className="fa-solid fa-gears"></i>}>
+        <Menu.Item key="6" icon={<i className="fa-solid fa-gears"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/settings">Settings</NavLink>
         </Menu.Item>
       </Menu>
