@@ -22,7 +22,7 @@ const SettingManagement = () => {
             const decodedToken = jwtDecode(token);
             setUser(decodedToken);
             let userToken = decodeToken();
-            if (userToken.userRole == "admin" || userToken.userRole == "staff") {
+            if (userToken.userRole.includes("admin") || userToken.userRole.includes("staff")) {
                 navigate("/management/settings");
 
             } else {

@@ -163,6 +163,7 @@ const CartPage = () => {
           toast.success(
             "Add order successfully. We will redirect to payment gateway"
           );
+          getCart();
           console.log(selectedOption);
           if (selectedOption === "VNPAY") {
             let resVNPAY = await getURLVNPAY(res.data);

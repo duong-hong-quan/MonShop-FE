@@ -124,7 +124,7 @@ const Profile = () => {
                       <Form.Group>
                         <div className="d-flex justify-content-between">
                           <label className="label-info" htmlFor="">
-                            Full Name
+                            First Name
                           </label>
 
                           <div className="w-75">
@@ -132,6 +132,35 @@ const Profile = () => {
                               type="text"
                               name="firstName"
                               placeholder="First Name"
+                              className="input-info"
+                              style={{
+                                borderRadius: "15px",
+                                padding: "10px",
+                                marginBottom: "10px",
+                                border: "1px solid #ccc",
+                                width: "100%",
+                              }}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="firstName"
+                              component="div"
+                              className="text-danger"
+                            />
+                          </div>
+                        </div>
+                      </Form.Group>
+                      <Form.Group>
+                        <div className="d-flex justify-content-between">
+                          <label className="label-info" htmlFor="">
+                            Last Name
+                          </label>
+
+                          <div className="w-75">
+                            <Field
+                              type="text"
+                              name="lastName"
+                              placeholder="Last Name"
                               className="input-info"
                               style={{
                                 borderRadius: "15px",
