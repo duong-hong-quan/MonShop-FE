@@ -225,10 +225,10 @@ const ProductDetail = () => {
             products.map((item, index) => (
               <div className="col-3 mt-3" key={index}>
                 <div className="product">
-                  <div className="product-above">
+                  <div className="product-above" style={{ width: "100%", height: "300px" }}>
                     <NavLink to={`/product/${item.productId}`}>
                       <span className="product-badge">Worth Buying</span>
-                      <img src={item.imageUrl} alt="" className="product-img" />
+                      <img src={item.imageUrl} alt="" className="product-img" style={{ width: "280px", height: "300px" }}/>
                       <div className="size-option p-3">
                         <div className="size-option-child p-2">
                           <h6 className="text-center m-3">Add to cart</h6>
@@ -248,7 +248,10 @@ const ProductDetail = () => {
                   <div className="product-bottom mt-3">
                     <h5 className="product-bottom-title">{item.productName}</h5>
                     <span className="product-bottom-size">S/M/L/XL</span>
-                    <h6 className="product-bottom-price mt-2">{item.price}</h6>
+                    <h6 className="product-bottom-price mt-2">{item.price.toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}</h6>
                   </div>
                 </div>
               </div>
