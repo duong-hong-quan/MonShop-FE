@@ -62,10 +62,10 @@ const OrderManagement = () => {
         const data = dataFilter;
         if (temp) {
             let tempdata = data.filter(order =>
-                (order.buyerAccount?.firstName && order.buyerAccount?.firstName.toLowerCase().includes(temp.toLowerCase())) ||
-                (order.buyerAccount?.lastName && order.buyerAccount?.lastName.toLowerCase().includes(temp.toLowerCase())) ||
-                (order.buyerAccount?.email && order.buyerAccount?.email.toLowerCase().includes(temp.toLowerCase())) ||
-                (order.buyerAccount?.phoneNumber && order.buyerAccount?.phoneNumber.includes(temp))
+                (order.applicationUser?.firstName && order.applicationUser?.firstName.toLowerCase().includes(temp.toLowerCase())) ||
+                (order.applicationUser?.lastName && order.applicationUser?.lastName.toLowerCase().includes(temp.toLowerCase())) ||
+                (order.applicationUser?.email && order.applicationUser?.email.toLowerCase().includes(temp.toLowerCase())) ||
+                (order.applicationUser?.phoneNumber && order.applicationUser?.phoneNumber.includes(temp))
             );
             setOrderList(tempdata);
         } else {
@@ -126,9 +126,9 @@ const OrderManagement = () => {
                                                 <tr key={index}>
                                                     <td>{order?.orderId}</td>
                                                     <td>{formatDate(order?.orderDate)}</td>
-                                                    <td>{order?.buyerAccount?.firstName} {order?.buyerAccount?.lastName}</td>
-                                                    <td>{order?.buyerAccount?.phoneNumber}</td>
-                                                    <td>{order?.buyerAccount?.email}</td>
+                                                    <td>{order?.applicationUser?.firstName} {order?.applicationUser?.lastName}</td>
+                                                    <td>{order?.applicationUser?.phoneNumber}</td>
+                                                    <td>{order?.applicationUser?.email}</td>
                                                     <td>
                                                         <Badge bg={order.orderStatus?.status == "Pending" ? "warning" : order.orderStatus?.status == "Sucess Pay" ? "success" : "primary"}> {order.orderStatus?.status}</Badge>
                                                     </td>

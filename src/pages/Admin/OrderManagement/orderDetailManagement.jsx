@@ -18,7 +18,7 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
 
             setOrderItems(res.data.orderItem);
             setPayment(res.data.paymentMethod);
-            setCustomer(res.data.order?.buyerAccount);
+            setCustomer(res.data.order?.applicationUser);
             setOrderStatusId(res.data.order?.orderStatus?.orderStatusId)
         }
         let res2 = await getAllOrderStatus();
