@@ -28,14 +28,22 @@ const HomePage = () => {
   return (
     <>
       <Header></Header>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', paddingBottom:"50px" }}>
-      <img
-        style={{ width: '60%', marginTop:"120px" }}
-        src="https://down-bs-vn.img.susercontent.com/cn-11134210-7r98o-lsgx830d54gt01.webp"
-        alt=""
-      />
-    </div>
-      
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          paddingBottom: "50px",
+        }}
+      >
+        <img
+          style={{ width: "60%", marginTop: "120px" }}
+          src="https://down-bs-vn.img.susercontent.com/cn-11134210-7r98o-lsgx830d54gt01.webp"
+          alt=""
+        />
+      </div>
+
       {/* <Carousel autoplay>
             <div>
                 <img style={contentStyle} src="https://levents.asia/wp-content/uploads/IMG_0879.jpeg-1-1200x988.jpg" alt="" />

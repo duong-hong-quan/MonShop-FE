@@ -137,10 +137,9 @@ const ProductDetail = () => {
                 <h5 className="m-0 d-flex my-3">
                   <b>Quantity: </b>
                   <p className="d-block" style={{ margin: "0 0 0 10px" }}>
-                {quantity}
-                </p>
+                    {quantity}
+                  </p>
                 </h5>
-                
               </div>
               <h5>Product Size</h5>
               <div className="d-flex" style={{ justifyContent: "flex-start" }}>
