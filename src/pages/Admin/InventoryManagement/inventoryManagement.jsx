@@ -87,7 +87,7 @@ const InventoryManagement = () => {
         if (res.isSuccess) {
             setShowAddModal(false);
             await fetchInventoryList();
-            toast.success(res.message);
+            toast.success("Add Inventory Successfully");
         }
     }
     const handleEditInventory = async (data) => {
@@ -95,7 +95,7 @@ const InventoryManagement = () => {
         if (res.isSuccess) {
             setShowEditModal(false);
             await fetchInventoryList();
-            toast.success(res.message);
+            toast.success("Update Inventory Successfully");
 
         }
     }

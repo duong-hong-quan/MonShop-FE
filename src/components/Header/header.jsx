@@ -96,6 +96,7 @@ const Header = () => {
           </NavLink>
         </div>
         <div className="col-6">
+          
           <ul className="nav-list">
             <li className="nav-list-link  ">
               <NavLink className="nav-link" to="/home">
@@ -104,7 +105,7 @@ const Header = () => {
             </li>
             <li className="nav-list-link  ">
               <NavLink className="nav-link" to="/products/1">
-                Pants
+                Dress
               </NavLink>
             </li>
             <li className="nav-list-link">
@@ -114,12 +115,12 @@ const Header = () => {
             </li>
             <li className="nav-list-link">
               <NavLink className="nav-link" to="/products/3">
-                Shoes
+                Pants
               </NavLink>
             </li>
             <li className="nav-list-link">
               <NavLink className="nav-link" to="/products/4">
-                Accessories
+                Set
               </NavLink>
             </li>
           </ul>

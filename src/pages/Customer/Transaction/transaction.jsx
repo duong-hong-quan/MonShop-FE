@@ -164,7 +164,7 @@ const Transaction = () => {
                             {orderDetails?.orderItem?.map((item, index) => (
                               <tr key={index}>
                                 <td className="text-center">{index + 1}</td>
-                                <td className="text-center">
+                                <td className="text-left">
                                   {item?.product?.productName}
                                 </td>
                                 <td className="text-center">
@@ -172,7 +172,7 @@ const Transaction = () => {
                                     src={item?.product?.imageUrl}
                                     alt=""
                                     style={{ width: "50px", height: "50px" }}
-                                    className="avatar"
+                                    //className="avatar"
                                   />
                                 </td>
                                 <td className="text-center">

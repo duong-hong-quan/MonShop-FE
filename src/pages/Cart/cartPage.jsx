@@ -170,17 +170,18 @@ const CartPage = () => {
             if (resVNPAY.isSuccess && resVNPAY.data) {
               window.location.href = resVNPAY.data;
             }
-          } else if (selectedOption === "MOMO") {
-            let resMOMO = await getURLMomo(res.data);
-            if (resMOMO.isSuccess && resMOMO.data) {
-              window.location.href = resMOMO.data;
-            }
-          } else if (selectedOption === "PAYPAL") {
-            let resPAYPAL = await getURLPayPal(res.data);
-            if (resPAYPAL.isSuccess && resPAYPAL.data) {
-              window.location.href = resPAYPAL.data;
-            }
-          }
+          } 
+          // else if (selectedOption === "MOMO") {
+          //   let resMOMO = await getURLMomo(res.data);
+          //   if (resMOMO.isSuccess && resMOMO.data) {
+          //     window.location.href = resMOMO.data;
+          //   }
+          // } else if (selectedOption === "PAYPAL") {
+          //   let resPAYPAL = await getURLPayPal(res.data);
+          //   if (resPAYPAL.isSuccess && resPAYPAL.data) {
+          //     window.location.href = resPAYPAL.data;
+          //   }
+          // }
         } else if (res.data == null) {
           toast.error(res.message);
         }
@@ -302,7 +303,7 @@ const CartPage = () => {
                     />
                     VNPAY
                   </div>
-                  <div
+                  {/* <div
                     className="d-flex "
                     style={{
                       margin: "10px 0",
@@ -329,8 +330,8 @@ const CartPage = () => {
                       }}
                     />{" "}
                     Momo
-                  </div>
-                  <div
+                  </div> */}
+                  {/* <div
                     className="d-flex "
                     style={{
                       margin: "10px 0",
@@ -357,7 +358,7 @@ const CartPage = () => {
                       }}
                     />
                     PayPal
-                  </div>
+                  </div> */}
                   <button
                     className="btn w-100 bg-dark text-white mt-5"
                     disabled={

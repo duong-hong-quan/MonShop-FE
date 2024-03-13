@@ -31,12 +31,12 @@ const SideMenu = ({ collapsed }) => {
       collapsedWidth="0"
     >
       <div className="demo-logo-vertical" />
-      <Menu theme="dark" mode="inline" >
+      <Menu theme="dark" mode="inline"  inlineCollapsed={collapsed}>
         <Menu.Item key="1" icon={<i className="fa-solid fa-bag-shopping"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/product" >Product</NavLink>
         </Menu.Item>
         <Menu.Item key="2" icon={<i className="fa-solid fa-bag-shopping"></i>}>
-          <NavLink style={{ textDecoration: 'none' }} to="/management/product" >Product Inventory</NavLink>
+          <NavLink style={{ textDecoration: 'none' }} to="/management/inventory" >Product Inventory</NavLink>
         </Menu.Item>
         <Menu.Item key="3" icon={<i className="fa-solid fa-user"></i>}>
           <NavLink style={{ textDecoration: 'none' }} to="/management/user">User</NavLink>
