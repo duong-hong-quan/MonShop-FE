@@ -12,7 +12,7 @@ const HomePage = () => {
 
   const fetchData = async () => {
     try {
-      let res = await getTopX(8);
+      let res = await getTopX(12);
       if (res.isSuccess && res.data) {
         setProducts(res.data);
       }
