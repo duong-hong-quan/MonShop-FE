@@ -90,7 +90,7 @@ const OrderDetailManagement = ({ show, onHide, currentOrder, handleUpdateStatus 
                     </div>
                 </div>
 
-                <div className="mt-3" style={{ boxShadow: ' rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px', borderRadius: '10px', padding: '10px', textAlign: 'center' }}>
+                <div className="mt-3" style={{ boxShadow: ' rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px', borderRadius: '10px', padding: '10px', textAlign: 'left' }}>
                     <div>
                         <h5>Customer Information</h5>
                         <span >Name: {customer?.firstName}</span>
