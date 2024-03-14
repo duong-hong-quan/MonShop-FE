@@ -108,7 +108,7 @@ const SignUp = ({ show, onHide, handleShowLogin, handleSignUp }) => {
                     </div>
                   </div>
                   <div className="col-6">
-                    <img style={{ width: '100%' }} src="https://mcdn.coolmate.me/image/September2023/mceclip0_49.jpg" alt="" />
+                    <img style={{ width: '100%' }} src="https://plus.unsplash.com/premium_photo-1675919640620-067b83eeb38b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
                   </div>
                 </div>
               </Form>
